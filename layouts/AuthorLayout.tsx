@@ -1,21 +1,22 @@
 import { ReactNode } from 'react'
-import type { Authors } from 'contentlayer/generated'
+import { allAuthors, type Authors } from 'contentlayer/generated'
 import Image from '@/components/Image'
 import { IoIosMail } from 'react-icons/io'
 import { MdOutlinePhoneIphone } from 'react-icons/md'
+import { coreContent } from 'pliny/utils/contentlayer'
 
 interface Props {
   children: ReactNode
-  content: Omit<Authors, '_id' | '_raw' | 'body'>
 }
 
-export default function AuthorLayout({ children, content }: Props) {
-  const { name, avatar, occupation, company, email, phone } = content
+export default function AuthorLayout({ children }: Props) {
+  const author = allAuthors.find((p) => p.slug === 'default') as Authors
+  const { name, avatar, occupation, company, email, phone } = coreContent(author)
 
   return (
     <>
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:space-y-0 xl:gap-x-8">
+      <div>
+        <div className="items-start space-y-2 xl:grid">
           <div className="flex items-center space-x-6 pt-8">
             {avatar && (
               <Image
@@ -42,9 +43,7 @@ export default function AuthorLayout({ children, content }: Props) {
               </div>
             </div>
           </div>
-          <div className="prose dark:prose-invert max-w-none pt-15 pb-8 xl:col-span-4">
-            {children}
-          </div>
+          <div className="prose dark:prose-invert max-w-none pt-15 pb-8">{children}</div>
         </div>
       </div>
     </>

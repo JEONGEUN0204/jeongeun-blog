@@ -1,15 +1,13 @@
 import { Authors, allAuthors } from 'contentlayer/generated'
-import { coreContent } from 'pliny/utils/contentlayer'
 import AuthorLayout from '@/layouts/AuthorLayout'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 
 export default function Home() {
   const author = allAuthors.find((p) => p.slug === 'default') as Authors
-  const mainContent = coreContent(author)
 
   return (
     <>
-      <AuthorLayout content={mainContent}>
+      <AuthorLayout>
         <h1 className="text-pink-600">About Me</h1>
         <MDXLayoutRenderer code={author.body.code} />
         <h1 className="mt-8 text-pink-600">Education</h1>

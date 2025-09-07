@@ -148,9 +148,25 @@ export const Authors = defineDocumentType(() => ({
   computedFields,
 }))
 
+export const Careers = defineDocumentType(() => ({
+  name: 'Careers',
+  filePathPattern: 'careers/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    company: { type: 'string', required: true },
+    date: { type: 'date', required: true },
+    endDate: { type: 'date' },
+    description: { type: 'string', required: true },
+    logo: { type: 'string', required: true },
+    duration: { type: 'string' },
+    tags: { type: 'json', of: { type: 'string' }, default: [] },
+  },
+  computedFields,
+}))
+
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors],
+  documentTypes: [Blog, Authors, Careers],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -182,6 +198,7 @@ export default makeSource({
   },
   onSuccess: async (importData) => {
     const { allBlogs } = await importData()
+    console.log('DDD', allBlogs)
     createTagCount(allBlogs)
     createSearchIndex(allBlogs)
   },
