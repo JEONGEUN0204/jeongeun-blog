@@ -27,8 +27,8 @@ export default function AuthorLayout({ children, content }: Props) {
               />
             )}
             <div>
-              <h3 className="pt-4 pb-2 text-4xl leading-8 font-bold tracking-tight">{name}</h3>
-              <h4 className="text-2xl text-gray-600 dark:text-gray-400">{occupation}</h4>
+              <h2 className="pt-4 pb-2 text-4xl leading-8 font-bold tracking-tight">{name}</h2>
+              <h3 className="text-2xl">{occupation}</h3>
               <div className="text-gray-500 dark:text-gray-400">{company}</div>
               <div className="flex flex-col space-x-3 pt-6">
                 <div className="space--2 flex items-center space-x-2">
@@ -42,7 +42,7 @@ export default function AuthorLayout({ children, content }: Props) {
               </div>
             </div>
           </div>
-          <div className="prose dark:prose-invert max-w-none pt-8 pb-8 xl:col-span-2">
+          <div className="prose dark:prose-invert max-w-none pt-15 pb-8 xl:col-span-4">
             {children}
           </div>
         </div>
