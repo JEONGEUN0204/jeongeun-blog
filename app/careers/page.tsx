@@ -8,8 +8,6 @@ const Career = () => {
   return (
     <AuthorLayout>
       {allCareers.map((career, index) => {
-        const tags = career.tags.split('-')
-
         return (
           <div key={index} className="flex items-start space-x-20">
             <div className="flex flex-col space-y-1">
@@ -32,7 +30,7 @@ const Career = () => {
                 <div className="text-4xl font-bold text-black">{career.company}</div>
                 <div className="text-gray-500">{career.description}</div>
                 <div className="flex flex-wrap space-x-1">
-                  {tags.map(
+                  {career.tags.map(
                     (tag, index) =>
                       tag && (
                         <div

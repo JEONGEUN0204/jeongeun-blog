@@ -159,14 +159,30 @@ export const Careers = defineDocumentType(() => ({
     description: { type: 'string', required: true },
     logo: { type: 'string', required: true },
     duration: { type: 'string' },
-    tags: { type: 'json', of: { type: 'string' }, default: [] },
+    tags: { type: 'list', of: { type: 'string' }, default: [] },
+  },
+  computedFields,
+}))
+
+export const Projects = defineDocumentType(() => ({
+  name: 'Projects',
+  filePathPattern: 'projects/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    order: { type: 'number', required: true },
+    name: { type: 'string', required: true },
+    date: { type: 'string', required: true },
+    endDate: { type: 'string' },
+    tags: { type: 'list', of: { type: 'string' }, default: [] },
+    images: { type: 'list', of: { type: 'string' }, default: [] },
+    imageSize: { type: 'list', of: { type: 'number' }, default: [200, 300] },
   },
   computedFields,
 }))
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors, Careers],
+  documentTypes: [Blog, Authors, Careers, Projects],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
@@ -198,7 +214,6 @@ export default makeSource({
   },
   onSuccess: async (importData) => {
     const { allBlogs } = await importData()
-    console.log('DDD', allBlogs)
     createTagCount(allBlogs)
     createSearchIndex(allBlogs)
   },
