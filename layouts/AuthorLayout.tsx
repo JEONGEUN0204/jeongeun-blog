@@ -34,7 +34,7 @@ export default function AuthorLayout({ children }: Props) {
               <div className="flex flex-col space-x-3 pt-6">
                 <div className="space--2 flex items-center space-x-2">
                   <IoIosMail />
-                  <div className="text-gray-800 dark:text-gray-400">{email}</div>
+                  <div>{email}</div>
                 </div>
                 <div className="space--2 flex items-center space-x-2">
                   <MdOutlinePhoneIphone />
