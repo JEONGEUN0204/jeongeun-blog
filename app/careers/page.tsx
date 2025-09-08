@@ -45,7 +45,9 @@ const Career = () => {
                   )}
                 </div>
               </div>
-              <MDXLayoutRenderer code={career.body.code} />
+              <div className="prose dark:prose-invert mt-5 max-w-none">
+                <MDXLayoutRenderer code={career.body.code} />
+              </div>
             </div>
           </div>
         )
