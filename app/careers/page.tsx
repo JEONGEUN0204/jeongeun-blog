@@ -6,7 +6,8 @@ import dayjs from 'dayjs'
 
 const Career = () => {
   return (
-    <AuthorLayout>
+    <div className="prose dark:prose-invert max-w-none pt-15 pb-8">
+      {' '}
       {allCareers.map((career, index) => {
         return (
           <div key={index} className="flex items-start space-x-10">
@@ -50,7 +51,7 @@ const Career = () => {
           </div>
         )
       })}
-    </AuthorLayout>
+    </div>
   )
 }
 

@@ -1,3 +1,5 @@
+'use client'
+
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
 import Logo from '@/data/logo.svg'
@@ -5,8 +7,11 @@ import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
+import { usePathname } from 'next/navigation'
 
 const Header = () => {
+  const pathname = usePathname()
+
   let headerClass = 'flex items-center w-full bg-white dark:bg-gray-950 justify-between py-10'
   if (siteMetadata.stickyNav) {
     headerClass += ' sticky top-0 z-50'
@@ -32,15 +37,19 @@ const Header = () => {
         <div className="no-scrollbar hidden max-w-40 items-center gap-x-4 overflow-x-auto sm:flex md:max-w-72 lg:max-w-96">
           {headerNavLinks
             .filter((link) => link.href !== '/')
-            .map((link) => (
-              <Link
-                key={link.title}
-                href={link.href}
-                className="hover:text-primary-500 dark:hover:text-primary-400 m-1 font-medium text-gray-900 dark:text-gray-100"
-              >
-                {link.title}
-              </Link>
-            ))}
+            .map((link) => {
+              const isActive = pathname === link.href
+
+              return (
+                <Link
+                  key={link.title}
+                  href={link.href}
+                  className={`hover:text-primary-600 dark:hover:text-primary-400 font-extrabold ${isActive ? 'text-primary-600 dark:text-primary-400 font-bold' : 'font-medium text-gray-900 dark:text-gray-100'} m-1 text-xl`}
+                >
+                  <div>{link.title}</div>
+                </Link>
+              )
+            })}
         </div>
         <SearchButton />
         <ThemeSwitch />
