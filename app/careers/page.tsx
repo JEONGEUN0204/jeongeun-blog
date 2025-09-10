@@ -9,19 +9,19 @@ const Career = () => {
     <AuthorLayout>
       {allCareers.map((career, index) => {
         return (
-          <div key={index} className="flex items-start space-x-20">
+          <div key={index} className="flex items-start space-x-10">
             <div className="flex flex-col">
               <Image
                 src={career.logo}
-                width={200}
-                height={200}
+                width={150}
+                height={150}
                 alt=""
                 className="mt-0 rounded-lg"
               />
-              <h1>
+              <h1 className="-mt-5 text-2xl">
                 {dayjs(career.date).format('YYYY.MM.DD')}~{career.endDate}
               </h1>
-              <div className="h-fit w-fit rounded-md bg-pink-600 px-2 py-1 text-sm text-white">
+              <div className="-mt-3 h-fit w-fit rounded-md bg-pink-600 px-2 py-1 text-sm text-white">
                 {career.duration}
               </div>
             </div>
