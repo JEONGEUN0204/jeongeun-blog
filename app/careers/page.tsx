@@ -10,7 +10,7 @@ const Career = () => {
       {' '}
       {allCareers.map((career, index) => {
         return (
-          <div key={index} className="flex items-start space-x-10">
+          <div key={index} className="mb-20 flex items-start space-x-10">
             <div className="flex flex-col">
               <Image
                 src={career.logo}
@@ -20,7 +20,8 @@ const Career = () => {
                 className="mt-0 rounded-lg"
               />
               <h1 className="-mt-5 text-2xl">
-                {dayjs(career.date).format('YYYY.MM.DD')}~{career.endDate}
+                {dayjs(career.date).format('YYYY.MM')}~
+                {career.endDate ? dayjs(career.endDate).format('YYYY.MM') : ''}
               </h1>
               <div className="-mt-3 h-fit w-fit rounded-md bg-pink-600 px-2 py-1 text-sm text-white">
                 {career.duration}
