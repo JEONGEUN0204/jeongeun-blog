@@ -18,8 +18,15 @@
 /* Core theme configuration */
 @theme {
   /* Font families */
+  /*
+   * Pretendard 전역 적용.
+   * Tailwind 4의 --default-font-family가 --font-sans를 그대로 참조하므로(theme.css),
+   * 여기만 바꾸면 preflight를 통해 html 전체에 적용된다.
+   * var(--font-pretendard)는 app/layout.tsx의 next/font/local이 주입한다.
+   */
   --font-sans:
-    var(--font-roboto), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    var(--font-pretendard), 'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, sans-serif,
+    'Apple SD Gothic Neo', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* Colors */

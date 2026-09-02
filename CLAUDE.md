@@ -79,6 +79,7 @@ GitHub Pages 정적 export라 서버 PDF 생성이 불가능하다. **브라우�
 ### 스타일 스코프
 
 - `prose-doc`(`css/tailwind.css`)은 **문서형 페이지 본문에만** 붙이는 스코프 클래스다. h3에 티얼 바, 리스트 마커 색상 등. 이걸 `MDXComponents`에서 전역 오버라이드로 옮기면 블로그 글까지 바뀌므로 스코프를 유지할 것.
+- 본문 폰트는 Pretendard Variable을 **셀프 호스팅**한다(`app/fonts/PretendardVariable.woff2`, SIL OFL 1.1). `next.config.js`의 CSP가 `font-src 'self'`라 CDN 로드가 막히고, `next/font/local`이 `BASE_PATH`를 붙여 `/_next/static/media`로 내보내므로 정적 export에서도 경로가 안전하다. 가변축 전 범위(`weight: '45 920'`) 한 파일이라 400~800을 추가 요청 없이 덮는다. 폰트를 바꾸려면 `app/layout.tsx`의 `localFont` 선언과 `css/tailwind.css`의 `--font-sans`를 함께 고친다 — Tailwind 4의 `--default-font-family`가 `--font-sans`를 참조해 preflight로 전역에 적용된다.
 - 테마 컬러는 Tailwind 4 `@theme` 블록의 `--color-primary-*`(Deep Teal)다. `primary-700`은 다크 배경에서 읽히지 않아 다크모드에서는 `primary-300/400`을 쓴다.
 - 티얼은 성과·강조 전용, 태그/뱃지 같은 중립 요소는 회색을 쓴다는 색 규칙이 문서형 페이지 전반에 적용되어 있다.
 

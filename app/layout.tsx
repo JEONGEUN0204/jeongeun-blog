@@ -3,7 +3,7 @@ import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
 import 'css/print.css'
 
-import { Space_Grotesk, Roboto } from 'next/font/google'
+import localFont from 'next/font/local'
 import { Analytics, AnalyticsConfig } from 'pliny/analytics'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
@@ -13,16 +13,19 @@ import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 
-const space_grotesk = Space_Grotesk({
-  subsets: ['latin'],
+/*
+ * Pretendard Variable(SIL OFL 1.1, app/fonts/OFL.txt) 셀프 호스팅.
+ * next.config.js의 CSP가 font-src 'self'라 CDN 로드는 차단되고,
+ * next/font/local이 BASE_PATH를 붙여 /_next/static/media로 내보내므로
+ * GitHub Pages 정적 export에서도 경로가 깨지지 않는다.
+ * weight는 가변축 전 범위(45~920) — 사이트가 쓰는 400~800을 한 파일로 덮는다.
+ */
+const pretendard = localFont({
+  src: './fonts/PretendardVariable.woff2',
+  weight: '45 920',
+  style: 'normal',
   display: 'swap',
-  variable: '--font-space-grotesk',
-})
-
-const roboto = Roboto({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-roboto',
+  variable: '--font-pretendard',
 })
 
 export const metadata: Metadata = {
@@ -71,7 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang={siteMetadata.language}
-      className={`${space_grotesk.variable} scroll-smooth`}
+      className={`${pretendard.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <link
