@@ -137,6 +137,7 @@ export const Authors = defineDocumentType(() => ({
     avatar: { type: 'string' },
     occupation: { type: 'string' },
     company: { type: 'string' },
+    summary: { type: 'string' },
     email: { type: 'string' },
     twitter: { type: 'string' },
     bluesky: { type: 'string' },
@@ -158,6 +159,10 @@ export const Careers = defineDocumentType(() => ({
     endDate: { type: 'date' },
     description: { type: 'string', required: true },
     logo: { type: 'string', required: true },
+    /** 로고 원본 크기. 테두리가 로고에 딱 맞으려면 실제 비율이 필요하다. */
+    logoSize: { type: 'list', of: { type: 'number' }, default: [240, 80] },
+    /** 정사각 로고 박스를 채우는 방식. 'cover'는 박스를 꽉 채우고, 'contain'은 여백을 두고 가운데 정렬한다. */
+    logoFit: { type: 'enum', options: ['contain', 'cover'], default: 'contain' },
     duration: { type: 'string' },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
   },
@@ -171,11 +176,16 @@ export const Projects = defineDocumentType(() => ({
   fields: {
     order: { type: 'number', required: true },
     name: { type: 'string', required: true },
-    date: { type: 'string', required: true },
-    endDate: { type: 'string' },
+    company: { type: 'string' },
+    period: { type: 'string' },
+    platform: { type: 'string' },
+    /** 프로젝트 한 줄 요약. 원본 PDF처럼 스크린샷 위에 노출한다. */
+    summary: { type: 'string' },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     images: { type: 'list', of: { type: 'string' }, default: [] },
     imageSize: { type: 'list', of: { type: 'number' }, default: [200, 300] },
+    /** 'phone'이면 스크린샷을 폰 프레임으로 감싼다. 비율만으로는 세로형 데스크톱 캡처와 구분되지 않는다. */
+    imageFrame: { type: 'string' },
   },
   computedFields,
 }))

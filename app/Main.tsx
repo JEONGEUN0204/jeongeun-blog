@@ -8,14 +8,16 @@ export default function Home() {
   return (
     <>
       <AuthorLayout>
-        <div className="w-full border-b-2 border-b-pink-600 pb-2">
-          <h1 className="mb-0 text-3xl text-pink-600">About Me</h1>
+        <div className="border-b-primary-600 w-full border-b-2 pb-2">
+          <h1 className="text-primary-700 dark:text-primary-400 mb-0 text-3xl">About Me</h1>
         </div>
         <MDXLayoutRenderer code={author.body.code} />
         <div className="flex w-full space-x-10">
           <div className="w-full">
-            <div className="mb-4 w-full border-b-2 border-b-pink-600 pb-2">
-              <h1 className="mt-8 mb-0 text-3xl text-pink-600">Education</h1>
+            <div className="border-b-primary-600 mb-4 w-full border-b-2 pb-2">
+              <h1 className="text-primary-700 dark:text-primary-400 mt-8 mb-0 text-3xl">
+                Education
+              </h1>
             </div>
             <div className="space-y-2">
               <div className="text-md flex space-x-5 font-semibold">
@@ -27,8 +29,10 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full">
-            <div className="mb-4 w-full border-b-2 border-b-pink-600 pb-2">
-              <h1 className="mt-8 mb-0 text-3xl text-pink-600">Certificate</h1>
+            <div className="border-b-primary-600 mb-4 w-full border-b-2 pb-2">
+              <h1 className="text-primary-700 dark:text-primary-400 mt-8 mb-0 text-3xl">
+                Certificate
+              </h1>
             </div>
             <div className="text-md flex space-x-5 font-semibold">
               <div>2022.06.17</div> <div>정보처리기사</div>

@@ -2,7 +2,18 @@
 @plugin "@tailwindcss/forms";
 @plugin '@tailwindcss/typography';
 @source '../node_modules/pliny';
-@custom-variant dark (&:where(.dark, .dark *));
+/*
+ * 인쇄할 때는 다크모드 유틸리티를 전부 무력화한다.
+ * print.css가 배경/색상만 라이트로 강제해도 .dark 클래스는 그대로 남기 때문에,
+ * 다크모드로 보다가 Ctrl+P 하면 밝은 회색 본문이 흰 종이에 찍혀 읽을 수 없게 된다.
+ */
+@custom-variant dark {
+  @media not print {
+    &:where(.dark, .dark *) {
+      @slot;
+    }
+  }
+}
 
 /* Core theme configuration */
 @theme {
@@ -12,18 +23,18 @@
     'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* Colors */
-  /* Copied from https://tailwindcss.com/docs/theme#default-theme-variable-reference */
-  --color-primary-50: oklch(0.971 0.014 343.198);
-  --color-primary-100: oklch(0.948 0.028 342.258);
-  --color-primary-200: oklch(0.899 0.061 343.231);
-  --color-primary-300: oklch(0.823 0.12 346.018);
-  --color-primary-400: oklch(0.718 0.202 349.761);
-  --color-primary-500: oklch(0.656 0.241 354.308);
-  --color-primary-600: oklch(0.592 0.249 0.584);
-  --color-primary-700: oklch(0.525 0.223 3.958);
-  --color-primary-800: oklch(0.459 0.187 3.815);
-  --color-primary-900: oklch(0.408 0.153 2.432);
-  --color-primary-950: oklch(0.284 0.109 3.907);
+  /* Deep Teal - Tailwind teal scale (node_modules/tailwindcss/theme.css) */
+  --color-primary-50: oklch(98.4% 0.014 180.72);
+  --color-primary-100: oklch(95.3% 0.051 180.801);
+  --color-primary-200: oklch(91% 0.096 180.426);
+  --color-primary-300: oklch(85.5% 0.138 181.071);
+  --color-primary-400: oklch(77.7% 0.152 181.912);
+  --color-primary-500: oklch(70.4% 0.14 182.503);
+  --color-primary-600: oklch(60% 0.118 184.704);
+  --color-primary-700: oklch(51.1% 0.096 186.391);
+  --color-primary-800: oklch(43.7% 0.078 188.216);
+  --color-primary-900: oklch(38.6% 0.063 188.416);
+  --color-primary-950: oklch(27.7% 0.046 192.524);
 
   --color-gray-50: oklch(0.985 0.002 247.839);
   --color-gray-100: oklch(0.967 0.003 264.542);
@@ -98,7 +109,7 @@
       font-weight: 600;
     }
     & :where(code):not(pre code) {
-      color: var(--color-indigo-500);
+      color: var(--color-primary-700);
     }
   }
 
@@ -114,6 +125,27 @@
     }
     & :where(h1, h2, h3, h4, h5, h6) {
       color: var(--color-gray-100);
+    }
+    /* 어두운 배경에서 primary-700은 너무 어두워 읽히지 않는다 */
+    & :where(code):not(pre code) {
+      color: var(--color-primary-300);
+    }
+  }
+
+  /*
+   * 문서형 페이지(포트폴리오·경력기술서) 본문 전용 타이포그래피.
+   *
+   * MDXComponents에서 h3/ul을 전역 오버라이드하면 블로그 글까지 바뀌므로,
+   * 해당 페이지에만 붙이는 스코프 클래스로 분리한다.
+   */
+  .prose-doc {
+    /* 소제목에 티얼 바 — 원본 PDF의 섹션 구분을 대신한다 */
+    & h3 {
+      border-left: 3px solid var(--color-primary-600);
+      padding-left: 0.75rem;
+    }
+    & ul > li::marker {
+      color: var(--color-primary-600);
     }
   }
 }

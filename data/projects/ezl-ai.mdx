@@ -1,18 +1,22 @@
 ---
 order: 4
 name: Jira/Confluence 검색 AI
-date: 2025-07
+company: 이즐랩스
+period: 2024.06 ~ 2025.10
+summary: '자연어 질의로 사내 Jira·Confluence 데이터를 검색하는 내부 도구입니다.'
+platform: TypeScript · Genkit
 tags:
   - TypeScript
   - Genkit
 images:
   - /static/images/ezl-ai.png
 imageSize:
-  - 500
-  - 500
+  - 350
+  - 265
 ---
 
-이즐랩스 내부 운영 효율성을 높이기 위해 Jira와 Confluence 데이터를 검색할 수 있는 AI 프로젝트를 진행했습니다.  
-예를 들어, “신정은에게 할당된 티켓 중 결제 관련 댓글이 있는 티켓을 알려줘”와 같은 자연어 질문을 통해 관련 정보를 빠르게 확인할 수 있습니다.
+<Block kind="approach" label="프롬프트 설계">
 
-✔ 사용자의 요청에 따라 적절한 tool을 선택하고, 원하는 형태로 답변을 출력할 수 있도록 프롬프트를 설계하였습니다.
+요청에 맞는 tool 선택·답변 형식을 제어하도록 프롬프트를 설계해, 운영 정보를 **빠르게 찾도록** 했습니다.
+
+</Block>

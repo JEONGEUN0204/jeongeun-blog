@@ -4,58 +4,71 @@ date: 2024-06
 endDate: 2025-10
 description: 이동의 즐거움(캐시비) 관계사로, 교통카드 충전·조회 서비스 「이즐충전소」 를 운영하고 있습니다. MAU 30만 명 규모의 서비스를 통해 사용자들이 보다 편리하게 교통카드를 관리할 수 있도록 지원합니다.
 logo: /static/images/ezllabs-logo.png
+logoSize:
+  - 512
+  - 512
+logoFit: cover
 duration: 1년 4개월
 tags:
   - React Native
-  - React
   - TypeScript
   - React Query
   - Recoil
-  - Git/GitHub
-  - Jira
-  - Slack
-  - Figma
+  - Kotlin
+  - Swift
   - Storybook
-  - Confluence
+  - Genkit
 ---
 
-### 1. 이즐워크 일일/연속 미션 조회 및 포인트 전환 API 연속 호출 개선
+<Section title="01. 이즐충전소 (React Native · 앱)">
 
-#### 문제/배경
+<Meta
+  tech={'React Native · TypeScript · React Query · Recoil · Kotlin · Swift'}
+  role={'조회 API 성능 개선·앱 안정성(Sentry)·충전/환불 결제 흐름 담당'}
+/>
 
-- 이즐워크 서비스 내에서 일일/연속 미션 조회 API가 불필요하게 연속 호출되는 문제를 발견
-- 포인트 전환 API 또한 버튼 연속 클릭 시 중복 호출이 발생하여 사용자 경험이 저하됨
+**이즐워크 조회·포인트 전환 API 개선**
 
-#### 해결 및 효과
+<Steps
+  problem={'버튼 클릭마다 조회 API가 중복 호출되어 리소스·UX 저하'}
+  improve={'useMutation→useQuery 전환·캐싱, 연속 클릭 방지 처리'}
+  result={'API 호출 75% 감소'}
+/>
 
-- 기존 `useMutation`으로 데이터를 받아오던 로직을 `useQuery`로 변경하여 캐시 활용 및 불필요한 호출 로직을 제거 → **조회 API 호출 75% 감소**
-- 포인트 전환 API에 버튼 연속 클릭 방지 로직 추가 → **중복 호출 방지**
-- 연속 호출 에러 발생 시 fallback 처리를 적용 → **사용자 경험 개선 및 안정성 확보**
+**Sentry 활용 앱 안정성 대응**
 
----
+<Steps
+  improve={'Sentry로 수집되는 런타임 에러를 확인해 원인 파악·수정'}
+  result={'Crash Free Rate 약 3%p 향상'}
+/>
 
-### 2. ErrorBoundary 도입 및 적용
+**충전·환불 재시도 플로우 구현**
 
-#### 문제/배경
+<Steps
+  problem={'충전·환불 미완료 거래로 CS 문의가 발생'}
+  improve={'재시도 플로우와 연속 클릭 방지 로직 추가'}
+  result={'중복 결제 차단, CS 인입 감소'}
+/>
 
-에러 핸들링 방식이 컴포넌트마다 달라 관리 및 가독성이 떨어지는 문제를 발견
+</Section>
 
-#### 해결 및 효과
+<Section title="02. 백오피스 · 디자인 시스템 · 내부 AI (React · React Native)">
 
-- `react-error-boundary` 라이브러리 적용
-  - 페이지 단의 비즈니스 로직에서 불필요한 에러 처리 코드 제거 → **코드 가독성 및 유지보수성 향상**
-  - 반복되는 에러 핸들링 패턴을 통일 → **개발 생산성 및 일관성 확보**
+<Meta
+  tech={'React · TypeScript · React Query · Recoil · Storybook · Genkit'}
+  role={'백오피스 운영 기능·공통 디자인 시스템·사내 검색 AI 개발 담당'}
+/>
 
----
+**백오피스 — 에러 처리 구조 개선**
 
-### 3. 디자인 시스템 스토리북 Control 적용
+- 관리자 운영 필수 기능을 구현하고, react-error-boundary 적용으로 에러 처리 패턴을 표준화(가독성·유지보수성·일관성 향상).
 
-#### 문제/배경
+**디자인 시스템 — Storybook 개발 환경 개선**
 
-- 스토리북에 `controls` 기능이 적용되어 있지 않아, UI 컴포넌트의 디자인이나 상태를 확인하려면 코드를 직접 수정해야 하는 불편함 존재
+- 공통 UI 컴포넌트를 구현하고, props 확인 시 코드 수정이 필요하던 것을 Storybook Controls 적용으로 코드 수정 없이 UI를 즉시 확인하도록 개선해 개발 시간을 단축.
 
-#### 해결 및 효과
+**Jira/Confluence 검색 AI**
 
-- 스토리북에 `controls`를 적용하여 컴포넌트의 속성(props)을 실시간으로 조정할 수 있도록 개선
-- 개발자와 디자이너 모두 별도의 코드 수정 없이 **다양한 UI 변화를 즉시 확인 가능**
-- 컴포넌트 활용도를 높이고, **UI 컴포넌트 확인 및 테스트에 소요되는 개발 시간 단축**
+- 자연어 질의로 Jira·Confluence 데이터를 검색해 원하는 정보를 즉시 확인하는 내부 도구를 구현(Genkit·프롬프트 설계).
+
+</Section>

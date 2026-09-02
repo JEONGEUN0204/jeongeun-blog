@@ -1,7 +1,10 @@
 ---
 order: 1
 name: 이즐충전소
-date: 2024-07
+company: 이즐랩스
+period: 2024.07 ~ 2025.10
+summary: 'MAU 30만 규모의 교통카드 충전·조회 서비스. 모바일 환경에서 안정적이고 직관적인 충전 경험을 제공하고, i18n으로 다국어를 지원했습니다.'
+platform: React Native · 앱
 tags:
   - React Native
   - TypeScript
@@ -10,16 +13,78 @@ tags:
   - Kotlin
   - Swift
 images:
-  - /static/images/ezl-charge.png
-  - /static/images/ezl-charge1.png
-  - /static/images/ezl-charge3.png
-  - /static/images/ezl-charge4.png
+  - /static/images/ezl-charge-1.png
+  - /static/images/ezl-charge-2.png
+  - /static/images/ezl-charge-3.png
+imageSize:
+  - 165
+  - 342
+imageFrame: phone
 ---
 
-`MAU 30만 규모`의 교통카드 충전·조회 서비스이며, React Native 기반의 프로젝트입니다.
-사용자들이 모바일 환경에서 편리하게 교통카드를 충전하고 이용 내역을 조회할 수 있도록 안정적이고 직관적인 서비스를 제공했습니다.
+### 이즐충전소 · 조회 API 성능 개선 (대표 성과)
 
-✔ 이즐워크에서 API 연속 호출 문제를 개선하여 불필요한 호출을 줄이고 `리소스를 절감함`과 동시에 `사용자 경험을 향상`시켰습니다.<br/>
-✔ 충전·환불 과정에서 미완료된 거래를 사용자가 재시도할 수 있는 플로우를 구현하여 관련 `CS 인입을 감소`시켰습니다. <br/>
-✔ Sentry를 활용해 주요 에러를 모니터링하고 해결하여 `Crash Free Rate를 약 3% 향상`시킴으로써 앱 안정성과 사용자 경험을 개선하였습니다.<br/>
-✔ i18n 라이브러리를 활용해 서비스의 다국어 지원 기능을 구현하였습니다.
+<Split
+  aside={
+    <StatCard
+      value="API 75% ↓"
+      caption="조회 API 호출 수 감소"
+      rows={[
+        ['방식', 'useMutation → useQuery 전환 · 캐싱'],
+        ['효과', '중복 조회 제거로 네트워크 비용·응답 지연 감소'],
+        ['부가', '연속 클릭 방지로 중복 트리거 차단'],
+      ]}
+    />
+  }
+>
+
+<Block kind="problem">
+
+이즐워크(걸음 적립)의 일일·연속 미션 조회와 포인트 전환 API가 버튼을 누를 때마다 매번 호출되는 구조였습니다. 사용자가 화면을 오가거나 버튼을 반복 탭할 때 동일한 조회 요청이 중복으로 발생해 불필요한 네트워크 비용과 응답 지연이 생겼습니다.
+
+</Block>
+
+<Block kind="approach">
+
+- 매 호출마다 서버를 때리던 useMutation 기반 조회를 useQuery로 전환, 조회 결과를 캐시에 두고 재사용하도록 재설계
+- 동일 데이터에 대한 중복 요청을 캐싱으로 흡수하고, 갱신이 필요한 시점에만 무효화(invalidate)
+- 버튼 연속 클릭 방지 처리로 순간적인 중복 트리거 차단
+
+</Block>
+
+</Split>
+
+<Block kind="result">
+
+동일 화면·동일 데이터에 대한 중복 조회 요청이 사라지면서 **API 호출이 75% 감소**했고, 조회·전환 흐름의 응답 체감이 개선됐습니다. 이후 다른 조회성 화면에도 같은 캐싱 패턴을 적용하는 기준이 됐습니다.
+
+</Block>
+
+### 이즐충전소 · 안정성 & 결제 흐름
+
+<Split
+  aside={
+    <StatCard
+      value="+3%p"
+      caption="Crash Free Rate 향상"
+      rows={[
+        ['방식', 'Sentry로 런타임 에러 확인·수정'],
+        ['결과', '앱 크래시 없는 세션 비율 약 3%p 개선'],
+      ]}
+    />
+  }
+>
+
+<Block kind="neutral" label="Sentry 활용 앱 안정성 대응">
+
+운영 중 발생하는 런타임 에러를 Sentry로 확인해 원인을 파악하고 수정하는 방식으로 앱 안정성 이슈에 대응했습니다.
+
+</Block>
+
+<Block kind="neutral" label="충전·환불 재시도 플로우 구현">
+
+충전·환불 거래가 중간에 미완료로 남으면 사용자가 상태를 알기 어렵고 CS 문의로 이어졌습니다. 미완료 거래에 대한 재시도 플로우를 구현해 사용자가 직접 이어서 처리하도록 유도하고, 결제 버튼 연속 클릭 방지로 중복 결제 자체를 차단했습니다. → **중복 결제 차단, CS 인입 감소**
+
+</Block>
+
+</Split>

@@ -1,0 +1,70 @@
+/*
+ * 인쇄(Ctrl+P → PDF로 저장) 전용 스타일.
+ * 정적 export(GitHub Pages) 환경이라 서버 PDF 생성이 불가능하므로,
+ * 브라우저 네이티브 인쇄만으로 제출 가능한 품질이 나오도록 보정한다.
+ */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 14mm;
+  }
+
+  /* 다크모드와 무관하게 항상 라이트로 인쇄 */
+  html {
+    color-scheme: light !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* 뱃지 배경색(primary-100 등)을 인쇄 시 보존 */
+  * {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* 문단 첫/끝 줄이 홀로 페이지에 남는 것 방지 */
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* 원본 PDF와 비슷한 페이지 수를 위해 인쇄 시 축소 */
+  body {
+    font-size: 13px;
+  }
+
+  /* 뷰포트 스크롤 보정용 좌측 패딩은 인쇄에 불필요 */
+  body {
+    padding-left: 0 !important;
+  }
+
+  /* 제목이 페이지 하단에 홀로 남지 않도록 */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    break-after: avoid-page;
+    break-inside: avoid-page;
+  }
+
+  /* 이미지·표·코드블록이 페이지 경계에서 잘리지 않도록 */
+  img,
+  figure,
+  pre,
+  table,
+  blockquote {
+    break-inside: avoid-page;
+  }
+
+  /* 인쇄물에서 링크 밑줄·강조는 불필요 */
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}

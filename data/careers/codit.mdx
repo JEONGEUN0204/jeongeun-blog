@@ -1,129 +1,238 @@
 ---
 company: CODIT
-date: 2024-11
-description: AI 기반 법·규제·정책 데이터 플랫폼을 운영하며, 실시간 입법 동향, 법령 정보, 국회의원 발언, 보도자료 등을 수집·분석하여 기업에 맞춘 맞춤형 정책·규제 인사이트를 제공합니다.
-logo: /static/images/codit-logo.png
-duration: 3개월
+date: 2025-11
+description: 국회 의안·법령·회의록·국회의원 데이터를 다루는 정책·입법 데이터 플랫폼 「Codit」과, 여기서 분리된 AI 챗봇 「ChatCODIT」의 웹·네이티브 앱을 담당했습니다. 대시보드 안정화부터 실시간 스트리밍·인앱결제·앱 배포까지 리드했습니다.
+logo: /static/images/codit-logo-wide.png
+logoSize:
+  - 384
+  - 93
+logoFit: contain
+duration: 약 10개월
 tags:
   - React
+  - Next.js
   - TypeScript
-  - React Query
+  - TanStack Query
   - Zustand
-  - Git/Bitbucket
+  - embla-carousel
+  - Tailwind CSS
+  - i18next
+  - next-intl
+  - Expo
+  - React Native
+  - reCAPTCHA Enterprise
+  - Firebase App Check
+  - EAS
+  - Bitbucket
   - Jira
-  - Slack
   - Figma
   - Confluence
-  - Next.js
-  - Tailwind CSS
 ---
 
-### 1. 회의록 상세 페이지 리뉴얼
+<Section title="01. Codit 플랫폼 · 대시보드 (Web · 대표 성과)">
 
-#### 문제/배경
+<Meta
+  tech={'React · TanStack Query · Zustand · embla-carousel · TypeScript'}
+  role={'대시보드 프론트엔드 데이터 로딩 아키텍처·쿼리 계층·캐러셀 인터랙션 설계 및 구현'}
+/>
 
-- 회의록 상세 페이지에 레거시 코드가 누적되어 잦은 버그 발생
-- 기능 추가 시 사이드 이펙트가 빈번하게 발생하여 유지보수 비용 증가
+**대시보드 순차 로딩 아키텍처 설계**
 
-#### 해결 및 효과
+<Steps
+  problem={'진입 시 뉴스·의안·법령 등 전 섹션·전 슬라이드를 한 번에 요청해 초기 로딩이 느림'}
+  improve={'현재 슬라이드만 요청하고 인접(±1) 슬라이드는 백그라운드 prefetch하도록 재설계'}
+  result={'초기 요청 데이터량 축소, 최초 진입 로딩 개선'}
+/>
 
-- 기존 레거시 코드를 전면 재구성하여 상세 페이지를 신규 개발
-- 비정상 동작 케이스를 정리하고 렌더링·상태 관리 로직 개선<br/>
-  → 회의록 관련 버그 발생률 대폭 감소(주요 이슈 재발 0건)<br/>
-  → 유지보수 및 기능 확장 용이성 확보
+**대시보드 쿼리 계층 단일화**
 
----
+<Steps
+  problem={'섹션마다 쿼리 훅이 산발적으로 흩어져 유지보수가 어려움'}
+  improve={'useDashboard 단일 훅·단일 캐시 정책으로 통합, deviceType 자동 주입'}
+  result={'신규 섹션 추가 비용 감소'}
+/>
 
-### 2. 챗코딧(ChatCODIT) 서비스 분리 및 Next.js 마이그레이션 (진행중)
+**캐러셀 인터랙션 고도화**
 
-#### 문제/배경
+<Steps
+  problem={'한 번 스와이프에 여러 칸이 넘어가고 섹션 간 동작이 불일치'}
+  improve={'useSwipeOneStep 등 커스텀 훅으로 1칸 이동·드래그 스냅·화살표 네비 구현'}
+  result={'스와이프 정확도·인터랙션 일관성 확보'}
+/>
 
-- 챗코딧이 코딧 플랫폼과 동일한 도메인·코드베이스를 사용하여 확장성과 독립성에 한계 존재
-- 서비스 성격에 맞는 구조 분리가 필요
+</Section>
 
-#### 해결 및 효과
+<Section title="02. Codit 플랫폼 · 품질·구조 (Web)">
 
-- 코딧을 별도 서비스로 분리하며 Next.js 기반 신규 프로젝트 세팅 및 마이그레이션 진행
+<Meta
+  tech={'React · Tailwind CSS · i18next · TypeScript'}
+  role={'AppShell 구조 도입·레거시 스타일 마이그레이션 담당'}
+/>
 
-- 서비스 특성을 고려해 SEO를 우선한 라우팅 구조 설계<br/>
-  → 다국어 URL 기반 라우팅 구조 설계 및 적용<br/>
-  → 검색 엔진 색인을 고려하여 랜딩 페이지는 리다이렉트 없이 직접 노출되도록 처리
-- 불필요한 리다이렉트로 인한 크롤링 손실 방지 및 페이지 접근성 개선<br/>
-  → 검색 엔진 친화적인 URL 구조 확보<br/>
-  → 서비스 초기 SEO 성능 및 확장성 기반 마련
+**AppShell 아키텍처 도입 & 레거시 마이그레이션**
 
----
+<Steps
+  problem={'라우트 전환마다 전역 폴백 노출, styled-components 레거시로 유지보수 부담'}
+  improve={'AppShell 분리·Suspense L1/L3 계층화, Tailwind 순차 전환·공통 컴포넌트화'}
+  result={'첫 진입 폴백 최소화, 유지보수성 향상'}
+/>
 
-### 3. ESLint 설정 개선 및 프로젝트 표준화
+</Section>
 
-#### 문제/배경
+<Section title="03. ChatCODIT · 실시간 스트리밍 (Web · 핵심)">
 
-- 기존 ESLint 설정이 정상적으로 동작하지 않아 코드 품질 관리가 어려움
-- 팀 내 코드 스타일 편차 발생
+<Meta
+  tech={'Next.js · fetch ReadableStream · SSE · Zustand · TypeScript'}
+  role={'스트리밍 응답 형식 설계(백엔드 협의)·프론트 파싱·렌더링·상태 구조 담당'}
+/>
 
-#### 해결 및 효과
+**스트리밍 응답 형식(SSE 프로토콜) 직접 설계**
 
-- `@rushstack/eslint-config`를 도입하여 프로젝트에 맞게 규칙 재정의
+<Steps
+  problem={
+    '기존 구조에서는 백엔드가 하나의 거대한 JSON을 문자 단위로 쪼개 전송했고, 이를 받는 프론트 파서(약 1,281줄)가 불완전한 JSON을 수동 파싱(brace counting·escape)해야 했으며 파셜 JSON 파서가 4~5개 중복 존재'
+  }
+  improve={
+    '"모든 SSE 이벤트는 그 자체로 유효한 JSON"이라는 원칙으로 블록 단위 + 텍스트 델타 프로토콜(meta·step·block_start·text_delta·block_end·block_data·done 7종)을 직접 설계해 백엔드에 요청'
+  }
+  result={
+    '모든 data: 라인이 완전한 JSON → JSON.parse() 한 줄로 처리, 약 1,281줄에 달하던 수동 파셜 JSON 파서를 걷어내 파싱 로직 대폭 단순화'
+  }
+/>
 
-- TypeScript·React 환경에 맞는 린트 설정 정비<br/>
-  → 정적 분석 신뢰도 향상<br/>
-  → 리뷰 단계에서의 코드 품질 이슈 감소
+**스키마 리뷰·제안 & 렌더러 선정**
 
-### 4. 챗코딧 답변 생성 단계별 인디케이터 UX 개선
+<Steps
+  improve={
+    'citations의 위치 표기가 본문 문자 오프셋(range) 기반이어서 스트리밍 중 텍스트가 늘어나면 틀어질 위험을 발견해, 본문의 [^1] 마커 id로 매칭하는 방식을 대안으로 제안. 스트리밍 최적화 렌더러(streamdown) 채택'
+  }
+  result={'불완전 JSON 파싱 자체가 불필요해지고, 스트리밍 중에도 마크다운이 안정적으로 렌더링'}
+/>
 
-#### 문제/배경
+**연결 안정성 & 채팅 상태 단일화**
 
-- AI 답변 생성 과정이 사용자에게 불투명하여 대기 시간이 길게 느껴짐
+<Steps
+  improve={
+    'Promise.race 타임아웃으로 죽은 연결 감지·예외 방어, Zustand StreamingStore로 상태를 통합하고 이벤트 리듀서 패턴으로 불변 갱신'
+  }
+  result={'도착 순서 무관 일관성, 신규 답변 타입 확장 기반 확보'}
+/>
 
-#### 해결 및 효과
+</Section>
 
-- 답변 생성 단계를 세분화하여 단계별 인디케이터 문구를 조건 분기 처리
+<Section title="04. ChatCODIT · 대화형 문서 초안 작성(Draft) (Web)">
 
-- 진행 상황을 명확히 인지할 수 있도록 UX 개선<br/>
-  → 체감 대기 시간 감소 및 사용자 신뢰도 향상<br/>
-  → 답변 생성 과정 이탈률 감소
+<Meta
+  tech={'Next.js · SSE · Zustand · TypeScript'}
+  role={'멀티턴 문서 생성 플로우 설계·블록 모델 확장·에러 복원 로직·파일 첨부 파이프라인 구현 담당'}
+/>
 
-### 5. 커스텀 메뉴 폴더 및 이슈 자동 생성 기능 개발
+**기존 스트리밍 아키텍처 위 멀티턴 문서 생성 확장**
 
-#### 문제/배경
+<Steps
+  problem={
+    '템플릿 질문에 순차로 답하면 이를 종합해 법률 문서 초안을 생성하는 "질문→답변→문서" 멀티턴 흐름을, 기존 스트리밍 구조를 깨지 않고 얹어야 함'
+  }
+  improve={
+    '기존 SSE 스토어에 question·user_message·document 블록 타입만 추가해 기존 렌더링 경로 수정 없이 통합(확장 가능한 구조를 실제로 검증), 세션 판정 로직을 draftBlocks.utils로 단일 소스화'
+  }
+  result={'기존 아키텍처 재사용으로 신규 피처를 무중단 확장'}
+/>
 
-- 연령대가 높은 사용자에게 폴더/이슈 수동 생성 과정이 복잡하게 인식됨
+**에러 복원력 있는 UX**
 
-- 초기 사용 진입 장벽 존재
+<Steps
+  improve={
+    "SSE 에러를 StreamError로 타입화하고 API 에러 코드를 카탈로그화해 재시도가능/입력오류/치명 3갈래 분기. 중복 요청(409) 시 '생성 중' 표시를 유지한 채 Retry-After 대기→세션 폴링→같은 키로 replay하는 자기복구 구현"
+  }
+  result={'중복 요청·네트워크 오류에도 진행 상태를 잃지 않는 복원력 확보'}
+/>
 
-#### 해결 및 효과
+**파일 첨부 파이프라인**
 
-- 문장을 입력하면 적절한 메뉴 폴더와 이슈를 자동 생성하는 기능 개발
+- 초안 질문에 파일을 multipart로 전송하고, 첨부 개수·용량(5MB) 제한과 초과 시 안내, '내 문서에서 업로드' 개수 제한 연동을 처리. 기존 파일은 재업로드하지 않고 existingFileIds로 전달하는 방식으로 설계.
 
-- 사용자 입력 의도를 기반으로 구조를 자동 설계<br/>
-  → 콘텐츠 생성 소요 시간 단축(수작업 대비 대폭 감소)<br/>
-  → 고연령 사용자 사용성 및 접근성 개선
+</Section>
 
-### 6. 서비스 전반 버그 픽스 및 안정성 개선
+<Section title="05. ChatCODIT · 렌더링·구축·운영 (Web)">
 
-#### 문제/배경
+<Meta
+  tech={'Next.js · React · TypeScript · next-intl · Tailwind CSS'}
+  role={'반응형 웹 대응·0→1 웹 구축(React→Next.js 마이그레이션·회원·인증·SEO·다국어) 담당'}
+/>
 
-- 신규 기능 개발과 병행되며 자잘한 UI/로직 버그 다수 발생
+**반응형 웹 — 다층 전략 설계**
 
-#### 해결 및 효과
+<Steps
+  problem={
+    '단순 CSS 분기로는 모바일 바텀시트 vs 데스크톱 모달·문서 패널 같은 구조적 차이를 감당하기 어려움'
+  }
+  improve={
+    '① next/server userAgent로 SSR 시점 디바이스 확정(DeviceProvider·useDeviceType)해 hydration 깜빡임 방지 ② desktop/mobile 라우트 분리 + device rewrite ③ Tailwind @theme 커스텀 브레이크포인트 토큰화(1920~480px) ④ 컴포넌트 단위 반응형으로 답변 영역 콘텐츠를 화면 폭에 맞춰 동적 배치'
+  }
+  result={'감지→라우팅→토큰→컴포넌트 전 계층에서 일관된 반응형 확보'}
+/>
 
-- 사용자 플로우에 직접적인 영향을 주는 버그 우선 해결
+**0→1 신규 구축 & 배포 단순화**
 
-- 재현 경로 정리 및 방어 로직 추가<br/>
-  → 서비스 안정성 향상
+- React → Next.js(App Router) 마이그레이션, 로그인 Guard(회원·인증)·next-intl 다국어·SEO 구축. Bitbucket Pipeline으로 테스트 서버 배포 과정을 자동화·단순화.
 
-### 7. 프론트엔드 개발 문화 및 협업 프로세스 개선
+</Section>
 
-#### 역할 및 기여
+<Section title="06. ChatCODIT App · 구축·결제 (iOS · Android)">
 
-- 프론트엔드 미팅 주도 및 참여를 통해 개발 환경 개선 논의
-  - 폴더 구조 개선 → 실제 적용 완료
+<Meta
+  tech={'Expo · React Native · TypeScript · Zustand · TanStack Query · expo-iap'}
+  role={'웹→네이티브 마이그레이션·인앱결제(IAP)·구독 결제 신뢰성 설계 및 구현'}
+/>
 
-  - PR 및 머지 방식 정의 → 리뷰 효율 및 히스토리 관리 개선
+- Expo Router·스트리밍 채팅·마크다운 이식으로 1.0.0 정식 출시. expo-iap 기반 BASIC/PRO 구독을 서버 검증까지 연동하고 결제 상태를 IAPProvider로 통합.
 
-  - 코딩 컨벤션 논의 및 정리
+**결제 신뢰성 확보**
 
-- 아이콘·이미지 리소스 정리 방향 수립(진행 예정)
+<Steps
+  problem={'인앱결제 검증 과정에서 동일 거래가 중복으로 verify되는 이슈 발생'}
+  improve={'앱 실행 시 미완료 거래 sweep·재검증, 계정 UUID 바인딩·중복 구독 방지 가드 적용'}
+  result={'중복 verify 해소'}
+/>
 
-- 업무 분배 및 역할 정리
-  → 팀 내 개발 생산성 및 협업 효율 향상
+</Section>
+
+<Section title="07. ChatCODIT App · 인증·보안·배포 (iOS · Android)">
+
+<Meta
+  tech={'Expo · React Native · reCAPTCHA Enterprise · Firebase App Check · EAS'}
+  role={'소셜 로그인·딥링크 처리·앱 보안·EAS 무중단 배포 담당'}
+/>
+
+- 이메일·Apple·Google 소셜 로그인을 구현하고, 비밀번호 재설정·이메일 인증 링크를 딥링크로 처리해 앱 설치 시 앱으로, 미설치 시 모바일 웹으로 연결되도록 구현. reCAPTCHA Enterprise 봇 방어 + Firebase App Check로 클라이언트 무결성 검증을 적용.
+- EAS Build 프로파일(dev/staging/production) 분리, EAS Update(OTA)·rollback 스크립트로 무중단 배포·빠른 복구 체계 구축. 출시 이후 발생하는 버그와 운영 이슈를 지속적으로 대응하고, i18n 수정처럼 급한 변경은 OTA로 즉시 반영.
+
+</Section>
+
+<Section title="08. 더코딧 앱 (WebView 하이브리드) (iOS · Android · WebView)">
+
+<Meta
+  tech={
+    'React Native · Expo · expo-router · react-native-webview · EAS · Firebase App Distribution'
+  }
+  role={'WebView 네비게이션·브릿지 트러블슈팅·릴리즈/스토어 배포 담당'}
+/>
+
+**원문링크 모달 2번 열림 — 브릿지 주입 타이밍 이슈 규명**
+
+<Steps
+  problem={
+    '원문링크 클릭 시 모달이 두 번 열림. 근본 원인은 네이티브 판별 상수 isNativeMobile이 모듈 로드 시점에 1번만 평가되는데, 그 시점엔 injectedObjectJson이 아직 늦게 주입돼 값이 false로 캐싱된 것'
+  }
+  improve={
+    '"ReactNativeWebView 객체의 존재 자체가 앱 웹뷰 환경"이라는 판단으로 판별 기준을 Boolean(window.ReactNativeWebView)로 변경해 주입 타이밍 의존을 제거'
+  }
+  result={'중복 오픈 제거, iOS·Android 동작 일관성 확보'}
+/>
+
+**배포 자동화 & 릴리즈 오너십**
+
+- EAS staging 빌드와 Firebase App Distribution 배포 스크립트로 QA/내부 배포 파이프라인을 간소화하고, 여러 마이너 버전의 릴리즈와 스토어 배포 전 과정(브랜치 병합·실서버 반영)을 주도.
+
+</Section>

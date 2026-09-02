@@ -14,7 +14,8 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: [],
+    // next-env.d.ts는 Next.js가 자동 생성하는 파일이라 lint 대상에서 제외한다
+    ignores: ['next-env.d.ts'],
   },
   js.configs.recommended,
   ...compat.extends(

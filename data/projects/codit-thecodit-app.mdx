@@ -1,0 +1,58 @@
+---
+order: 8
+name: 더코딧 앱 (WebView 하이브리드)
+company: 코딧
+period: 2025.11 ~ 현재
+summary: '코딧 웹 서비스를 WebView로 래핑한 하이브리드 앱. 네이티브 셸과 웹 콘텐츠 간 브릿지(postMessage) 통신·모달 웹뷰 네비게이션이 핵심입니다.'
+platform: iOS · Android · WebView
+tags:
+  - React Native
+  - Expo SDK
+  - expo-router
+  - react-native-webview
+  - EAS
+images:
+  - /static/images/codit-thecodit-app-1.png
+  - /static/images/codit-thecodit-app-2.png
+imageSize:
+  - 165
+  - 345
+imageFrame: phone
+---
+
+### 더코딧 앱 트러블슈팅
+
+<Split
+  aside={
+    <StatCard
+      value="중복 오픈 제거"
+      caption="주입 타이밍 의존 제거"
+      rows={[
+        ['전', 'injectedObjectJson()의 coditWebView 파싱 → 로드 시 false로 캐싱'],
+        ['후', 'Boolean(window.ReactNativeWebView) — 객체 존재만으로 판별'],
+      ]}
+    />
+  }
+>
+
+<Block kind="problem">
+
+대시보드 → 법령 상세 → 원문링크를 클릭하면, 네이티브 모달이 두 번 열리는 문제가 있었습니다.
+
+</Block>
+
+<Block kind="neutral" label="근본 원인">
+
+앱 웹뷰 환경인지 판별하는 `isNativeMobile` 상수가 원인이었습니다. 기존 판별 기준은 `injectedObjectJson()` 함수가 주입해 준 값(coditWebView 플래그)을 파싱하는 방식이었는데, 이 상수는 모듈 로드 시점에 딱 1번만 평가됩니다. 그런데 그 시점엔 ReactNativeWebView 객체는 있어도 `injectedObjectJson` 함수가 아직 늦게 주입돼, 값이 false로 굳어버렸습니다. 이후 링크 클릭 시 ①네이티브가 모달 열기 + ②`!isNativeMobile` 조건이 참이 되어 `window.open()`까지 둘 다 실행된 것입니다.
+
+</Block>
+
+</Split>
+
+<Block kind="result" label="해결">
+
+"ReactNativeWebView 객체가 존재한다는 것 자체가 지금 이 웹페이지가 앱의 WebView 안에서 실행되고 있다는 의미"라고 판단해, 판별 기준을 함수 주입 여부에 의존하지 않도록 `Boolean(window.ReactNativeWebView)`로 변경했습니다. 이로써 주입 타이밍과 무관하게 항상 올바르게 판별됩니다. → **중복 오픈 제거, iOS·Android 동작 일관성 확보**
+
+</Block>
+
+**핵심 역량**: iOS·Android WebView 동작 차이와 브릿지 주입 타이밍까지 파고들어 근본 원인을 규명했고, EAS + Firebase App Distribution 스테이징 배포 스크립트로 QA 배포를 간소화하며 릴리즈·스토어 배포 전 과정을 주도했습니다.

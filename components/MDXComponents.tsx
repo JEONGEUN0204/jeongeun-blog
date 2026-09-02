@@ -5,6 +5,13 @@ import type { MDXComponents } from 'mdx/types'
 import Image from './Image'
 import CustomLink from './Link'
 import TableWrapper from './TableWrapper'
+import Section from './mdx/Section'
+import Block from './mdx/Block'
+import Label from './mdx/Label'
+import Meta from './mdx/Meta'
+import Split from './mdx/Split'
+import StatCard from './mdx/StatCard'
+import Steps from './mdx/Steps'
 
 export const components: MDXComponents = {
   Image,
@@ -13,4 +20,11 @@ export const components: MDXComponents = {
   pre: Pre,
   table: TableWrapper,
   BlogNewsletterForm,
+  Section,
+  Block,
+  Label,
+  Meta,
+  Split,
+  StatCard,
+  Steps,
 }
