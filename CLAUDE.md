@@ -22,7 +22,7 @@ cross-env EXPORT=1 UNOPTIMIZED=1 npm run build
 
 테스트 러너는 없다. 검증은 `npm run lint` + 정적 export 빌드 성공 + 브라우저 인쇄 미리보기 확인으로 한다.
 
-패키지 매니저: `package.json`의 `packageManager`와 CI는 yarn 3.6.1이지만, 현재 `node_modules`는 npm으로 설치되어 있고 `package-lock.json`/`yarn.lock` 둘 다 커밋되어 있다. **의존성을 추가하면 두 lockfile 모두 갱신**해야 CI와 로컬이 어긋나지 않는다.
+패키지 매니저: **npm 단일**이다(`package-lock.json`, lockfileVersion 3). 원래 스타터는 yarn 3.6.1(`packageManager` 필드 + `.yarnrc.yml` + `.yarn/releases`)이었지만 `yarn.lock`이 classic(v1) 포맷으로 방치된 채 실제 설치는 npm으로 이뤄져, yarn 3이 v1 lockfile을 Berry 포맷으로 마이그레이션하려다 CI의 immutable install과 충돌해 배포가 깨졌다(`YN0028: The lockfile would have been modified by this install, which is explicitly forbidden.`). 그래서 `packageManager` 필드·`yarn.lock`·`.yarnrc.yml`·`.yarn/`을 모두 제거했다. **yarn.lock을 다시 만들지 말 것** — 두 lockfile이 공존하면 호스팅 플랫폼(Vercel 등)이 어느 쪽을 감지하느냐에 따라 설치 방식이 갈린다.
 
 커밋 시 husky + lint-staged가 eslint/prettier를 자동 실행한다.
 
