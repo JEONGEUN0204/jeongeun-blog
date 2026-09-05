@@ -1,0 +1,38 @@
+import type { Period, Project } from '../schema'
+import { getCompany, formatPeriod } from '../companies'
+import { coditCodit } from './codit-codit'
+import { coditChatCodit } from './codit-chatcodit'
+import { coditChatCoditApp } from './codit-chatcodit-app'
+import { coditTheCoditApp } from './codit-thecodit-app'
+import { ezlCharge } from './ezl-charge'
+import { ezlBackoffice } from './ezl-backoffice'
+import { ezlDesignSystem } from './ezl-design-system'
+import { ezlAi } from './ezl-ai'
+
+/**
+ * 배열 순서가 곧 /portfolio 노출 순서다.
+ * 예전에는 MDX frontmatter 의 `order` 숫자가 순서를 정했는데, 사이에 하나를 끼우려면
+ * 파일 여러 개를 동시에 고쳐야 했다. 순서도 사실의 일부라 여기서만 관리한다.
+ *
+ * 최신 회사를 앞에 둔다. depth:'flagship' 은 /portfolio 가 렌더 시점에 맨 앞으로
+ * 끌어올리므로 이 배열에서는 회사 안의 상대 순서만 지키면 된다.
+ */
+export const projects: Project[] = [
+  coditCodit,
+  coditChatCodit,
+  coditChatCoditApp,
+  coditTheCoditApp,
+  ezlCharge,
+  ezlBackoffice,
+  ezlDesignSystem,
+  ezlAi,
+]
+
+/** 프로젝트 기간. periodOverride 가 없으면 회사 재직 기간을 상속한다. */
+function projectPeriod(project: Project): Period {
+  return project.periodOverride ?? getCompany(project.companyId).period
+}
+
+export function formatProjectPeriod(project: Project): string {
+  return formatPeriod(projectPeriod(project))
+}
