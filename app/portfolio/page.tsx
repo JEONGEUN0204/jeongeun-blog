@@ -1,105 +1,69 @@
-import AuthorLayout from '@/layouts/AuthorLayout'
 import { allProjects } from 'contentlayer/generated'
-import Image from '@/components/Image'
-import DeviceFrame from '@/components/DeviceFrame'
-import { MDXLayoutRenderer } from 'pliny/mdx-components'
-import { components } from '@/components/MDXComponents'
+import Reveal from '@/components/motion/Reveal'
+import ScrollProgress from '@/components/motion/ScrollProgress'
+import PortfolioHero from '@/components/portfolio/PortfolioHero'
+import ProjectDetail from '@/components/portfolio/ProjectDetail'
+import ProjectShowcase from '@/components/portfolio/ProjectShowcase'
+import { getCompany } from '@/content/companies'
+import { projects } from '@/content/projects'
+
+/*
+  사실(이름·기간·역할·팀·스택)은 content/projects/{id}.ts, 표현(요약·스크린샷·본문)은
+  data/projects/{id}.mdx 에 있다. 파일명이 두 소스를 잇는 유일한 키다.
+
+  위계는 라벨이 아니라 순서가 나타낸다. depth 는 스키마에 그대로 남아 있지만 화면에서
+  'Flagship' / 'Supporting' 이라는 단어를 보여주지는 않는다 — supporting 으로 묶인
+  프로젝트도 전부 실무 프로젝트이고 "덜 중요한 것"으로 읽힐 이유가 없다.
+  대표는 인덱스 맨 앞이고 기본으로 선택돼 있다는 것으로만 구분된다.
+*/
+const flagships = projects.filter((project) => project.depth === 'flagship')
+const rest = projects.filter((project) => project.depth !== 'flagship')
+
+/** 노출 순서가 곧 번호다. 대표를 맨 앞으로 빼고 나머지를 배열 순서대로 잇는다. */
+const ordered = [...flagships, ...rest]
+const numberOf = (id: string) => String(ordered.findIndex((p) => p.id === id) + 1).padStart(2, '0')
+
+/**
+ * MDX 본문의 `###` 소제목만 뽑는다. contentlayer 의 toc 는 json 필드라 타입이 없어
+ * 여기서 한 번만 좁힌다. 스트립 카드가 "무슨 작업을 했는지"를 이 목록으로 보여준다.
+ */
+type TocHeading = { value: string; depth: number }
+const subheadings = (toc: unknown) =>
+  (toc as TocHeading[]).filter((heading) => heading.depth === 3).map((heading) => heading.value)
 
 const Portfolio = () => {
-  const projects = allProjects.sort((a, b) => a.order - b.order)
-
   return (
-    <AuthorLayout>
-      {projects.map((project, index) => {
-        return (
-          <section
-            key={project.name}
-            className={
-              index === 0
-                ? ''
-                : 'mt-20 border-t border-gray-200 pt-16 dark:border-gray-700 print:break-before-page'
-            }
-          >
-            {/* 프로젝트 헤더 — 원본 PDF의 커버 구성(번호 배지 + 회사 · PROJECT + 제목) */}
-            <header className="not-prose break-inside-avoid-page break-after-avoid-page">
-              <div className="flex items-start gap-4">
-                <div className="bg-primary-700 flex size-12 shrink-0 items-center justify-center rounded-xl text-xl font-bold text-white">
-                  {index + 1}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold tracking-[0.2em] text-gray-900 uppercase dark:text-gray-100">
-                    {project.company && (
-                      <span className="text-primary-700 dark:text-primary-400">
-                        {project.company}{' '}
-                      </span>
-                    )}
-                    · Project
-                  </p>
-                  <h2 className="mt-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                    {project.name}
-                  </h2>
-                </div>
-                <div className="hidden shrink-0 text-right text-sm text-gray-400 sm:block print:block">
-                  {project.platform && <div>{project.platform}</div>}
-                  {project.period && <div className="text-xs">{project.period}</div>}
-                </div>
-              </div>
-              {/* 태그는 중립 회색으로 — 티얼은 성과 강조에만 쓴다 */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <div
-                    key={tag}
-                    className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium whitespace-nowrap text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                  >
-                    {tag}
-                  </div>
-                ))}
-              </div>
-              {project.summary && (
-                <p className="mt-5 leading-8 text-gray-600 dark:text-gray-400">{project.summary}</p>
-              )}
-            </header>
+    <>
+      <ScrollProgress />
+      <PortfolioHero />
 
-            {/*
-              imageSize는 "표시 폭 × 표시 높이"다. 실제 높이는 h-auto로 원본 비율을 따르므로
-              한 프로젝트 안에 비율이 다른 이미지가 섞여도 찌그러지지 않는다.
-              폭은 A4 인쇄 시 컨텐츠 폭(약 640px = 인쇄 폭 688px - 좌우 패딩) 안에서 한 프로젝트의
-              이미지가 gap-6(24px)을 포함해 한 줄에 모두 들어가도록 정한다. 예: 2장이면 폭 300.
-            */}
-            {project.images.length > 0 && (
-              <div className="not-prose mt-8 flex flex-wrap items-start gap-6">
-                {project.images.map((image, imageIndex) => {
-                  const img = (
-                    <Image
-                      src={image.trimEnd()}
-                      alt={`${project.name} 스크린샷 ${imageIndex + 1}`}
-                      width={Number(project.imageSize[0])}
-                      height={Number(project.imageSize[1])}
-                      className="h-auto max-w-full rounded-md"
-                    />
-                  )
-                  return (
-                    <div key={image} className="break-inside-avoid-page">
-                      {project.imageFrame ? (
-                        <DeviceFrame variant={project.imageFrame as 'phone' | 'tablet'}>
-                          {img}
-                        </DeviceFrame>
-                      ) : (
-                        img
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            )}
+      <section className="mt-24">
+        <Reveal>
+          <p className="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase dark:text-gray-400">
+            Projects
+          </p>
+          <div className="mt-4 mb-10 border-t border-gray-200 dark:border-gray-700" />
+        </Reveal>
 
-            <div className="prose-doc mt-8 max-w-none">
-              <MDXLayoutRenderer code={project.body.code} components={components} />
-            </div>
-          </section>
-        )
-      })}
-    </AuthorLayout>
+        <ProjectShowcase
+          items={ordered.flatMap((project) => {
+            const doc = allProjects.find((item) => item.slug === project.id)
+            if (!doc) return []
+            const no = numberOf(project.id)
+            return [
+              {
+                id: project.id,
+                no,
+                company: getCompany(project.companyId).name,
+                name: project.name,
+                topics: subheadings(doc.toc),
+                detail: <ProjectDetail project={project} doc={doc} no={no} />,
+              },
+            ]
+          })}
+        />
+      </section>
+    </>
   )
 }
 

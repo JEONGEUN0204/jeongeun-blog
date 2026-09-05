@@ -67,4 +67,16 @@
     color: inherit !important;
     text-decoration: none !important;
   }
+
+  /*
+   * 스크롤 등장 애니메이션 무력화.
+   * 인쇄는 스크롤이 없어 IntersectionObserver가 끝까지 발화하지 않는다.
+   * 뷰포트 밖에 있던 블록이 opacity:0 인 채로 인쇄되면 통째로 빈 페이지가 된다.
+   */
+  .reveal,
+  .reveal:not([data-visible]) {
+    opacity: 1 !important;
+    translate: none !important;
+    transition: none !important;
+  }
 }
