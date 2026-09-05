@@ -154,16 +154,18 @@ export const Careers = defineDocumentType(() => ({
   filePathPattern: 'careers/**/*.mdx',
   contentType: 'mdx',
   fields: {
-    company: { type: 'string', required: true },
-    date: { type: 'date', required: true },
-    endDate: { type: 'date' },
+    /**
+     * content/companies.ts 의 Company['id'] 와 같아야 한다.
+     * 회사명·재직기간·개월 수는 여기 두지 않는다 — 세 문서가 각자 들고 있다가
+     * /resume 는 '8개월', /careers 는 '10개월' 로 갈라졌던 자리다.
+     */
+    companyId: { type: 'string', required: true },
     description: { type: 'string', required: true },
     logo: { type: 'string', required: true },
     /** 로고 원본 크기. 테두리가 로고에 딱 맞으려면 실제 비율이 필요하다. */
     logoSize: { type: 'list', of: { type: 'number' }, default: [240, 80] },
     /** 정사각 로고 박스를 채우는 방식. 'cover'는 박스를 꽉 채우고, 'contain'은 여백을 두고 가운데 정렬한다. */
     logoFit: { type: 'enum', options: ['contain', 'cover'], default: 'contain' },
-    duration: { type: 'string' },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
   },
   computedFields,
@@ -174,14 +176,13 @@ export const Projects = defineDocumentType(() => ({
   filePathPattern: 'projects/**/*.mdx',
   contentType: 'mdx',
   fields: {
-    order: { type: 'number', required: true },
-    name: { type: 'string', required: true },
-    company: { type: 'string' },
-    period: { type: 'string' },
+    /**
+     * 이 파일은 '표현'만 담는다. 이름·회사·기간·기술 스택·노출 순서 같은 사실은
+     * content/projects/{파일명}.ts 가 원천이고, 파일명이 두 소스를 잇는 키다.
+     */
     platform: { type: 'string' },
     /** 프로젝트 한 줄 요약. 원본 PDF처럼 스크린샷 위에 노출한다. */
     summary: { type: 'string' },
-    tags: { type: 'list', of: { type: 'string' }, default: [] },
     images: { type: 'list', of: { type: 'string' }, default: [] },
     imageSize: { type: 'list', of: { type: 'number' }, default: [200, 300] },
     /** 'phone'이면 스크린샷을 폰 프레임으로 감싼다. 비율만으로는 세로형 데스크톱 캡처와 구분되지 않는다. */

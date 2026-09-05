@@ -1,16 +1,6 @@
 ---
-order: 5
-name: Codit 플랫폼 · 대시보드
-company: 코딧
-period: 2025.11 ~ 현재
 summary: '국회 의안·법령·회의록 등 10여 개 섹션이 캐러셀로 구성된 정책·입법 데이터 대시보드. 초기 로딩 성능과 인터랙션 품질을 끌어올렸습니다.'
 platform: Web · 대표 성과
-tags:
-  - React
-  - TanStack Query
-  - Zustand
-  - embla-carousel
-  - TypeScript
 images:
   - /static/images/codit-dashboard-1.jpg
   - /static/images/codit-dashboard-2.jpg
@@ -63,6 +53,6 @@ imageSize:
 
 <Steps
   problem="라우트 전환마다 전역 폴백이 노출되고, styled-components 레거시로 유지보수 부담이 컸습니다."
-  improve="AppShell을 분리해 Suspense를 L1/L3로 계층화하고, Tailwind v4로 순차 전환하며 공통 컴포넌트화했습니다."
+  improve="AppShell을 분리해 Suspense를 L1/L3로 계층화하고, Tailwind로 순차 전환하며 공통 컴포넌트화했습니다."
   result="첫 진입 폴백을 최소화하고 유지보수성을 높였습니다."
 />
