@@ -1,53 +1,73 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# CLAUDE.md
 
-## 개요
+## 이 저장소
 
-[tailwind-nextjs-starter-blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) v2를 포크해 **개인 이력서·경력기술서·포트폴리오 사이트**로 개조한 저장소다. 블로그 기능(`/blog`, `/tags`)은 스타터 원본 그대로 남아 있고, 실제 커스터마이징의 대부분은 `/resume`, `/careers`, `/portfolio` 문서형 페이지와 그 **인쇄(PDF) 파이프라인**에 집중되어 있다.
+신정은 개인 사이트(Next.js App Router). /resume, /careers, /portfolio 3개
+문서를 서비스한다. 세 문서는 같은 사실을 다른 압축률로 보여주는 뷰이며,
+사실의 원천은 항상 `content/` 다.
 
-`SPEC.md`(45KB)는 이 개조 작업의 설계 문서이자 원본 PDF 3종의 텍스트 원문을 그대로 담고 있다. 콘텐츠나 문서형 페이지 구조를 손볼 때 먼저 참고할 것. `README.md`는 스타터 원본 문서라 이 저장소 고유의 결정은 담고 있지 않다.
+## 절대 규칙
+
+1. **`app/**`에 사실을 하드코딩하지 않는다.**
+기간·수치·역할·팀 구성·기술 스택 문자열이 페이지 컴포넌트에 나타나면
+그건 버그다. 전부`content/` 에서 import 한다.
+
+2. **없는 사실을 만들지 않는다.**
+   전달받은 입력 블록에 없는 수치·행위·성과는 절대 생성하지 않는다.
+   빈칸이 필요하면 `'TBD'` 로 두고 작업 종료 시 목록으로 보고한다.
+
+3. **금지 표현** (verify-content.ts 와 동기화 유지)
+   - 버전 표기: `v4`, `18` 등
+   - 갱신 필요 표기: `약 N개월`, `총 경력 약 N년`
+   - `네이티브 앱` → `iOS·Android 앱`
+   - `진단`, `사이클을 만들었다`, `풀스택`
+   - 근거 없는 형용사, 과한 대구, 추상 명사 나열
+
+4. **개월 수는 저장하지 않는다.** 화면에 필요하면
+   `formatTenure(company)` 로 렌더 시점에 계산한다.
+
+## 문서별 역할 (내용 중복 금지)
+
+| 경로       | 역할           | 분량              | 렌더할 narrative 단계                 |
+| ---------- | -------------- | ----------------- | ------------------------------------- |
+| /resume    | 숫자 중심 압축 | 인쇄 시 A4 1장    | problem·decision.chosen·result 각 1줄 |
+| /careers   | 경력기술서     | 회사당 제한 없음  | 7단 전체 요약                         |
+| /portfolio | 판단 근거 서술 | flagship 1개 집중 | 7단 풀 전개 + decision.rejected       |
+
+- `profile.summary`(resume)와 `profile.about`(portfolio)는 문장이 겹치면 안 된다.
+  겹치면 verify 가 실패한다.
+- /careers 는 모든 회사를 렌더한다. 회사 하나가 빠지면 안 된다.
+- /portfolio 의 `depth:'supporting'` 프로젝트는 카드 1개 분량을 넘기지 않는다.
+
+## 내가 콘텐츠를 전달하는 방식
+
+Claude 챗에서 정리한 내용을 아래 블록 형태로 붙여넣는다.
+이 블록을 받으면 `content/projects/{id}.ts` 를 생성/수정하고,
+세 페이지 중 영향받는 곳을 함께 갱신한 뒤 `pnpm verify` 를 돌린다.
+(블록 스펙은 `docs/handoff-format.md` 참조)
+
+## 입력 블록을 받았을 때의 절차
+
+1. `content/companies.ts`·`content/metrics.ts` 와 대조해 **불일치를 먼저 보고**한다.
+   불일치가 있으면 코드를 고치기 전에 질문한다.
+2. 새 수치가 있으면 `metrics.ts` 에 `evidence` 와 함께 먼저 등록한다.
+   evidence 가 입력 블록에 없으면 등록하지 말고 물어본다.
+3. `content/projects/{id}.ts` 작성. 스키마 필드를 임의로 비우지 않는다.
+4. 영향받는 페이지 컴포넌트 갱신. 렌더 로직만 수정하고 문구는 건드리지 않는다.
+5. `pnpm verify && pnpm build` 실행.
+6. 보고: ①변경 파일 ②TBD 목록 ③세 문서 중 추가 동기화가 필요한 지점.
+
+## 하지 말 것
+
+- 스키마 필드를 임의로 추가/삭제 (먼저 제안하고 승인받는다)
+- 문구를 "더 좋게" 다듬기 — 문구 수정은 챗에서 확정해서 전달한다
+- verify 실패를 우회하기 위해 규칙을 완화
 
 ## 명령어
 
-```bash
-npm run dev      # 개발 서버 (contentlayer가 data/**/*.mdx를 감시·재생성)
-npm run lint     # eslint --fix (pages, app, components, lib, layouts, scripts)
-npm run build    # 프로덕션 빌드 + RSS 생성(scripts/postbuild.mjs)
-npm run analyze  # 번들 분석
-
-# CI(GitHub Pages)와 동일한 정적 export 빌드 — 배포 전 검증용
-cross-env EXPORT=1 UNOPTIMIZED=1 npm run build
-```
-
-테스트 러너는 없다. 검증은 `npm run lint` + 정적 export 빌드 성공 + 브라우저 인쇄 미리보기 확인으로 한다.
-
-패키지 매니저: **npm 단일**이다(`package-lock.json`, lockfileVersion 3). 원래 스타터는 yarn 3.6.1(`packageManager` 필드 + `.yarnrc.yml` + `.yarn/releases`)이었지만 `yarn.lock`이 classic(v1) 포맷으로 방치된 채 실제 설치는 npm으로 이뤄져, yarn 3이 v1 lockfile을 Berry 포맷으로 마이그레이션하려다 CI의 immutable install과 충돌해 배포가 깨졌다(`YN0028: The lockfile would have been modified by this install, which is explicitly forbidden.`). 그래서 `packageManager` 필드·`yarn.lock`·`.yarnrc.yml`·`.yarn/`을 모두 제거했다. **yarn.lock을 다시 만들지 말 것** — 두 lockfile이 공존하면 호스팅 플랫폼(Vercel 등)이 어느 쪽을 감지하느냐에 따라 설치 방식이 갈린다.
-
-커밋 시 husky + lint-staged가 eslint/prettier를 자동 실행한다.
-
-## 아키텍처
-
-### 콘텐츠 → Contentlayer2 → 페이지
-
-`contentlayer.config.ts`가 `data/` 아래 MDX를 4개 document type으로 읽어 `contentlayer/generated`(= `.contentlayer/generated`)로 내보낸다. 필드를 추가·변경하려면 이 파일을 고쳐야 하고, 고친 뒤에는 dev 서버 재시작이 필요할 수 있다.
-
-| Type       | 소스                  | 소비하는 곳                                                            |
-| ---------- | --------------------- | ---------------------------------------------------------------------- |
-| `Blog`     | `data/blog/**/*.mdx`  | `app/blog/*` — 스타터 원본                                             |
-| `Authors`  | `data/authors/*.mdx`  | `layouts/AuthorLayout.tsx`(프로필 헤더), `app/Main.tsx`(About Me 본문) |
-| `Careers`  | `data/careers/*.mdx`  | `components/CareerList.tsx` → `/careers`, `/resume/full`               |
-| `Projects` | `data/projects/*.mdx` | `app/portfolio/page.tsx` → `/portfolio`                                |
-
-- `Careers`의 `logoSize`/`logoFit`, `Projects`의 `imageSize`/`imageFrame`은 **렌더링 레이아웃을 직접 제어하는 프론트매터**다. 각 필드의 의도는 `contentlayer.config.ts`와 소비 컴포넌트의 주석에 적혀 있으니 값을 바꾸기 전에 읽을 것.
-- `Projects`는 `order` 오름차순으로 정렬된다. 순서를 바꾸려면 MDX의 `order`를 고친다.
-- `onSuccess` 훅이 `app/tag-data.json`과 `public/search.json`(kbar 검색 인덱스)을 **빌드 산출물로 덮어쓴다** — 이 두 파일은 직접 수정하지 말 것.
-
-### 이력서는 MDX가 아니라 TS 데이터
-
-`/resume`만 예외적으로 MDX가 아닌 `data/resumeData.ts`(구조화된 객체)를 쓰고, `components/ResumeContent.tsx`가 렌더링한다. 짧고 고정적인 항목(스킬·학력·자격증)이라 MDX보다 데이터+React가 단순하다는 판단이었다.
-
-`/resume/full`은 `ResumeContent`(`showFullLink={false}`) + `CareerList`를 이어 붙인 **인쇄 전용 통합 페이지**다. 이력서와 경력기술서를 한 문서로 요구하는 곳에 제출하기 위한 것이므로, 두 컴포넌트는 항상 단독 페이지와 통합 페이지 양쪽에서 동작해야 한다.
+pnpm dev / pnpm verify / pnpm build
 
 ### 인쇄(PDF) 아키텍처 — 이 저장소의 핵심 제약
 
@@ -62,34 +82,3 @@ GitHub Pages 정적 export라 서버 PDF 생성이 불가능하다. **브라우�
 5. `Projects` 이미지의 `imageSize[0]`(표시 폭)은 **A4 인쇄 폭(약 640px 콘텐츠 폭) 안에서 한 프로젝트의 이미지가 gap 포함 한 줄에 들어가도록** 정한다(2장이면 300 등). 높이는 `h-auto`라 원본 비율을 따른다.
 
 변경 후에는 각 문서 페이지에서 인쇄 미리보기를 실제로 확인한다.
-
-### 문서형 MDX 컴포넌트
-
-`components/mdx/`의 컴포넌트들이 `components/MDXComponents.tsx`에 등록되어 `careers`/`projects` MDX 본문에서 태그로 바로 쓰인다. 원본 PDF의 시각 구조를 옮긴 것이다.
-
-- `Section` — 제목 + 인쇄 break 보호 래퍼
-- `Label` / `Block` — PROBLEM(앰버) · APPROACH(블루) · RESULT(티얼) 컬러 칩. `Block`은 칩 + 본문 한 덩어리
-- `Steps` — 문제/개선/성과 3단을 같은 컬러 체계로 한 줄씩
-- `Meta` — "기술 / 역할" 메타 라인
-- `Split` — 본문 + 우측 강조 카드 2단(인쇄에서도 2단 유지)
-- `StatCard` — 다크 네이비 성과 카드. 라이트/다크 모두 네이비 고정
-
-새 컴포넌트를 만들면 `MDXComponents.tsx`에 등록해야 MDX에서 인식된다.
-
-### 스타일 스코프
-
-- `prose-doc`(`css/tailwind.css`)은 **문서형 페이지 본문에만** 붙이는 스코프 클래스다. h3에 티얼 바, 리스트 마커 색상 등. 이걸 `MDXComponents`에서 전역 오버라이드로 옮기면 블로그 글까지 바뀌므로 스코프를 유지할 것.
-- 본문 폰트는 Pretendard Variable을 **셀프 호스팅**한다(`app/fonts/PretendardVariable.woff2`, SIL OFL 1.1). `next.config.js`의 CSP가 `font-src 'self'`라 CDN 로드가 막히고, `next/font/local`이 `BASE_PATH`를 붙여 `/_next/static/media`로 내보내므로 정적 export에서도 경로가 안전하다. 가변축 전 범위(`weight: '45 920'`) 한 파일이라 400~800을 추가 요청 없이 덮는다. 폰트를 바꾸려면 `app/layout.tsx`의 `localFont` 선언과 `css/tailwind.css`의 `--font-sans`를 함께 고친다 — Tailwind 4의 `--default-font-family`가 `--font-sans`를 참조해 preflight로 전역에 적용된다.
-- 테마 컬러는 Tailwind 4 `@theme` 블록의 `--color-primary-*`(Deep Teal)다. `primary-700`은 다크 배경에서 읽히지 않아 다크모드에서는 `primary-300/400`을 쓴다.
-- 티얼은 성과·강조 전용, 태그/뱃지 같은 중립 요소는 회색을 쓴다는 색 규칙이 문서형 페이지 전반에 적용되어 있다.
-
-### 정적 export 제약
-
-`.github/workflows/pages.yml`이 main 푸시마다 `EXPORT=1 UNOPTIMIZED=1 BASE_PATH=<pages base>`로 빌드해 `./out`을 GitHub Pages에 배포한다. 따라서:
-
-- 동적 라우트는 `generateStaticParams`가 반드시 있어야 하고, route handler와 `sitemap`/`robots`는 `export const dynamic = 'force-static'`이 필요하다.
-- 런타임 서버 로직(요청 시점 데이터 fetch, 실동작하는 API 라우트)은 쓸 수 없다.
-- `next/image`가 `unoptimized`로 돌아간다.
-- 정적 자산 경로에는 `process.env.BASE_PATH`를 붙여야 한다(`app/layout.tsx`의 favicon/manifest, `siteMetadata`의 로고·검색 인덱스 경로가 그 예).
-
-`app/api/newsletter/route.ts`는 스타터 잔재로 `force-static`이 걸려 실제로는 동작하지 않는다.
