@@ -34,6 +34,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - run: npm ci
+      # 콘텐츠 규칙 검사. 금지 표현·문서 간 불일치는 배포 전에 여기서 걸린다.
+      - run: npm run verify
       - run: npm run build
         env:
           EXPORT: 1
