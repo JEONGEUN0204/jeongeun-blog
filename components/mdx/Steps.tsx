@@ -21,14 +21,14 @@ interface StepsProps {
 
 export default function Steps(props: StepsProps) {
   return (
-    <div className="not-prose my-4 break-inside-avoid-page space-y-2">
+    <div className="not-prose my-3 break-inside-avoid-page space-y-1">
       {rows.map(([key, kind, label, emphasis]) => {
         const text = props[key]
         if (!text) return null
         return (
           <div
             key={key}
-            className={`flex gap-3 rounded-md px-3 py-2 ${
+            className={`flex gap-3 rounded-md px-3 py-1.5 ${
               emphasis ? 'bg-primary-50 dark:bg-primary-400/10' : ''
             }`}
           >

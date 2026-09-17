@@ -8,7 +8,7 @@ import { ReactNode } from 'react'
  */
 export default function Split({ aside, children }: { aside: ReactNode; children: ReactNode }) {
   return (
-    <div className="my-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] print:grid-cols-[minmax(0,1fr)_14rem] print:gap-6">
+    <div className="my-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] print:grid-cols-[minmax(0,1fr)_14rem] print:gap-6">
       <div className="min-w-0 [&>:first-child]:mt-0">{children}</div>
       <div className="min-w-0">{aside}</div>
     </div>

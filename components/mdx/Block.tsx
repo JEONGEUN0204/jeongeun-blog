@@ -24,7 +24,7 @@ export default function Block({
   children: ReactNode
 }) {
   return (
-    <div className="my-6 break-inside-avoid-page">
+    <div className="my-5 break-inside-avoid-page">
       <Label kind={kind}>{label ?? defaultLabel[kind]}</Label>
       <div className="mt-2 [&>:first-child]:mt-0 [&>:last-child]:mb-0">{children}</div>
     </div>

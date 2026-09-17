@@ -13,7 +13,7 @@ const Header = () => {
   const pathname = usePathname()
 
   let headerClass =
-    'flex items-center w-full bg-white dark:bg-gray-950 justify-between py-10 print:hidden'
+    'flex items-center w-full bg-sand-50 dark:bg-gray-950 justify-between py-10 print:hidden'
   if (siteMetadata.stickyNav) {
     headerClass += ' sticky top-0 z-50'
   }

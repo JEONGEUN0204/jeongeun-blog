@@ -30,30 +30,94 @@
     'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* Colors */
-  /* Deep Teal - Tailwind teal scale (node_modules/tailwindcss/theme.css) */
-  --color-primary-50: oklch(98.4% 0.014 180.72);
-  --color-primary-100: oklch(95.3% 0.051 180.801);
-  --color-primary-200: oklch(91% 0.096 180.426);
-  --color-primary-300: oklch(85.5% 0.138 181.071);
-  --color-primary-400: oklch(77.7% 0.152 181.912);
-  --color-primary-500: oklch(70.4% 0.14 182.503);
-  --color-primary-600: oklch(60% 0.118 184.704);
-  --color-primary-700: oklch(51.1% 0.096 186.391);
-  --color-primary-800: oklch(43.7% 0.078 188.216);
-  --color-primary-900: oklch(38.6% 0.063 188.416);
-  --color-primary-950: oklch(27.7% 0.046 192.524);
+  /*
+   * 팔레트: 미드나잇 리넨 — #0B1320 · #1F2A44 · #F2EFE8 · #C7B8A6 · #B46A55
+   *
+   * 다섯 색을 스케일의 한 단에 그대로 두고, 나머지 단은 같은 색상각에서 명도·채도만 조절했다.
+   * 원색이 들어간 단은 hex 에서 역산한 값이라 화면에 정확히 그 색이 나온다.
+   *
+   * - primary(네이비)    900 = #1F2A44, 950 = #0B1320. 700 은 같은 색상각에서 밝혀
+   *                      소제목·번호 배지·주력 칩에 쓴다. 프로젝트 카드 뒷면(미리보기)은 900
+   * - accent(클레이)     600 = #B46A55. 지표 숫자·문제 라벨·링크. 글자로 쓸 때는 700 부터
+   * - sand(리넨 → 토프)  50 = #F2EFE8(라이트 모드 바탕), 300 = #C7B8A6. 볼드 형광펜·접근 라벨 같은 면
+   * - gray               950 = #0B1320(다크 모드 바탕)
+   *
+   * gray 는 밝은 쪽(50~400)을 리넨 색상각, 어두운 쪽(500~950)을 미드나잇 색상각으로 나눴다.
+   * 라이트 모드는 리넨 바탕에 미드나잇 글자, 다크 모드는 미드나잇 바탕에 리넨 글자가 되고
+   * 테두리·면은 각 모드 바탕과 같은 온도를 따른다. 경계인 400/500 은 채도가 가장 낮아 이음매가 드러나지 않는다.
+   * 컴포넌트가 쓰는 유틸리티 이름(gray-*)은 그대로 두고 값만 바꾼다.
+   *
+   * 리넨 바탕 대비: gray-500 4.98, gray-600 7.09, primary-700 7.74, accent-700 4.90.
+   * 미드나잇 바탕 대비: gray-400 6.22, primary-400 6.59. 흰 종이(인쇄)에서는 모두 이보다 높다.
+   * 작은 글자에 accent 600 이하는 쓰지 않는다 — 리넨 위에서 3.56 이다.
+   */
+  --color-primary-50: oklch(97.2% 0.008 265);
+  --color-primary-100: oklch(93.6% 0.017 265);
+  --color-primary-200: oklch(87.2% 0.03 265);
+  --color-primary-300: oklch(78.5% 0.045 265);
+  --color-primary-400: oklch(68.5% 0.06 265);
+  --color-primary-500: oklch(57.5% 0.072 265);
+  --color-primary-600: oklch(48.5% 0.078 265);
+  --color-primary-700: oklch(41% 0.074 265.5);
+  --color-primary-800: oklch(34.5% 0.063 265.8);
+  --color-primary-900: oklch(28.83% 0.0503 265.9);
+  --color-primary-950: oklch(18.61% 0.0294 259.81);
 
-  --color-gray-50: oklch(0.985 0.002 247.839);
-  --color-gray-100: oklch(0.967 0.003 264.542);
-  --color-gray-200: oklch(0.928 0.006 264.531);
-  --color-gray-300: oklch(0.872 0.01 258.338);
-  --color-gray-400: oklch(0.707 0.022 261.325);
-  --color-gray-500: oklch(0.551 0.027 264.364);
-  --color-gray-600: oklch(0.446 0.03 256.802);
-  --color-gray-700: oklch(0.373 0.034 259.733);
-  --color-gray-800: oklch(0.278 0.033 256.848);
-  --color-gray-900: oklch(0.21 0.034 264.665);
-  --color-gray-950: oklch(0.13 0.028 261.692);
+  --color-accent-50: oklch(97.6% 0.009 50);
+  --color-accent-100: oklch(94.4% 0.02 45);
+  --color-accent-200: oklch(88.8% 0.04 42);
+  --color-accent-300: oklch(81.5% 0.064 40);
+  --color-accent-400: oklch(73.5% 0.085 38);
+  --color-accent-500: oklch(66.5% 0.097 37);
+  --color-accent-600: oklch(60.16% 0.1004 36.66);
+  --color-accent-700: oklch(52.5% 0.096 35);
+  --color-accent-800: oklch(45% 0.086 33);
+  --color-accent-900: oklch(37.5% 0.072 31);
+  --color-accent-950: oklch(27% 0.05 30);
+
+  --color-sand-50: oklch(95.25% 0.0099 87.47);
+  --color-sand-100: oklch(92.3% 0.0145 84);
+  --color-sand-200: oklch(88.2% 0.02 80);
+  --color-sand-300: oklch(79.02% 0.0302 72.39);
+  --color-sand-400: oklch(70% 0.033 70);
+  --color-sand-500: oklch(61% 0.033 68);
+  --color-sand-600: oklch(52% 0.03 66);
+  --color-sand-700: oklch(44% 0.026 64);
+  --color-sand-800: oklch(36.5% 0.021 62);
+  --color-sand-900: oklch(29.5% 0.016 60);
+  --color-sand-950: oklch(21.5% 0.011 58);
+
+  --color-gray-50: oklch(97.6% 0.005 85);
+  --color-gray-100: oklch(92.2% 0.011 83);
+  --color-gray-200: oklch(87.4% 0.015 80);
+  --color-gray-300: oklch(80.5% 0.018 77);
+  --color-gray-400: oklch(67% 0.017 74);
+  --color-gray-500: oklch(51% 0.02 258);
+  --color-gray-600: oklch(43% 0.024 260);
+  --color-gray-700: oklch(36% 0.03 262);
+  --color-gray-800: oklch(28.5% 0.04 264);
+  --color-gray-900: oklch(23% 0.035 262);
+  --color-gray-950: oklch(18.61% 0.0294 259.81);
+
+  /*
+   * 타입 스케일 한 단 올리기.
+   *
+   * 이 사이트의 본문은 text-sm(14px)·text-xs(12px)에 몰려 있어 화면에서 잘게 읽혔다.
+   * 개별 컴포넌트의 클래스를 일일이 바꾸는 대신 Tailwind 의 --text-* 토큰을 재정의한다 —
+   * `.text-sm{font-size:var(--text-sm)}` 이므로 유틸리티를 쓰는 모든 곳이 한 번에 따라온다.
+   *
+   * 짝이 되는 --text-*--line-height 는 기본값(무단위 비율)을 그대로 두어 행간이 같은
+   * 비율로 함께 커진다. 제목대(3xl 이상)는 이미 충분히 크므로 건드리지 않는다.
+   *
+   * 인쇄에서는 css/print.css 가 이 토큰들을 원래 값으로 되돌린다. A4 분량에 맞춰
+   * 조정해 둔 기존 PDF 출력이 화면 조정 때문에 밀리면 안 되기 때문이다.
+   */
+  --text-xs: 0.8125rem; /* 12 → 13px */
+  --text-sm: 0.9375rem; /* 14 → 15px */
+  --text-base: 1.0625rem; /* 16 → 17px */
+  --text-lg: 1.1875rem; /* 18 → 19px */
+  --text-xl: 1.3125rem; /* 20 → 21px */
+  --text-2xl: 1.5625rem; /* 24 → 25px */
 
   /* Line heights */
   --line-height-11: 2.75rem;
@@ -86,26 +150,35 @@
 
   a,
   button {
-    outline-color: var(--color-primary-500);
+    outline-color: var(--color-primary-600);
   }
 
   a:focus-visible,
   button:focus-visible {
     outline: 2px solid;
     border-radius: var(--radius-sm);
-    outline-color: var(--color-primary-500);
+    outline-color: var(--color-primary-600);
   }
 }
 
 @layer utilities {
   .prose {
+    /*
+     * MDX 본문(블로그·경력기술서·포트폴리오)의 크기.
+     * typography 플러그인이 `.prose{font-size:1rem}` 을 직접 박아두기 때문에
+     * --text-base 를 올려도 여기까지 따라오지 않는다. 같은 값으로 맞춰준다.
+     * 내부 요소들은 em 기준이라 이 한 줄로 함께 커진다.
+     */
+    font-size: var(--text-base);
+
+    /* 링크는 강조색(테라코타). 올리브는 소제목이 쓰고 있어 같은 색이면 링크가 제목처럼 읽힌다. */
     & a {
-      color: var(--color-primary-500);
+      color: var(--color-accent-700);
       &:hover {
-        color: var(--color-primary-600);
+        color: var(--color-accent-800);
       }
       & code {
-        color: var(--color-primary-400);
+        color: var(--color-accent-700);
       }
     }
     & :where(h1, h2) {
@@ -122,12 +195,12 @@
 
   .prose-invert {
     & a {
-      color: var(--color-primary-500);
+      color: var(--color-accent-300);
       &:hover {
-        color: var(--color-primary-400);
+        color: var(--color-accent-200);
       }
       & code {
-        color: var(--color-primary-400);
+        color: var(--color-accent-300);
       }
     }
     & :where(h1, h2, h3, h4, h5, h6) {
@@ -146,7 +219,7 @@
    * 해당 페이지에만 붙이는 스코프 클래스로 분리한다.
    */
   .prose-doc {
-    /* 소제목에 티얼 바 — 원본 PDF의 섹션 구분을 대신한다 */
+    /* 소제목에 올리브 바 — 원본 PDF의 섹션 구분을 대신한다 */
     & h3 {
       border-left: 3px solid var(--color-primary-600);
       padding-left: 0.75rem;
@@ -157,7 +230,16 @@
       padding-left: 0;
     }
     & ul > li::marker {
-      color: var(--color-primary-600);
+      color: var(--color-accent-600);
+    }
+    /*
+     * 문단 아래 여백만 줄인다. 경력기술서의 **볼드** 소제목 문단이 위(이전 항목)와 아래(자기 Steps)에
+     * 같은 1.25em 을 두고 떠 있어 어느 쪽에 속하는지 안 읽혔다. 위 여백은 그대로라
+     * 문단과 문단 사이는 변하지 않는다(마진 상쇄로 큰 쪽이 남는다).
+     * not-prose 안의 p(StatCard 수치·회사 헤더 등)는 여백 없이 설계돼 있어 제외한다.
+     */
+    & p:not(.not-prose p) {
+      margin-bottom: 0.5em;
     }
     /*
      * 본문 measure. SectionContainer는 블로그까지 쓰는 전역 컨테이너라 건드리지 않고,
@@ -169,56 +251,34 @@
     }
     /*
      * MDX 본문의 **볼드**를 강조 신호로 승격한다. 굵기만으로는 긴 문단 안에서
-     * 눈에 걸리지 않아, 형광펜처럼 옅은 배경을 깐다.
+     * 눈에 걸리지 않아, 형광펜처럼 옅은 크림 배경을 깐다.
      */
     & :where(p, li) strong {
       border-radius: 0.125rem;
       padding: 0.05em 0.2em;
-      background-color: color-mix(in oklab, var(--color-primary-100) 70%, transparent);
+      background-color: color-mix(in oklab, var(--color-sand-200) 80%, transparent);
     }
   }
 }
 
-/*
- * 스크롤 등장 애니메이션 (components/motion/Reveal.tsx).
- *
- * 초기 숨김을 `@media (scripting: enabled)` 안에만 두는 게 핵심이다. SSR HTML에
- * opacity:0을 그대로 박으면 JS가 실행되지 않는 환경에서 내용이 영영 보이지 않는다.
- * prefers-reduced-motion은 CSS로만 처리한다 — 관찰자는 그대로 돌고 트랜지션만 무력화된다.
- */
-.reveal {
-  transition:
-    opacity 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
-    translate 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-@media (scripting: enabled) {
-  .reveal:not([data-visible]) {
-    opacity: 0;
-    translate: 0 12px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal,
-  .reveal:not([data-visible]) {
-    opacity: 1;
-    translate: none;
-    transition: none;
-  }
-}
+/* JS 가 돌지 않는 환경. /portfolio 는 JS 없이 회사·프로젝트를 고를 수 없어 모든 프로젝트를 펼쳐 둔다. */
+@custom-variant noscript (@media (scripting: none));
 
 /*
- * 상세 패널 등장 (components/portfolio/ProjectShowcase.tsx).
+ * /portfolio 화면 연출 (components/portfolio/*).
  *
- * 패널은 display:none → block 으로 바뀌기 때문에 Reveal(IntersectionObserver)을 쓸 수 없다 —
- * 숨겨 있는 동안 관찰자가 교차를 보고하지 않아 영영 보이지 않는다.
- * 표시될 때 한 번 도는 키프레임으로 대신한다.
+ * 화면 전용이다. 인쇄물은 모든 프로젝트가 펼쳐진 문서여야 하고, 모션 줄이기 설정에서는 결과 상태만
+ * 보여준다. 카드 뒤집기(transition)는 컴포넌트가 motion-reduce: 로 끄고 여기서는 키프레임만 다룬다.
+ *
+ * - components 레이어에 둔다. 레이어 밖(unlayered)에 두면 animation 단축 속성이 유틸리티를 이긴다.
+ * - 한 요소에 translate 키프레임과 translate 를 바꾸는 클래스를 같이 걸지 않는다. fill-mode 가 끝값을
+ *   붙잡아 클래스가 영영 적용되지 않는다. 등장은 translate(.stagger-in), 뒤집기는 transform,
+ *   선택·hover 때 들리는 움직임은 바깥 버튼의 translate 로 나눴다.
  */
-@keyframes panel-in {
+@keyframes rise-in {
   from {
     opacity: 0;
-    translate: 0 8px;
+    translate: 0 12px;
   }
   to {
     opacity: 1;
@@ -226,26 +286,30 @@
   }
 }
 
-.panel-in {
-  animation: panel-in 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .panel-in {
-    animation: none;
+@layer components {
+  /* --stagger-index 는 ProjectCard 가 넣는다. 한 장씩 70ms 간격으로 올라온다. */
+  .stagger-in {
+    animation: rise-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--stagger-index, 0) * 70ms);
   }
-}
 
-@media print {
-  .panel-in {
-    animation: none;
+  @media (prefers-reduced-motion: reduce) {
+    .stagger-in {
+      animation: none;
+    }
+  }
+
+  @media print {
+    .stagger-in {
+      animation: none;
+    }
   }
 }
 
 /* 다크모드 볼드 하이라이트 — 인쇄에서는 라이트 규칙만 남는다 */
 @media not print {
   .dark .prose-doc :where(p, li) strong {
-    background-color: color-mix(in oklab, var(--color-primary-400) 18%, transparent);
+    background-color: color-mix(in oklab, var(--color-sand-400) 18%, transparent);
   }
 }
 

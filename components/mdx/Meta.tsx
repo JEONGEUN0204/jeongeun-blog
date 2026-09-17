@@ -6,7 +6,7 @@
  */
 export default function Meta({ tech, role }: { tech?: string; role?: string }) {
   return (
-    <dl className="not-prose mt-3 mb-6 break-inside-avoid-page space-y-1 border-l-2 border-gray-200 pl-3 dark:border-gray-700">
+    <dl className="not-prose mt-2 mb-4 break-inside-avoid-page space-y-1 border-l-2 border-gray-200 pl-3 dark:border-gray-700">
       {tech && <Row label="기술" value={tech} />}
       {role && <Row label="역할" value={role} />}
     </dl>

@@ -65,7 +65,7 @@ export default function Section({ title, className, titleClassName, children }: 
     <section className={`break-inside-avoid-page my-8${className ? ` ${className}` : ''}`}>
       {title &&
         (parsed ? (
-          /* section-head 는 .prose-doc h3 의 좌측 티얼 바를 끈다 — 번호 배지가 그 역할을 대신한다 */
+          /* section-head 는 .prose-doc h3 의 좌측 색 바를 끈다 — 번호 배지가 그 역할을 대신한다 */
           <h3
             className={`section-head flex break-after-avoid-page flex-wrap items-center gap-x-3 gap-y-2${
               titleClassName ? ` ${titleClassName}` : ''
