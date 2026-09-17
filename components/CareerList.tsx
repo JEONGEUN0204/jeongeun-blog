@@ -2,7 +2,9 @@ import { allCareers } from 'contentlayer/generated'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import Image from '@/components/Image'
 import { components } from '@/components/MDXComponents'
+import { NarrativeSummary } from '@/components/Narrative'
 import { companies, formatPeriod } from '@/content/companies'
+import { projects } from '@/content/projects'
 
 export default function CareerList() {
   /*
@@ -11,13 +13,30 @@ export default function CareerList() {
     아무도 눈치채지 못한다. 여기서는 짝이 없으면 렌더가 비고, verify 가 실패한다.
   */
   return (
-    <div className="prose dark:prose-invert prose-doc max-w-none pt-15 pb-8">
+    <div className="prose dark:prose-invert prose-doc max-w-none pt-4 pb-8">
       {companies.map((company) => {
         const career = allCareers.find((item) => item.companyId === company.id)
         if (!career) return null
 
+        /*
+          narrative 가 있는 프로젝트는 서술을 MDX 에 다시 적지 않고 content/projects 에서 렌더한다.
+          MDX 가 <ProjectNarrative id="..."> 로 자리를 잡아 둔 프로젝트는 그 자리에서 렌더되므로
+          뒤에 다시 붙이지 않고, 나머지만 본문 끝에 잇는다.
+          MDX 제목의 'NN.' 은 손으로 매긴 번호라, 번호 섹션과 자리 표시를 세어 그 뒤를 잇는다.
+        */
+        const raw = career.body.raw
+        const placed = (raw.match(/<ProjectNarrative\s[^>]*?\bid="[^"]+"/g) ?? []).map((tag) =>
+          tag.replace(/^[\s\S]*\bid="([^"]+)"$/, '$1')
+        )
+        const narrated = projects.filter(
+          (project) =>
+            project.companyId === company.id && project.narrative && !placed.includes(project.id)
+        )
+        const numberedSections =
+          (raw.match(/<Section\s+title="\d{1,2}\./g)?.length ?? 0) + placed.length
+
         return (
-          <div key={company.id} className="mb-20">
+          <div key={company.id} className="mb-16">
             {/*
               예전에는 220x220 로고가 좌측 컬럼을 고정 점유해 본문 폭을 그만큼 깎았다.
               로고는 회사를 알아보게 하는 표식일 뿐 읽을 내용이 아니므로, 가로 배너로
@@ -54,11 +73,11 @@ export default function CareerList() {
                 </div>
               </div>
 
-              <p className="mt-5 max-w-[68ch] leading-7 text-gray-600 dark:text-gray-400">
+              <p className="mt-4 max-w-[68ch] leading-7 text-gray-600 dark:text-gray-400">
                 {career.description}
               </p>
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {career.tags.map(
                   (tag, index) =>
                     tag && (
@@ -73,8 +92,19 @@ export default function CareerList() {
               </div>
             </header>
 
-            <div className="mt-10">
+            <div className="mt-8">
               <MDXLayoutRenderer code={career.body.code} components={components} />
+              {narrated.map(
+                (project, index) =>
+                  project.narrative && (
+                    <NarrativeSummary
+                      key={project.id}
+                      project={project}
+                      narrative={project.narrative}
+                      no={String(numberedSections + index + 1).padStart(2, '0')}
+                    />
+                  )
+              )}
             </div>
           </div>
         )

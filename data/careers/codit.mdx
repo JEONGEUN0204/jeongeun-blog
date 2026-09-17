@@ -25,6 +25,7 @@ tags:
   - Jira
   - Figma
   - Confluence
+  - Claude Code
 ---
 
 <Section title="01. Codit 플랫폼 · 대시보드 (Web · 대표 성과)">
@@ -62,50 +63,23 @@ tags:
 
 <Section title="02. Codit 플랫폼 · 품질·구조 (Web)">
 
-<Meta
-  tech={'React · Tailwind CSS · i18next · TypeScript'}
-  role={'AppShell 구조 도입·레거시 스타일 마이그레이션 담당'}
-/>
+<Meta tech={'React · Tailwind CSS · i18next · TypeScript'} role={'AppShell 구조 도입 담당'} />
 
-**AppShell 아키텍처 도입 & 레거시 마이그레이션**
+**AppShell 아키텍처 도입**
 
 <Steps
-  problem={'라우트 전환마다 전역 폴백 노출, styled-components 레거시로 유지보수 부담'}
-  improve={'AppShell 분리·Suspense L1/L3 계층화, Tailwind 순차 전환·공통 컴포넌트화'}
-  result={'첫 진입 폴백 최소화, 유지보수성 향상'}
+  problem={'라우트 전환마다 전역 폴백 노출'}
+  improve={'AppShell 분리·Suspense L1/L3 계층화'}
+  result={'첫 진입 폴백 최소화'}
 />
 
 </Section>
 
-<Section title="03. ChatCODIT · 실시간 스트리밍 (Web · 핵심)">
+<ProjectNarrative id="codit-agents-md" no="03" />
 
-<Meta
-  tech={'Next.js · fetch ReadableStream · SSE · Zustand · TypeScript'}
-  role={'스트리밍 응답 형식 설계(백엔드 협의)·프론트 파싱·렌더링·상태 구조 담당'}
-/>
+<ProjectNarrative id="codit-tailwind-skill" no="04" />
 
-**스트리밍 응답 형식(SSE 프로토콜) 직접 설계**
-
-<Steps
-  problem={
-    '기존 구조에서는 백엔드가 하나의 거대한 JSON을 문자 단위로 쪼개 전송했고, 이를 받는 프론트 파서(약 1,281줄)가 불완전한 JSON을 수동 파싱(brace counting·escape)해야 했으며 파셜 JSON 파서가 4~5개 중복 존재'
-  }
-  improve={
-    '"모든 SSE 이벤트는 그 자체로 유효한 JSON"이라는 원칙으로 블록 단위 + 텍스트 델타 프로토콜(meta·step·block_start·text_delta·block_end·block_data·done 7종)을 직접 설계해 백엔드에 요청'
-  }
-  result={
-    '모든 data: 라인이 완전한 JSON → JSON.parse() 한 줄로 처리, 약 1,281줄에 달하던 수동 파셜 JSON 파서를 걷어내 파싱 로직 대폭 단순화'
-  }
-/>
-
-**스키마 리뷰·제안 & 렌더러 선정**
-
-<Steps
-  improve={
-    'citations의 위치 표기가 본문 문자 오프셋(range) 기반이어서 스트리밍 중 텍스트가 늘어나면 틀어질 위험을 발견해, 본문의 [^1] 마커 id로 매칭하는 방식을 대안으로 제안. 스트리밍 최적화 렌더러(streamdown) 채택'
-  }
-  result={'불완전 JSON 파싱 자체가 불필요해지고, 스트리밍 중에도 마크다운이 안정적으로 렌더링'}
-/>
+<ProjectNarrative id="codit-chatcodit" no="05" suffix="Web · 핵심">
 
 **연결 안정성 & 채팅 상태 단일화**
 
@@ -116,9 +90,9 @@ tags:
   result={'도착 순서 무관 일관성, 신규 답변 타입 확장 기반 확보'}
 />
 
-</Section>
+</ProjectNarrative>
 
-<Section title="04. ChatCODIT · 대화형 문서 초안 작성(Draft) (Web)">
+<Section title="06. ChatCODIT · 대화형 문서 초안 작성(Draft) (Web)">
 
 <Meta
   tech={'Next.js · SSE · Zustand · TypeScript'}
@@ -152,7 +126,7 @@ tags:
 
 </Section>
 
-<Section title="05. ChatCODIT · 렌더링·구축·운영 (Web)">
+<Section title="07. ChatCODIT · 렌더링·구축·운영 (Web)">
 
 <Meta
   tech={'Next.js · React · TypeScript · next-intl · Tailwind CSS'}
@@ -177,7 +151,7 @@ tags:
 
 </Section>
 
-<Section title="06. ChatCODIT App · 구축·결제 (iOS · Android)">
+<Section title="08. ChatCODIT App · 구축·결제 (iOS · Android)">
 
 <Meta
   tech={'Expo · React Native · TypeScript · Zustand · TanStack Query · expo-iap'}
@@ -196,7 +170,7 @@ tags:
 
 </Section>
 
-<Section title="07. ChatCODIT App · 인증·보안·배포 (iOS · Android)">
+<Section title="09. ChatCODIT App · 인증·보안·배포 (iOS · Android)">
 
 <Meta
   tech={'Expo · React Native · reCAPTCHA Enterprise · Firebase App Check · EAS'}
@@ -208,7 +182,7 @@ tags:
 
 </Section>
 
-<Section title="08. 더코딧 앱 (WebView 하이브리드) (iOS · Android · WebView)">
+<Section title="10. 더코딧 앱 (WebView 하이브리드) (iOS · Android · WebView)">
 
 <Meta
   tech={

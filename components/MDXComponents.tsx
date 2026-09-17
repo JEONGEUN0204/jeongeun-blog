@@ -12,6 +12,7 @@ import Meta from './mdx/Meta'
 import Split from './mdx/Split'
 import StatCard from './mdx/StatCard'
 import Steps from './mdx/Steps'
+import { ProjectNarrative } from './Narrative'
 
 export const components: MDXComponents = {
   Image,
@@ -27,4 +28,5 @@ export const components: MDXComponents = {
   Split,
   StatCard,
   Steps,
+  ProjectNarrative,
 }
