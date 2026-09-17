@@ -124,6 +124,8 @@ const metricIds = new Set(metrics.map((metric) => metric.id))
 if (metricIds.size !== metrics.length) error('metrics.ts 에 중복 id 가 있다')
 
 for (const metric of metrics) {
+  if (metric.label === TBD) todo(`metrics.ts '${metric.id}' (${metric.value}) — label 미확정`)
+
   if (!metric.evidence.trim()) {
     error(`metrics.ts '${metric.id}' evidence 가 비어 있다`)
   } else if (metric.evidence === TBD) {
@@ -140,7 +142,7 @@ for (const metric of metrics) {
 }
 
 /* ------------------------------------------------------------------ *
- * 4. 프로젝트 — 역할·팀·대안 검토
+ * 4. 프로젝트 — 역할·대안 검토
  * ------------------------------------------------------------------ */
 
 const projectIds = new Set(projects.map((project) => project.id))
@@ -155,12 +157,30 @@ for (const project of projects) {
     error(`${at} companies.ts 에 없는 companyId '${project.companyId}'`)
   }
 
+  if (project.name === TBD) todo(`${at} 프로젝트명(name) 미확정`)
   if (!project.roleDetail.trim()) error(`${at} roleDetail 이 비어 있다`)
   if (project.role === TBD) todo(`${at} role 미확정 (담당/리드/설계 중 무엇인지)`)
-  if (project.team === TBD) todo(`${at} 팀 구성·규모 미확보`)
   if (project.contribution === TBD) todo(`${at} 기여 범위 미확보`)
 
   if (project.stack.primary.length === 0) error(`${at} stack.primary 가 비어 있다`)
+
+  // 하위 프로젝트는 상위 안에서 렌더된다. 가리키는 곳이 없거나 한 단계를 넘으면 렌더 자리가 사라진다.
+  if (project.parentId) {
+    const parent = projects.find((item) => item.id === project.parentId)
+    if (!parent) {
+      error(`${at} content/projects 에 없는 parentId '${project.parentId}'`)
+    } else {
+      if (parent.companyId !== project.companyId) {
+        error(`${at} 상위 프로젝트 '${parent.id}' 와 companyId 가 다르다`)
+      }
+      if (parent.parentId) {
+        error(`${at} 상위 프로젝트 '${parent.id}' 도 하위 프로젝트다 — 한 단계만 허용한다`)
+      }
+    }
+    if (project.depth === 'flagship') {
+      error(`${at} 하위 프로젝트는 flagship 이 될 수 없다 — /portfolio 에 독립 카드가 없다`)
+    }
+  }
 
   for (const id of project.metricIds) {
     if (!metricIds.has(id)) error(`${at} metrics.ts 에 없는 metricId '${id}'`)
@@ -217,6 +237,20 @@ for (const group of skills) {
   }
 }
 
+// /resume 하이라이트 — 입력 블록에 그룹명·제목이 없으면 TBD 로 두고 여기서 목록으로 남긴다.
+for (const experience of experiences) {
+  for (const group of experience.groups) {
+    if (group.product === TBD) {
+      todo(`content/experience.ts '${experience.companyId}' 그룹명(product) 미확정`)
+    }
+    for (const highlight of group.highlights) {
+      if (highlight.title === TBD) {
+        todo(`content/experience.ts '${experience.companyId}' 하이라이트 제목(title) 미확정`)
+      }
+    }
+  }
+}
+
 /* ------------------------------------------------------------------ *
  * 6. 세 문서의 커버리지
  * ------------------------------------------------------------------ */
@@ -229,6 +263,20 @@ for (const company of companies) {
   }
   if (!experiences.some((experience) => experience.companyId === company.id)) {
     error(`${company.name}(${company.id}) 가 content/experience.ts 에 없다 — /resume 에서 누락된다`)
+  }
+}
+
+// 하위 프로젝트의 서술은 회사 경력기술서에서 <ProjectNarrative> 로 상위 섹션 뒤에 자리를 잡아야 한다.
+// 자리가 없으면 CareerList 가 회사 본문 끝에 붙여 상위 프로젝트와 멀리 떨어진다.
+for (const project of projects) {
+  if (!project.parentId || !project.narrative) continue
+  const path = join('data', 'careers', `${project.companyId}.mdx`)
+  if (!existsSync(join(ROOT, path))) continue
+  const placeholder = new RegExp(`<ProjectNarrative\\s[^>]*?\\bid="${project.id}"`)
+  if (!placeholder.test(readFileSync(join(ROOT, path), 'utf-8'))) {
+    warn(
+      `content/projects/${project.id}.ts 는 하위 프로젝트인데 ${path} 에 <ProjectNarrative> 자리가 없다 — /careers 에서 회사 끝에 붙는다`
+    )
   }
 }
 

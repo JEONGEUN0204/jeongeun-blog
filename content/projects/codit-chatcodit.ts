@@ -3,22 +3,70 @@ import type { Project } from '../schema'
 /**
  * flagship — /portfolio 에서 유일하게 풀 전개하는 프로젝트.
  *
- * flagship 은 decision.rejected(대안 검토)가 반드시 있어야 한다. narrative 이관 전이라
- * 아직 비어 있고, `npm run verify` 가 이를 미이관 항목으로 계속 보고한다.
+ * 서술은 narrative 가 원천이다. /portfolio 는 7단 풀 전개 + decision.rejected 를,
+ * /careers 는 codit.mdx 의 05 자리(<ProjectNarrative>)에서 7단 요약을 렌더한다.
+ * narrative 밖의 내용(연결 안정성·상태 단일화)만 codit.mdx 05 에 남아 있다.
+ *
+ * 스택은 입력 블록(React·TypeScript·SSE / streamdown)이 아니라 확인 질문에서 받은 답
+ * (Next.js·TypeScript·Zustand / SSE·streamdown)을 따른다.
  */
 export const coditChatCodit: Project = {
   id: 'codit-chatcodit',
   companyId: 'codit',
   name: 'ChatCODIT · 실시간 스트리밍',
-  role: 'TBD',
-  roleDetail: '스트리밍 응답 형식 설계(백엔드 협의)·프론트 파싱·렌더링·상태 구조 담당',
-  team: 'TBD',
-  contribution: 'TBD',
+  // /careers 05 는 name 을 그대로 쓴다. 06·07 의 다른 ChatCODIT 섹션과 구분돼야 해서다.
+  cardName: 'ChatCODIT',
+  role: '설계·구현 리드',
+  roleDetail: '스트리밍 응답 규격을 설계해 백엔드·PM에 제안하고, 새 규격에 맞춰 프론트엔드 구현',
+  contribution:
+    '문제 분석과 새 이벤트 규격 설계, 제안 문서 작성, PM이 제시한 스키마 검토 및 대안 제시, 프론트엔드 구현',
   stack: {
     primary: ['Next.js', 'TypeScript', 'Zustand'],
-    secondary: ['SSE', 'fetch ReadableStream'],
+    secondary: ['SSE', 'streamdown'],
   },
-  metricIds: ['sse-parser-lines'],
+  metricIds: ['sse-parser-lines', 'sse-protocol-scope'],
   depth: 'flagship',
   kind: 'improvement',
+  narrative: {
+    problem:
+      '백엔드가 답변 전체를 담은 하나의 JSON을 문자 단위로 쪼개서 보내고 있었다. 그래서 프론트엔드는 아직 완성되지 않은 JSON 문자열을 직접 해석해야 했다. 괄호 짝을 세고, 이스케이프를 처리하고, 잘린 문자열을 잘라내는 코드가 파일 하나에 1,281줄까지 늘어났고 비슷한 파서가 네댓 개 중복돼 있었다. 조각이 순서대로 도착한다는 보장이 없어 순번을 따로 붙이고 정렬하는 로직도 필요했다. 응답 형식이 조금만 바뀌어도 이 코드를 함께 고쳐야 했다.',
+    insight:
+      '파서를 고쳐서 해결할 문제가 아니었다. 하나의 JSON을 쪼개 보내는 전송 방식 자체가 받는 쪽에 복원 부담을 떠넘기고 있었다. 보내는 단위를 바꿔서 조각 하나하나가 그 자체로 완결된 JSON이 되면 받는 쪽은 해석할 게 없어진다.',
+    decision: {
+      chosen:
+        '모든 이벤트가 그 자체로 유효한 JSON이 되도록 전송 규격을 다시 설계. 답변을 블록 단위로 나누고 텍스트만 조각으로 흘려보내는 방식으로 바꿔 백엔드에 제안',
+      rejected: [
+        {
+          option: '기존 파싱 로직을 유지하고 필요할 때마다 보강',
+          reason:
+            '응답 형식이 바뀔 때마다 파서를 함께 고쳐야 한다. 코드가 읽기 어려워 고칠 때마다 비용이 쌓이고, 내가 오기 전에 만들어진 코드라 맥락을 아는 사람도 없었다',
+        },
+        {
+          option: '인용 위치를 본문의 문자 위치로 지정',
+          reason:
+            'PM이 제시한 스키마인데, 본문에 이미 각주 마커가 있어 같은 정보를 두 곳에서 표현하게 된다. 스트리밍 중 텍스트가 바뀌면 위치가 어긋나고 프론트엔드가 둘을 맞춰야 한다. 마커 하나로만 연결하자고 제안했다',
+        },
+      ],
+      constraint: '백엔드 작업 공수 / FE·BE·PM 각 1명',
+    },
+    action: [
+      '기존 파서의 문제를 정리하고 새 이벤트 규격을 담은 제안 문서를 작성해 백엔드·PM과 공유',
+      '이벤트 종류를 나눠 설계. 블록 시작·종료, 텍스트 조각, 테이블 헤더, 테이블 행, 구조화 데이터 일괄 전송, 완료 신호',
+      '텍스트는 조각으로 흘리고, 뉴스나 참고문헌처럼 구조가 정해진 데이터는 한 번에 보내도록 구분',
+      '테이블은 별도 블록으로 떼어내고 본문에는 자리 표시만 남겨, 헤더가 먼저 그려지고 행이 하나씩 채워지도록 설계',
+      '인용과 링크 같은 부가 정보는 텍스트가 끝난 뒤 블록 종료 시점에 한 번에 받도록 정리',
+      'PM이 제시한 스키마를 검토해 문제가 될 부분을 짚고 대안을 제시',
+      '스트리밍에 맞는 마크다운 렌더러를 골라 적용',
+    ],
+    beforeAfter: {
+      before:
+        '불완전한 JSON을 직접 해석하는 파서 1,281줄, 비슷한 파서 네댓 개 중복, 순서 보장을 위한 별도 정렬 로직.',
+      after:
+        '도착한 줄을 그대로 파싱해 종류에 따라 처리하는 구조. 불완전한 JSON을 해석하는 코드가 필요 없어짐.',
+    },
+    result:
+      '수동 파싱 로직 파일 제거(1,281줄). 응답 형식이 바뀌어도 파서를 함께 고칠 일이 없어졌다. 테이블이 헤더부터 행 순서로 채워지면서 답변이 완성되는 과정이 화면에 드러난다.',
+    learning:
+      '받는 쪽 코드가 계속 복잡해질 때는 보내는 쪽 규격을 의심해봐야 한다. 다른 직군에 요청하려면 무엇이 문제인지보다 어떤 형태로 받고 싶은지를 구체적으로 적어야 이야기가 진행된다.',
+  },
 }

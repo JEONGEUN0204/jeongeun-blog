@@ -22,9 +22,17 @@ export const experiences: Experience[] = [
             detail:
               '전 섹션 일괄 요청으로 느리던 초기 로딩을 슬라이드 단위 fetch+prefetch로 재설계, 초기 요청량 축소·진입 로딩 개선',
           },
+          // codit-agents-md · codit-tailwind-skill 은 parentId 로 Codit 플랫폼에 속한다. 그룹을 따로 떼지 않는다.
           {
-            title: '레거시 스타일 마이그레이션',
-            detail: 'styled-components → Tailwind 순차 전환·공통 컴포넌트화로 유지보수성 향상',
+            title: '도구 중립 단일 원본으로 저장소 규칙 정리',
+            detail:
+              '구조·규칙 문서가 없어 도구마다 참조 기준이 달랐던 저장소에, AGENTS.md를 단일 원본으로 두고 도구별 파일이 import 로 이를 불러오게 구성해 팀이 같은 문서를 참조하도록 정리',
+          },
+          {
+            // codit-tailwind-skill. 제목은 입력 블록에 없어 TBD 다 (verify 가 목록으로 보고한다).
+            title: 'TBD',
+            detail:
+              'styled-components·SCSS·Tailwind가 섞인 저장소에서, 확인에 드는 시간이 더 크다고 판단해 확인 절차를 먼저 정하고 그에 맞춘 작업 문서를 팀이 명령 하나로 쓰게 함',
           },
         ],
       },
@@ -88,19 +96,15 @@ export const experiences: Experience[] = [
     groups: [
       {
         product: '이즐충전소 (React Native · 앱)',
+        /*
+          ezl-charge. 제목은 roleDetail 의 첫 항목, 내용은 narrative.result 를 그대로 옮겼다.
+          Sentry·재시도 플로우는 입력 블록에 서술이 없어 하이라이트를 두지 않는다.
+        */
         highlights: [
           {
-            title: '이즐워크 조회·포인트 전환 API 개선',
+            title: '이즐워크 조회 API 호출 개선',
             detail:
-              '버튼 클릭마다 중복 호출되던 조회 API를 useQuery 전환·캐싱으로 재설계, API 호출 75% 감소',
-          },
-          {
-            title: 'Sentry 활용 앱 안정성 대응',
-            detail: 'Sentry로 런타임 에러를 확인·수정해 Crash Free Rate 3%p 향상',
-          },
-          {
-            title: '충전·환불 재시도 플로우 구현',
-            detail: '미완료 거래 재시도·연속 클릭 방지로 중복 결제 차단·CS 인입 감소',
+              '페이지 진입당 미션 조회 API 호출을 4회에서 1회로 줄이고, 보상 버튼 연속 클릭 에러를 없애고, 불필요한 호출 코드를 삭제',
           },
         ],
       },

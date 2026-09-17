@@ -46,11 +46,11 @@
 ```
 ### PROJECT: <id>              # 아래 '기존 id' 목록에 있으면 그대로, 새 프로젝트면 kebab-case
 company: codit | ezllabs
+parent: <상위 프로젝트 id>     # 다른 프로젝트의 하위 작업일 때만. 아니면 이 줄을 지운다
 depth: flagship | supporting
 kind: improvement | build | operation
 role: 단독 담당 | 설계·구현 리드 | 기능 담당 | 일부 참여   # 넷 중 하나. 섞어 쓰지 않는다
 roleDetail: <한 줄로 구체화>
-team: FE 2 / BE 3 / PM 1 / 디자이너 1 / QA 1               # 모르면 TBD
 contribution: <실제 수행 + 의사결정 기여 범위>              # 모르면 TBD
 periodOverride: 2024.07 ~ 2025.10   # 회사 재직 기간과 다를 때만. 같으면 이 줄을 지운다
 
@@ -102,14 +102,14 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 ## 필드 값 규칙
 
-| 필드                 | 규칙                                                                                      |
-| -------------------- | ----------------------------------------------------------------------------------------- |
-| `depth: flagship`    | 대표 프로젝트 **1개만**. flagship 은 `DECISION.rejected` 가 1건 이상 없으면 빌드 실패     |
-| `kind: operation`    | 운영 중 발생한 문제 대응 사례. 현재 0건이라 하나는 꼭 필요                                |
-| `role`               | 네 값 중 하나만. "담당이자 리드" 같은 표현 금지                                           |
-| `team`               | 숫자로. 0명인 직군은 0                                                                    |
-| `METRICS[].evidence` | **화면에 안 나온다.** 면접 대비용 측정 방법·출처. 없으면 지표를 만들지 말고 나에게 물어라 |
-| `kind: scope`        | `0 → 1`, `Web · App` 처럼 숫자가 아닌 범위 표기. `businessImpact` 불필요                  |
+| 필드                 | 규칙                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| `depth: flagship`    | 대표 프로젝트 **1개만**. flagship 은 `DECISION.rejected` 가 1건 이상 없으면 빌드 실패            |
+| `kind: operation`    | 운영 중 발생한 문제 대응 사례. 현재 0건이라 하나는 꼭 필요                                       |
+| `parent`             | 같은 회사의 최상위 프로젝트 id 만. 하위의 하위는 안 되고, 하위 프로젝트는 flagship 이 될 수 없다 |
+| `role`               | 네 값 중 하나만. "담당이자 리드" 같은 표현 금지                                                  |
+| `METRICS[].evidence` | **화면에 안 나온다.** 면접 대비용 측정 방법·출처. 없으면 지표를 만들지 말고 나에게 물어라        |
+| `kind: scope`        | `0 → 1`, `Web · App` 처럼 숫자가 아닌 범위 표기. `businessImpact` 불필요                         |
 
 ## 문서별 압축률 (같은 내용을 세 번 쓰지 않는다)
 
@@ -119,23 +119,25 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 | 경력기술서 | 7단 전체 요약                             | 회사당 제한 없음                          |
 | 포트폴리오 | 7단 풀 전개 + DECISION.rejected           | flagship 1개 집중, 나머지는 카드 1개 분량 |
 
-## 현재 저장소가 이미 알고 있는 사실 (2026-09-04 기준)
+## 현재 저장소가 이미 알고 있는 사실 (2026-09-14 기준)
 
 새 id 를 만들기 전에 여기 있는지 먼저 확인한다. **최신 상태는 Claude Code 가 갖고 있다.**
 
 **회사** — `codit`(2025.11 ~ 현재), `ezllabs`(2024.06 ~ 2025.10)
 
 **프로젝트 id** — `ezl-charge`, `ezl-backoffice`, `ezl-design-system`, `ezl-ai`,
-`codit-codit`, `codit-chatcodit`(현재 flagship), `codit-chatcodit-app`, `codit-thecodit-app`
+`codit-codit`, `codit-chatcodit`(현재 flagship), `codit-chatcodit-app`, `codit-thecodit-app`,
+`codit-agents-md`·`codit-tailwind-skill`(둘 다 `parent: codit-codit`)
 
 **지표 id** — `ezl-inquiry-api`(API 75%↓), `ezl-crash-free`(+3%p), `sse-parser-lines`(1,281줄 제거),
-`ezl-mau`(MAU 30만), `zero-to-one`(0 → 1), `web-app-scope`(Web · App)
+`sse-protocol-scope`(이벤트 9종), `ezl-mau`(MAU 30만), `zero-to-one`(0 → 1), `web-app-scope`(Web · App),
+`tw-migration-backlog`, `tw-migration-check`
 
 ## 지금 비어 있는 칸 (우선순위 순)
 
 1. **flagship `codit-chatcodit` 의 7단 서술** — 특히 `DECISION.rejected`.
    폴링·WebSocket·기존 파서 보강 대신 블록 단위 SSE 를 택한 근거가 없으면 포트폴리오가 성립하지 않는다.
-2. **전 프로젝트의 `role` · `team` · `contribution`** — 8개 모두 TBD 다.
+2. **프로젝트 6건의 `role` · `contribution`** — 아직 TBD 다.
 3. **기술 지표 3건의 `evidence` 와 사업 지표 연결** — `ezl-inquiry-api`, `ezl-crash-free`, `sse-parser-lines`
 4. **`kind: operation` 사례 1건** — 개선 사례만 있고 장애·이슈 대응이 없다.
 5. **코딧에서의 구조 개선 사례** — 검증된 수치 두 개가 모두 이즐랩스 것이다.

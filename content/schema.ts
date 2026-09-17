@@ -2,7 +2,7 @@
  * 세 문서(/resume · /careers · /portfolio)가 공유하는 사실의 타입 정의.
  *
  * 목적은 "규칙을 타입으로 강제"하는 것이다. 서류 피드백에서 반복 지적된 항목
- * (역할·팀 구성 누락, 근거 없는 수치, 대안 검토 부재)을 옵셔널이 아닌 필수 필드로
+ * (역할 누락, 근거 없는 수치, 대안 검토 부재)을 옵셔널이 아닌 필수 필드로
  * 두어, 비어 있으면 타입 또는 `npm run verify`에서 드러나게 한다.
  */
 
@@ -74,14 +74,6 @@ export type Narrative = {
 /** 담당/리드/설계가 섞여 있으면 어떤 역할로 뽑을지 판단이 서지 않는다. 하나만 고른다. */
 export type ProjectRole = '단독 담당' | '설계·구현 리드' | '기능 담당' | '일부 참여' | Tbd
 
-export type TeamComposition = {
-  fe: number
-  be: number
-  pm: number
-  design: number
-  qa: number
-}
-
 /** flagship 만 /portfolio 에서 풀 전개한다. supporting 은 카드 1개 분량. */
 export type ProjectDepth = 'flagship' | 'supporting'
 
@@ -92,13 +84,27 @@ export type Project = {
   /** data/projects/{id}.mdx 파일명과 반드시 같다. 두 소스를 잇는 유일한 키. */
   id: string
   companyId: CompanyId
+  /**
+   * 다른 프로젝트의 하위 작업일 때 그 프로젝트 id. 예: AGENTS.md 작업 → 'codit-codit'.
+   *
+   * 기간·역할·서술은 하위 프로젝트가 따로 갖고, 렌더 위치만 상위 안으로 들어간다 —
+   * /portfolio 는 카드로 세지 않고 상위 상세에 붙이고, /careers 는 제목 앞에 상위 이름을 붙인다.
+   * 같은 회사의 최상위 프로젝트만 가리킬 수 있고 flagship 이 될 수 없다(verify 가 검사).
+   */
+  parentId?: string
   name: string
+  /**
+   * /portfolio 에서 name 대신 쓰는 짧은 이름. name 과 다를 때만 둔다.
+   *
+   * /careers 는 같은 제품의 섹션을 나란히 두므로 작업까지 적어야 서로 구분되지만,
+   * /portfolio 는 회사 덱 안의 카드라 제품명이면 충분하다. /resume·/careers 는 항상 name 을 쓴다.
+   */
+  cardName?: string
   /** 회사 재직 기간과 다를 때만 명시. 없으면 회사 기간을 상속한다. */
   periodOverride?: Period
   role: ProjectRole
   /** 역할을 한 줄로 구체화. 예: 'SSE 프로토콜 초안 설계 및 프론트 파서 전면 교체' */
   roleDetail: string
-  team: TeamComposition | Tbd
   /** 실제 수행 + 의사결정 기여 범위 */
   contribution: string | Tbd
   /** 버전 표기 금지. primary = 주력, secondary = 보조. */

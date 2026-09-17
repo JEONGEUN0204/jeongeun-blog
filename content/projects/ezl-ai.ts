@@ -6,7 +6,6 @@ export const ezlAi: Project = {
   name: 'Jira/Confluence 검색 AI',
   role: 'TBD',
   roleDetail: '사내 검색 AI 개발 담당',
-  team: 'TBD',
   contribution: 'TBD',
   stack: {
     primary: ['TypeScript'],

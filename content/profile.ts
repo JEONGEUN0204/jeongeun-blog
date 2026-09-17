@@ -30,7 +30,7 @@ export const summarySentences = summary
   .map((sentence) => sentence.trim())
   .filter(Boolean)
 
-/** /portfolio 의 ABOUT. 과정과 태도 중심 서술. summary 와 문장이 겹치면 안 된다. */
+/** 홈(/)의 About Me. 과정과 태도 중심 서술. summary 와 문장이 겹치면 안 된다. */
 export const about = [
   '안녕하세요. 웹과 앱 환경에서 프론트엔드 개발을 담당하고 있습니다.',
   '단순한 기능 구현을 넘어 근본적인 문제 해결과 React 리렌더링 최적화를 통해 성능과 사용자 경험을 개선하는 데 집중해왔습니다.',
@@ -60,7 +60,7 @@ export const skills: SkillGroup[] = [
   {
     category: 'Dev · Ops',
     primary: ['Storybook'],
-    secondary: ['Sentry', 'expo-iap', 'EAS', 'Genkit'],
+    secondary: ['Sentry', 'expo-iap', 'EAS', 'Genkit', 'Claude Code'],
   },
   {
     category: 'Collaboration',

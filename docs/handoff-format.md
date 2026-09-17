@@ -3,16 +3,16 @@
 Claude 챗에서 내용을 확정한 뒤 이 형태로 Claude Code 에 붙여넣는다.
 챗에 넣을 지침은 `docs/chat-instructions.md`, 받는 쪽 절차는 `CLAUDE.md` 를 따른다.
 
-이 포맷의 목적은 하나다. **대안 검토와 팀 구성이 비면 코드까지 가지 못하게 막는 것.**
+이 포맷의 목적은 하나다. **대안 검토가 비면 코드까지 가지 못하게 막는 것.**
 `depth: flagship` 인데 `DECISION.rejected` 가 비면 `npm run verify` 가 실패하므로,
 챗에서 그 칸을 채우지 않으면 포트폴리오에 올라가지 않는다.
 
 ## 한 프로젝트가 놓이는 두 파일
 
-| 파일                       | 담는 것                                         | 블록의 어느 부분                  |
-| -------------------------- | ----------------------------------------------- | --------------------------------- |
-| `content/projects/{id}.ts` | **사실** — 회사·기간·역할·팀·스택·지표·7단 서술 | `company` ~ `LEARNING`, `METRICS` |
-| `data/projects/{id}.mdx`   | **표현** — 한 줄 요약·스크린샷·본문             | `summary`, `platform`, `images`   |
+| 파일                       | 담는 것                                      | 블록의 어느 부분                  |
+| -------------------------- | -------------------------------------------- | --------------------------------- |
+| `content/projects/{id}.ts` | **사실** — 회사·기간·역할·스택·지표·7단 서술 | `company` ~ `LEARNING`, `METRICS` |
+| `data/projects/{id}.mdx`   | **표현** — 한 줄 요약·스크린샷·본문          | `summary`, `platform`, `images`   |
 
 파일명(`{id}`)이 둘을 잇는 유일한 키다. 한쪽만 있으면 verify 가 실패한다.
 
@@ -27,7 +27,6 @@ depth: flagship
 kind: improvement
 role: 설계·구현 리드
 roleDetail: SSE 프로토콜 초안 설계, 백엔드 협의, 프론트 파서 전면 교체
-team: FE 2 / BE 3 / PM 1 / 디자이너 1 / QA 1
 contribution: 프로토콜 설계 100%, 프론트 구현 100%, 백엔드 스키마 합의 주도
 periodOverride: 2025.11 ~ 현재
 
@@ -63,11 +62,11 @@ ASK:
 | ---------------------- | ----------------------------------- | ------------------------------------------------------------------------- |
 | `PROJECT:`             | `id`                                | `data/projects/{id}.mdx` 와 같은 이름이어야 한다                          |
 | `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다               |
+| `parent`               | `parentId`                          | 다른 프로젝트의 하위 작업일 때만. 아래 '하위 프로젝트' 참고               |
 | `depth`                | `depth`                             | `flagship` \| `supporting`. flagship 은 1개 원칙 (2개 이상이면 경고)      |
 | `kind`                 | `kind`                              | `improvement` \| `build` \| `operation`                                   |
 | `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD`    |
 | `roleDetail`           | `roleDetail`                        | 비어 있으면 verify 실패                                                   |
-| `team`                 | `team`                              | `{ fe, be, pm, design, qa }` 숫자 또는 `TBD`                              |
 | `contribution`         | `contribution`                      | 문자열 또는 `TBD`                                                         |
 | `periodOverride`       | `periodOverride`                    | **회사 기간과 다를 때만.** 같으면 필드를 만들지 않고 회사 기간을 상속한다 |
 | `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                               |
@@ -77,6 +76,18 @@ ASK:
 
 `periodOverride` 를 쓸 때는 **왜 회사 기간과 다른지 주석으로 남긴다.**
 (예: `ezl-charge` 는 입사 2024.06, 프로젝트 투입 2024.07 로 의도된 구분)
+
+### 하위 프로젝트 (`parent`)
+
+`parent: codit-codit` 처럼 상위 프로젝트 id 를 주면 `Project.parentId` 가 되고, 그 프로젝트의 하위 작업이 된다.
+기간·역할·7단 서술은 하위 프로젝트가 그대로 갖고, 렌더 위치만 상위 안으로 들어간다.
+같은 회사의 최상위 프로젝트만 가리킬 수 있고, 하위 프로젝트는 flagship 이 될 수 없다 (verify 가 검사).
+
+| 경로         | 렌더 위치                                                                                                      |
+| ------------ | -------------------------------------------------------------------------------------------------------------- |
+| `/resume`    | `content/experience.ts` 의 상위 제품 그룹에 하이라이트로 넣는다. 그룹을 따로 만들지 않는다                     |
+| `/careers`   | 회사 MDX 의 상위 섹션 뒤에 `<ProjectNarrative id="..." no="NN" />` 로 자리를 잡는다. 제목에 상위 이름이 붙는다 |
+| `/portfolio` | 카드로 세지 않는다. 상위 프로젝트 상세 끝에 소제목과 카드 1개 분량으로 붙는다                                  |
 
 ---
 
@@ -136,9 +147,9 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 ## 지금 비어 있는 칸
 
-`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 32건:
+`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 21건:
 
-- 전 프로젝트(8개)의 `role` · `team` · `contribution`
+- 프로젝트 6건의 `role` · `contribution`
 - 기술 지표 3건(`ezl-inquiry-api`, `ezl-crash-free`, `sse-parser-lines`)의 `evidence` 와 사업 지표
 - `ezl-mau` 의 `evidence`
 - flagship `codit-chatcodit` 의 7단 서술 — 특히 `DECISION.rejected`

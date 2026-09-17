@@ -6,7 +6,6 @@ export const ezlBackoffice: Project = {
   name: '백오피스',
   role: 'TBD',
   roleDetail: '백오피스 운영 기능 개발 담당',
-  team: 'TBD',
   contribution: 'TBD',
   stack: {
     primary: ['React', 'TypeScript'],

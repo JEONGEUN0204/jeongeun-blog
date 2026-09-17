@@ -6,7 +6,6 @@ export const ezlDesignSystem: Project = {
   name: '디자인 시스템',
   role: 'TBD',
   roleDetail: '공통 디자인 시스템 개발 담당',
-  team: 'TBD',
   contribution: 'TBD',
   stack: {
     primary: ['React Native', 'TypeScript', 'Storybook'],
