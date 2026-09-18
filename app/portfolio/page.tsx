@@ -41,6 +41,7 @@ export default function Portfolio() {
         context: company.context,
         projects: withDocs.map(({ project, doc }, index) => {
           const no = pad(index + 1)
+          const cover = doc.images[0]?.trimEnd()
           return {
             id: project.id,
             no,
@@ -49,6 +50,17 @@ export default function Portfolio() {
             period: formatProjectPeriod(project),
             summary: doc.summary,
             stack: project.stack.primary,
+            cover: cover
+              ? {
+                  src: cover,
+                  width: Number(doc.imageSize[0]),
+                  height: Number(doc.imageSize[1]),
+                  frame:
+                    doc.imageFrame === 'phone' || doc.imageFrame === 'tablet'
+                      ? doc.imageFrame
+                      : undefined,
+                }
+              : undefined,
             ...projectBody({ project, doc, no }),
           }
         }),
