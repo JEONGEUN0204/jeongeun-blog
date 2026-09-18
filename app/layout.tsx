@@ -101,9 +101,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         color="#5bbad5"
       />
       <meta name="msapplication-TileColor" content="#000000" />
-      {/* 브라우저 UI 색. css/tailwind.css 의 sand-50(리넨)·gray-950(미드나잇)과 같은 값이다. */}
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2EFE8" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B1320" />
+      {/* 브라우저 UI 색. css/tailwind.css 의 sand-50(라이트 그레이)·gray-950(다크 바탕)과 같은 값이다. */}
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F5F5" />
+      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B1118" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
       <body className="bg-sand-50 pl-[calc(100vw-100%)] text-gray-950 antialiased dark:bg-gray-950 dark:text-gray-50">
         <ThemeProviders>
