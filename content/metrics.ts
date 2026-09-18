@@ -84,6 +84,18 @@ export const metrics: Metric[] = [
     // 변환 소요 시간·문제 발생률 미측정. 사유를 값에 붙이면 verify 가 TBD 로 잡지 못해 주석으로 둔다.
     businessImpact: 'TBD',
   },
+  // codit-appshell 지표 1건
+  {
+    id: 'codit-header-refetch',
+    value: '헤더 API 전환당 2건 → 0건',
+    // label 은 입력 블록에 없어 TBD 다.
+    label: 'TBD',
+    kind: 'tech',
+    // 끝의 'StrictMode 여부: TBD' 는 문장 안에 있어 verify 가 잡지 못한다. 두 커밋 grep 결과를 받으면 교체한다.
+    evidence:
+      '적용 커밋 7e9d315658 vs 직전 커밋 7e3082e36 비교. staging 백엔드, 동일 계정, 언론↔대시보드 4회 전환, PerformanceResourceTiming으로 엔드포인트 전수 집계 (notice/new 4→0, shop/report 4→0, 그 외 콘텐츠 API는 동일). dev 빌드로 측정. 두 커밋의 StrictMode 여부: TBD',
+    businessImpact: 'TBD',
+  },
 ]
 
 export function getMetric(id: string): Metric {

@@ -255,9 +255,10 @@ export default function ResumeContent() {
                         A4 분량이 늘어나는 것을 막기 위한 분기다.
                       */}
                       <ul className="mt-2 space-y-2">
-                        {group.highlights.map((highlight) => (
+                        {/* 제목이 TBD 인 하이라이트가 한 그룹에 여럿일 수 있어 제목을 key 로 쓰지 않는다 */}
+                        {group.highlights.map((highlight, index) => (
                           <li
-                            key={highlight.title}
+                            key={index}
                             className="break-inside-avoid-page border-l-2 border-gray-200 pl-4 text-sm leading-6 dark:border-gray-700"
                           >
                             <span className="block font-semibold text-gray-900 dark:text-gray-100 print:inline">

@@ -22,7 +22,12 @@ export const experiences: Experience[] = [
             detail:
               '전 섹션 일괄 요청으로 느리던 초기 로딩을 슬라이드 단위 fetch+prefetch로 재설계, 초기 요청량 축소·진입 로딩 개선',
           },
-          // codit-agents-md · codit-tailwind-skill 은 parentId 로 Codit 플랫폼에 속한다. 그룹을 따로 떼지 않는다.
+          // codit-appshell · codit-agents-md · codit-tailwind-skill 은 parentId 로 Codit 플랫폼에 속한다. 그룹을 따로 떼지 않는다.
+          {
+            // codit-appshell. 제목·설명 모두 입력 블록에 없어 TBD 다. verify 는 제목만 보고한다.
+            title: 'TBD',
+            detail: 'TBD',
+          },
           {
             title: '도구 중립 단일 원본으로 저장소 규칙 정리',
             detail:

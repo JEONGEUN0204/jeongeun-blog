@@ -4,6 +4,7 @@ import { coditCodit } from './codit-codit'
 import { coditChatCodit } from './codit-chatcodit'
 import { coditChatCoditApp } from './codit-chatcodit-app'
 import { coditTheCoditApp } from './codit-thecodit-app'
+import { coditAppShell } from './codit-appshell'
 import { coditAgentsMd } from './codit-agents-md'
 import { coditTailwindSkill } from './codit-tailwind-skill'
 import { ezlCharge } from './ezl-charge'
@@ -25,6 +26,7 @@ export const projects: Project[] = [
   coditChatCodit,
   coditChatCoditApp,
   coditTheCoditApp,
+  coditAppShell,
   coditAgentsMd,
   coditTailwindSkill,
   ezlCharge,
