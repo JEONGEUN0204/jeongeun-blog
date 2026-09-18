@@ -24,22 +24,25 @@ type Row = {
   emphasis?: boolean
 }
 
-/** 라벨 컬럼 + 본문. MDX 의 <Steps> 와 같은 모양이라 손으로 쓴 섹션 옆에 놓여도 어긋나지 않는다. */
+/**
+ * 라벨 컬럼 + 본문. MDX 의 <Steps> 와 같은 모양이라 손으로 쓴 섹션 옆에 놓여도 어긋나지 않는다.
+ * 좁은 화면에서는 <Steps> 처럼 라벨을 본문 위로 올린다.
+ */
 function Rows({ rows }: { rows: Row[] }) {
   return (
     <div className="not-prose space-y-1">
       {rows.map((row) => (
         <div
           key={row.label}
-          className={`flex break-inside-avoid-page gap-3 rounded-md px-3 py-1.5 ${
+          className={`flex break-inside-avoid-page flex-col gap-1 rounded-md px-3 py-1.5 sm:flex-row sm:gap-3 ${
             row.emphasis ? 'bg-primary-50 dark:bg-primary-400/10' : ''
           }`}
         >
-          <span className="w-16 shrink-0">
+          <span className="sm:w-16 sm:shrink-0">
             <Label kind={row.kind}>{row.label}</Label>
           </span>
           <div
-            className={`min-w-0 text-sm leading-7 ${
+            className={`min-w-0 text-sm leading-7 wrap-break-word ${
               row.emphasis
                 ? 'font-medium text-gray-900 dark:text-gray-100'
                 : 'text-gray-700 dark:text-gray-300'

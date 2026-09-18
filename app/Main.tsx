@@ -17,7 +17,7 @@ export default function Home() {
         {about.map((line) => (
           <h4 key={line}>{line}</h4>
         ))}
-        <div className="flex w-full space-x-10">
+        <div className="flex w-full flex-col sm:flex-row sm:space-x-10">
           <div className="w-full">
             <div className="border-b-primary-600 mb-4 w-full border-b-2 pb-2">
               <h1 className={heading}>Education</h1>

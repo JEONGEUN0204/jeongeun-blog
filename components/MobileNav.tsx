@@ -84,8 +84,9 @@ const MobileNav = () => {
                 ))}
               </nav>
 
+              {/* 헤더의 햄버거 아이콘과 같은 자리에 X 가 오도록 맞춘다(p-4 만큼 바깥으로 뺀 위치). */}
               <button
-                className="hover:text-primary-500 dark:hover:text-primary-400 fixed top-7 right-4 z-80 h-16 w-16 p-4 text-gray-900 dark:text-gray-100"
+                className="hover:text-primary-500 dark:hover:text-primary-400 fixed top-6 right-0 z-80 h-16 w-16 p-4 text-gray-900 dark:text-gray-100"
                 aria-label="Toggle Menu"
                 onClick={onToggleNav}
               >

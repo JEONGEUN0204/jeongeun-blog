@@ -22,7 +22,8 @@ export default function AuthorLayout({ children }: Props) {
     <>
       <div>
         <div className="items-start space-y-2 xl:grid">
-          <div className="flex items-center space-x-6 pt-8">
+          {/* 좁은 화면에서는 사진 옆에 직함·메일이 들어갈 폭이 없어 사진 아래로 내린다. */}
+          <div className="flex flex-col items-start gap-x-6 gap-y-2 pt-8 sm:flex-row sm:items-center">
             {avatar && (
               <Image
                 src={avatar}

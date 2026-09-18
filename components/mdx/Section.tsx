@@ -65,26 +65,32 @@ export default function Section({ title, className, titleClassName, children }: 
     <section className={`break-inside-avoid-page my-8${className ? ` ${className}` : ''}`}>
       {title &&
         (parsed ? (
-          /* section-head 는 .prose-doc h3 의 좌측 색 바를 끈다 — 번호 배지가 그 역할을 대신한다 */
+          /*
+            section-head 는 .prose-doc h3 의 좌측 색 바를 끈다 — 번호 배지가 그 역할을 대신한다.
+            배지 옆 칸 안에서만 줄을 바꾼다. 배지까지 한 줄에 흘리면 좁은 화면에서 긴 제목이
+            통째로 다음 줄로 밀려 배지만 홀로 남는다.
+          */
           <h3
-            className={`section-head flex break-after-avoid-page flex-wrap items-center gap-x-3 gap-y-2${
+            className={`section-head flex break-after-avoid-page items-start gap-3${
               titleClassName ? ` ${titleClassName}` : ''
             }`}
           >
             <span className="bg-primary-700 not-prose inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold text-white">
               {parsed.no}
             </span>
-            <span className="min-w-0">{parsed.title}</span>
-            {(parsed.neutral || parsed.emphasis.length > 0) && (
-              <span className="flex flex-wrap items-center gap-1.5">
-                {parsed.neutral && <Label kind="neutral">{parsed.neutral}</Label>}
-                {parsed.emphasis.map((token) => (
-                  <Label key={token} kind="result">
-                    {token}
-                  </Label>
-                ))}
-              </span>
-            )}
+            <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="min-w-0">{parsed.title}</span>
+              {(parsed.neutral || parsed.emphasis.length > 0) && (
+                <span className="flex flex-wrap items-center gap-1.5">
+                  {parsed.neutral && <Label kind="neutral">{parsed.neutral}</Label>}
+                  {parsed.emphasis.map((token) => (
+                    <Label key={token} kind="result">
+                      {token}
+                    </Label>
+                  ))}
+                </span>
+              )}
+            </span>
           </h3>
         ) : (
           <h3 className={`break-after-avoid-page${titleClassName ? ` ${titleClassName}` : ''}`}>
