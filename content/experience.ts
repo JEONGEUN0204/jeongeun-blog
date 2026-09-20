@@ -121,9 +121,13 @@ export const experiences: Experience[] = [
         product: '백오피스 · 디자인 시스템 · 내부 AI (React · React Native)',
         highlights: [
           {
+            /*
+              ezl-backoffice. 제목은 기존 값을 두고, 내용은 narrative.result 를 그대로 옮겼다.
+              예전 내용의 '가독성·유지보수성 향상' 은 입력 블록에 없는 주장이라 함께 걷어냈다.
+            */
             title: '백오피스',
             detail:
-              '관리자 운영 기능 구현 및 react-error-boundary로 에러 처리 패턴 표준화(가독성·유지보수성 향상)',
+              '7개 도메인에 목록 단위 에러 경계를 적용했다. 일주일 뒤부터 동료 개발자가 같은 파일 규칙과 구성으로 다른 화면을 작성했고, 2025.09에는 동료가 쓴 기능별 README에 기본 구조로 실렸다.',
           },
           {
             title: '디자인 시스템',
