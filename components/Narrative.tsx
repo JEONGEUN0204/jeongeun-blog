@@ -280,13 +280,13 @@ export function NarrativeSummary({
   )
 
   /*
-    하위 프로젝트(parentId)는 상위 이름을 앞에 붙인다. 손으로 쓴 섹션의
-    'ChatCODIT App · 구축·결제' 와 같은 '제품 · 작업' 모양이어야 같은 제품의 작업으로 묶여 읽힌다.
+    제품 이름은 회사 MDX 의 <ProductGroup> 구분선이 한 번 적으므로 제목에는 작업만 남긴다.
+    하위 프로젝트(parentId)의 name 은 이미 작업이다. '제품 · 작업' 모양의 name 은 앞의
+    'cardName · '(제품)을 뗀다 — 'ChatCODIT · 실시간 스트리밍' → '실시간 스트리밍'.
   */
-  const parent = project.parentId
-    ? projects.find((item) => item.id === project.parentId)
-    : undefined
-  const title = parent ? `${parent.name} · ${project.name}` : project.name
+  const product = project.cardName ? `${project.cardName} · ` : ''
+  const title =
+    product && project.name.startsWith(product) ? project.name.slice(product.length) : project.name
 
   return (
     <Section title={`${no}. ${title}${suffix ? ` (${suffix})` : ''}`}>

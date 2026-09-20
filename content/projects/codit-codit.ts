@@ -1,11 +1,20 @@
 import type { Project } from '../schema'
 
+/**
+ * 'Codit 플랫폼' 상위 프로젝트. 대시보드·AppShell·AGENTS.md·Tailwind 작업이 parentId 로 여기에 붙는다.
+ *
+ * 예전에는 이 파일이 대시보드 작업 자체를 담았다. 대시보드 입력 블록이 이 id 로 왔지만 그 기간을 여기 넣으면
+ * 하위 작업 전체의 카드 기간이 줄어들어 codit-dashboard 로 뗐다. 그래서 periodOverride 를 두지 않고 회사 기간을 상속한다.
+ *
+ * roleDetail 의 예전 값은 대시보드 한 작업의 설명이라 codit-dashboard 로 대체됐다. 플랫폼 단위 설명은 입력 블록에 없어 TBD 다.
+ * verify 는 roleDetail 의 TBD 를 목록에 올리지 않으니 여기서 기억해 둔다.
+ */
 export const coditCodit: Project = {
   id: 'codit-codit',
   companyId: 'codit',
   name: 'Codit 플랫폼',
   role: 'TBD',
-  roleDetail: '대시보드 프론트엔드 데이터 로딩 아키텍처·쿼리 계층·캐러셀 인터랙션 설계 및 구현',
+  roleDetail: 'TBD',
   contribution: 'TBD',
   stack: {
     primary: ['React', 'TypeScript', 'TanStack Query', 'Zustand'],

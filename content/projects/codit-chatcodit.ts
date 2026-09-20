@@ -14,7 +14,8 @@ export const coditChatCodit: Project = {
   id: 'codit-chatcodit',
   companyId: 'codit',
   name: 'ChatCODIT · 실시간 스트리밍',
-  // /careers 05 는 name 을 그대로 쓴다. 06·07 의 다른 ChatCODIT 섹션과 구분돼야 해서다.
+  // /careers 05 는 name 에서 'ChatCODIT · ' 를 뗀 '실시간 스트리밍' 을 쓴다. 제품명은 <ProductGroup> 구분선이 적는다.
+  // /portfolio 서술 섹션 제목(카드 뒷면)은 name 그대로다.
   cardName: 'ChatCODIT',
   role: '설계·구현 리드',
   roleDetail: '스트리밍 응답 규격을 설계해 백엔드·PM에 제안하고, 새 규격에 맞춰 프론트엔드 구현',

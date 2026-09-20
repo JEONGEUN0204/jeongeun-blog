@@ -17,12 +17,16 @@ export const experiences: Experience[] = [
       {
         product: 'Codit 플랫폼 (Web)',
         highlights: [
+          // codit-dashboard · codit-appshell · codit-agents-md · codit-tailwind-skill 은 parentId 로 Codit 플랫폼에 속한다. 그룹을 따로 떼지 않는다.
           {
+            /*
+              codit-dashboard. 제목은 기존 값을 두고, 내용은 narrative.result 첫 문장을 그대로 옮겼다.
+              예전 내용의 '초기 요청량 축소' 는 result 의 '전체 요청 수와 전송량은 줄지 않았지만' 과 맞지 않아 교체했다.
+            */
             title: '대시보드 순차 로딩 아키텍처 설계',
             detail:
-              '전 섹션 일괄 요청으로 느리던 초기 로딩을 슬라이드 단위 fetch+prefetch로 재설계, 초기 요청량 축소·진입 로딩 개선',
+              '뉴스를 슬라이드 단위로 요청해 첫 화면이 기다리는 목록을 35건에서 9건으로 줄였고, 화면을 그리기 전 기다리던 썸네일도 35장에서 9장으로 줄어 LCP가 5.3초에서 1.8초로 줄었다.',
           },
-          // codit-appshell · codit-agents-md · codit-tailwind-skill 은 parentId 로 Codit 플랫폼에 속한다. 그룹을 따로 떼지 않는다.
           {
             // codit-appshell. 제목·설명 모두 입력 블록에 없어 TBD 다. verify 는 제목만 보고한다.
             title: 'TBD',

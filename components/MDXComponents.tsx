@@ -9,6 +9,7 @@ import Section from './mdx/Section'
 import Block from './mdx/Block'
 import Label from './mdx/Label'
 import Meta from './mdx/Meta'
+import ProductGroup from './mdx/ProductGroup'
 import Split from './mdx/Split'
 import StatCard from './mdx/StatCard'
 import Steps from './mdx/Steps'
@@ -25,6 +26,7 @@ export const components: MDXComponents = {
   Block,
   Label,
   Meta,
+  ProductGroup,
   Split,
   StatCard,
   Steps,

@@ -119,19 +119,20 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 | 경력기술서 | 7단 전체 요약                             | 회사당 제한 없음                          |
 | 포트폴리오 | 7단 풀 전개 + DECISION.rejected           | flagship 1개 집중, 나머지는 카드 1개 분량 |
 
-## 현재 저장소가 이미 알고 있는 사실 (2026-09-14 기준)
+## 현재 저장소가 이미 알고 있는 사실 (2026-09-19 기준)
 
 새 id 를 만들기 전에 여기 있는지 먼저 확인한다. **최신 상태는 Claude Code 가 갖고 있다.**
 
 **회사** — `codit`(2025.11 ~ 현재), `ezllabs`(2024.06 ~ 2025.10)
 
 **프로젝트 id** — `ezl-charge`, `ezl-backoffice`, `ezl-design-system`, `ezl-ai`,
-`codit-codit`, `codit-chatcodit`(현재 flagship), `codit-chatcodit-app`, `codit-thecodit-app`,
-`codit-agents-md`·`codit-tailwind-skill`(둘 다 `parent: codit-codit`)
+`codit-codit`(Codit 플랫폼 상위), `codit-chatcodit`(현재 flagship), `codit-chatcodit-app`, `codit-thecodit-app`,
+`codit-dashboard`·`codit-appshell`·`codit-agents-md`·`codit-tailwind-skill`(모두 `parent: codit-codit`)
 
 **지표 id** — `ezl-inquiry-api`(API 75%↓), `ezl-crash-free`(+3%p), `sse-parser-lines`(1,281줄 제거),
 `sse-protocol-scope`(이벤트 9종), `ezl-mau`(MAU 30만), `zero-to-one`(0 → 1), `web-app-scope`(Web · App),
-`tw-migration-backlog`, `tw-migration-check`
+`tw-migration-backlog`, `tw-migration-check`, `codit-header-refetch`(헤더 API 2건 → 0건),
+`codit-dashboard-lcp`(LCP 66%↓), `codit-dashboard-hooks`(쿼리 훅 33 → 7)
 
 ## 지금 비어 있는 칸 (우선순위 순)
 

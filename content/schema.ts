@@ -88,7 +88,8 @@ export type Project = {
    * 다른 프로젝트의 하위 작업일 때 그 프로젝트 id. 예: AGENTS.md 작업 → 'codit-codit'.
    *
    * 기간·역할·서술은 하위 프로젝트가 따로 갖고, 렌더 위치만 상위 안으로 들어간다 —
-   * /portfolio 는 카드로 세지 않고 상위 상세에 붙이고, /careers 는 제목 앞에 상위 이름을 붙인다.
+   * /portfolio 는 카드로 세지 않고 상위 상세에 붙이고, /careers 는 상위 제품 이름을 <ProductGroup>
+   * 구분선에 한 번 적고 제목에는 name(작업)만 쓴다.
    * 같은 회사의 최상위 프로젝트만 가리킬 수 있고 flagship 이 될 수 없다(verify 가 검사).
    */
   parentId?: string
@@ -96,8 +97,8 @@ export type Project = {
   /**
    * /portfolio 에서 name 대신 쓰는 짧은 이름. name 과 다를 때만 둔다.
    *
-   * /careers 는 같은 제품의 섹션을 나란히 두므로 작업까지 적어야 서로 구분되지만,
-   * /portfolio 는 회사 덱 안의 카드라 제품명이면 충분하다. /resume·/careers 는 항상 name 을 쓴다.
+   * name 은 '제품 · 작업', cardName 은 그중 제품이다. /portfolio 는 회사 덱 안의 카드라 제품명이면 충분하다.
+   * /careers 는 제품을 <ProductGroup> 구분선이 적으므로 name 앞의 'cardName · ' 를 떼고 작업만 쓴다.
    */
   cardName?: string
   /** 회사 재직 기간과 다를 때만 명시. 없으면 회사 기간을 상속한다. */
