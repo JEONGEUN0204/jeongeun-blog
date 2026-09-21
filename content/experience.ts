@@ -130,9 +130,12 @@ export const experiences: Experience[] = [
               '7개 도메인에 목록 단위 에러 경계를 적용했다. 일주일 뒤부터 동료 개발자가 같은 파일 규칙과 구성으로 다른 화면을 작성했고, 2025.09에는 동료가 쓴 기능별 README에 기본 구조로 실렸다.',
           },
           {
+            /*
+              ezl-design-system. 제목은 기존 값을 두고, 내용은 narrative.result 를 그대로 옮겼다.
+              예전 내용의 '개발 시간 단축' 은 입력 블록에 없는 주장이라 함께 걷어냈다.
+            */
             title: '디자인 시스템',
-            detail:
-              '공통 UI 컴포넌트·Storybook Controls 적용으로 코드 수정 없이 UI 확인, 개발 시간 단축',
+            detail: '신규·확장 컴포넌트가 이즐충전소 앱과 모바일 이즐 앱에 반영됨',
           },
           {
             title: 'Jira/Confluence 검색 AI',
