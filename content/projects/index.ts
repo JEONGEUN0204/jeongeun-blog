@@ -3,6 +3,7 @@ import { getCompany, formatPeriod } from '../companies'
 import { coditCodit } from './codit-codit'
 import { coditChatCodit } from './codit-chatcodit'
 import { coditChatCoditApp } from './codit-chatcodit-app'
+import { coditChatCoditAppInfra } from './codit-chatcodit-app-infra'
 import { coditTheCoditApp } from './codit-thecodit-app'
 import { coditDashboard } from './codit-dashboard'
 import { coditAppShell } from './codit-appshell'
@@ -26,6 +27,7 @@ export const projects: Project[] = [
   coditCodit,
   coditChatCodit,
   coditChatCoditApp,
+  coditChatCoditAppInfra,
   coditTheCoditApp,
   coditDashboard,
   coditAppShell,

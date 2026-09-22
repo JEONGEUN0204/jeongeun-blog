@@ -33,7 +33,8 @@ export const metrics: Metric[] = [
     value: '0 → 1',
     label: '웹·앱 신규 구축·운영',
     kind: 'scope',
-    evidence: 'ChatCODIT Web React → Next.js 신규 구축, ChatCODIT App iOS·Android 1.0.0 출시',
+    evidence:
+      'ChatCODIT Web React → Next.js 신규 구축, ChatCODIT App iOS·Android 1.0.x 출시(2026.04, 결제 없음). 인앱 구독은 Android 1.1.0·iOS 1.1.2 부터',
   },
   {
     id: 'web-app-scope',

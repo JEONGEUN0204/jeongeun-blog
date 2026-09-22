@@ -69,16 +69,23 @@ export const experiences: Experience[] = [
         product: 'ChatCODIT App (iOS · Android)',
         highlights: [
           {
-            title: '웹→네이티브 마이그레이션',
-            detail:
-              'Expo Router 아키텍처로 재구성하고 스트리밍 채팅·마크다운 렌더링을 앱에 이식해 iOS·Android 1.0.0 정식 출시',
+            /*
+              codit-chatcodit-app. 제목의 '웹→네이티브 마이그레이션' 은 사실과 달라 교체했다 —
+              입력 블록의 제약이 '기존 React 모바일 웹은 그대로 유지' 라 웹을 앱으로 옮긴 게 아니라 앱을 더한 일이다.
+              내용은 narrative.result 를 그대로 옮겼고, 예전의 '1.0.0 정식 출시' 는 beforeAfter.after 의
+              '1.0.x 출시(결제 없음)' 과 어긋나 함께 걷어냈다.
+            */
+            title: 'iOS·Android 앱 추가',
+            detail: 'iOS·Android 앱을 출시하고, 두 스토어 모두 인앱 구독을 붙여 운영 중',
           },
           {
+            // codit-chatcodit-app. 제목은 기존 값을 두고, 내용은 narrative.decision.chosen 첫 문장을 옮겼다.
             title: '인앱결제(IAP)·구독 신뢰성 확보',
             detail:
-              'expo-iap 서버 검증·IAPProvider 통합, 미완료 거래 sweep·중복 구독 방지로 중복 verify 해소',
+              '서버 검증이 성공한 뒤에만 거래를 완료(finish)하고, 실패한 거래는 스토어 큐에 남겨 다음 실행·로그인 때 다시 검증한다',
           },
           {
+            // codit-chatcodit-app-infra. 하위 프로젝트라 그룹을 따로 두지 않는다. 7단 서술을 받지 못해 기존 문구를 유지한다.
             title: '앱 보안·무중단 배포',
             detail:
               'reCAPTCHA·Firebase App Check 무결성 검증, EAS 환경 분리·OTA·rollback 자동 배포 체계 구축',

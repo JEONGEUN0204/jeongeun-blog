@@ -1,5 +1,5 @@
 ---
-summary: '웹 챗봇을 iOS·Android 앱으로 신규 구축. 스트리밍 채팅·마크다운·인앱결제부터 소셜 로그인·앱 보안·무중단 배포까지 서비스에 필요한 프론트엔드 인프라를 완성했습니다.'
+summary: 'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱을 추가하고, 두 스토어 모두 인앱 구독을 붙여 운영 중입니다.'
 platform: iOS · Android
 images:
   - /static/images/codit-chatcodit-app-3.png
@@ -10,49 +10,3 @@ imageSize:
   - 342
 imageFrame: phone
 ---
-
-### ChatCODIT App · 구축 & 결제 신뢰성
-
-<Split
-  aside={
-    <StatCard
-      value="결제 검증 안정화"
-      caption="iOS · Android 1.0.0 출시"
-      rows={[
-        ['신뢰성', '중복 verify 이슈 해소'],
-        ['구축', 'expo-iap 서버 검증·IAPProvider 상태 통합'],
-      ]}
-    />
-  }
->
-
-<Block kind="approach" label="웹 → 네이티브 마이그레이션 & IAP 구축">
-
-Expo Router 아키텍처와 스트리밍 채팅·마크다운을 이식해 1.0.0 정식 출시 기반을 마련하고, expo-iap 기반 BASIC/PRO 구독을 서버 검증까지 연동해 결제 상태를 IAPProvider로 통합했습니다.
-
-</Block>
-
-<Block kind="problem" label="결제 검증 PROBLEM">
-
-인앱결제 과정에서 동일 결제가 중복으로 verify(검증)되는 이슈가 있었습니다.
-
-</Block>
-
-<Block kind="result" label="APPROACH & RESULT">
-
-- 앱 실행 시 미완료 거래를 sweep·재검증해 누락된 결제 처리
-- 결제를 계정 UUID에 바인딩하고 중복 구독 방지 가드 적용
-
-→ **결제 검증 안정화, 중복 verify 이슈 해소, iOS·Android 1.0.0 출시**
-
-</Block>
-
-</Split>
-
-### ChatCODIT App · 인증·보안·배포
-
-iOS·Android 앱의 로그인·보안·배포 인프라를 구축해 보안 리스크를 줄이고 무중단 배포 체계를 갖췄습니다.
-
-- **소셜 로그인·딥링크 처리** — 이메일·Apple·Google 소셜 로그인, 비밀번호 재설정·이메일 인증 링크를 딥링크로 처리(앱 설치 시 앱·미설치 시 모바일 웹 연결)
-- **앱 보안 강화** — reCAPTCHA 봇 방어 + Firebase App Check로 클라이언트 무결성 검증
-- **배포 인프라·OTA** — EAS Build 환경 분리 + EAS Update·rollback으로 무중단 배포·빠른 복구
