@@ -138,8 +138,14 @@ export const experiences: Experience[] = [
             detail: '신규·확장 컴포넌트가 이즐충전소 앱과 모바일 이즐 앱에 반영됨',
           },
           {
+            /*
+              ezl-ai. 제목은 기존 값을 두고, 내용은 narrative.result 를 그대로 옮겼다.
+              예전 내용의 '자연어 질의로 사내 데이터를 검색하는 내부 도구 구현' 은 도구 전체를 혼자 만든 것처럼 읽힌다 —
+              입력 블록이 준 범위는 3인 프로젝트의 client 레이어까지고, 그 범위는 roleDetail·contribution 에 있다.
+            */
             title: 'Jira/Confluence 검색 AI',
-            detail: '자연어 질의로 사내 데이터를 검색하는 내부 도구 구현(Genkit·프롬프트 설계)',
+            detail:
+              '수정한 flow가 배포 브랜치의 최종 버전으로 AWS ECS에 배포되어 사내에서 테스트 수준으로 사용됨. 회사 사정으로 본격 사용 전에 중단',
           },
         ],
       },
