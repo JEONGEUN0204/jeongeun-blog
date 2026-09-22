@@ -14,6 +14,7 @@ import { join, basename } from 'path'
 
 import { companies } from '../content/companies'
 import { metrics } from '../content/metrics'
+import { products } from '../content/products'
 import { projects } from '../content/projects'
 import { summary, about, skills } from '../content/profile'
 import { experiences } from '../content/experience'
@@ -49,6 +50,7 @@ function readDir(dir: string, ext: string): SourceFile[] {
 const proseFiles: SourceFile[] = [
   ...readDir('content', '.ts'),
   ...readDir('data/careers', '.mdx'),
+  ...readDir('data/products', '.mdx'),
   ...readDir('data/projects', '.mdx'),
 ]
 
@@ -142,13 +144,35 @@ for (const metric of metrics) {
 }
 
 /* ------------------------------------------------------------------ *
- * 4. 프로젝트 — 역할·대안 검토
+ * 4. 제품 — 작업이 놓이는 자리
+ * ------------------------------------------------------------------ */
+
+const companyIds = new Set(companies.map((company) => company.id))
+
+const productIds = new Set(products.map((product) => product.id))
+if (productIds.size !== products.length) error('content/products.ts 에 중복 id 가 있다')
+
+for (const product of products) {
+  const at = `content/products.ts '${product.id}'`
+
+  if (!companyIds.has(product.companyId)) {
+    error(`${at} companies.ts 에 없는 companyId '${product.companyId}'`)
+  }
+  if (!product.name.trim()) error(`${at} name 이 비어 있다`)
+  if (!product.platform.trim()) error(`${at} platform 이 비어 있다`)
+
+  // 작업이 없는 제품은 /portfolio 카드만 있고 내용이 없다.
+  if (!projects.some((project) => project.productId === product.id)) {
+    error(`${at} 에 속한 작업이 없다 — content/projects 에서 productId 로 가리키는 파일이 없다`)
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * 5. 작업 — 역할·대안 검토
  * ------------------------------------------------------------------ */
 
 const projectIds = new Set(projects.map((project) => project.id))
 if (projectIds.size !== projects.length) error('content/projects 에 중복 id 가 있다')
-
-const companyIds = new Set(companies.map((company) => company.id))
 
 for (const project of projects) {
   const at = `content/projects/${project.id}.ts`
@@ -164,22 +188,17 @@ for (const project of projects) {
 
   if (project.stack.primary.length === 0) error(`${at} stack.primary 가 비어 있다`)
 
-  // 하위 프로젝트는 상위 안에서 렌더된다. 가리키는 곳이 없거나 한 단계를 넘으면 렌더 자리가 사라진다.
-  if (project.parentId) {
-    const parent = projects.find((item) => item.id === project.parentId)
-    if (!parent) {
-      error(`${at} content/projects 에 없는 parentId '${project.parentId}'`)
-    } else {
-      if (parent.companyId !== project.companyId) {
-        error(`${at} 상위 프로젝트 '${parent.id}' 와 companyId 가 다르다`)
-      }
-      if (parent.parentId) {
-        error(`${at} 상위 프로젝트 '${parent.id}' 도 하위 프로젝트다 — 한 단계만 허용한다`)
-      }
-    }
-    if (project.depth === 'flagship') {
-      error(`${at} 하위 프로젝트는 flagship 이 될 수 없다 — /portfolio 에 독립 카드가 없다`)
-    }
+  // 작업은 예외 없이 제품에 속한다. 가리키는 제품이 없으면 /portfolio 에 렌더될 자리가 없다.
+  const product = products.find((item) => item.id === project.productId)
+  if (!product) {
+    error(`${at} content/products.ts 에 없는 productId '${project.productId}'`)
+  } else if (product.companyId !== project.companyId) {
+    error(`${at} 제품 '${product.id}' 와 companyId 가 다르다`)
+  }
+
+  // 제품 이름을 작업 이름 앞에 다시 적으면 /careers 제목과 카드 뒷면에 같은 말이 두 번 나온다.
+  if (product && project.name.startsWith(`${product.name} · `)) {
+    error(`${at} name 이 제품 이름('${product.name}')으로 시작한다 — 작업 이름만 둔다`)
   }
 
   for (const id of project.metricIds) {
@@ -204,10 +223,20 @@ for (const project of projects) {
 
 const flagships = projects.filter((project) => project.depth === 'flagship')
 if (flagships.length === 0) {
-  error('depth:flagship 프로젝트가 없다 — /portfolio 가 집중할 대상이 없다')
+  error('depth:flagship 작업이 없다 — /portfolio 가 집중할 대상이 없다')
 }
 if (flagships.length > 1) {
   warn(`flagship 이 ${flagships.length}개다 — /portfolio 는 1개 집중이 원칙이다`)
+}
+
+// 한 제품에 flagship 이 둘이면 /portfolio 가 풀 전개를 둘 다 펼쳐 카드 1장 분량을 넘긴다.
+for (const product of products) {
+  const leads = projects.filter(
+    (project) => project.productId === product.id && project.depth === 'flagship'
+  )
+  if (leads.length > 1) {
+    error(`content/products.ts '${product.id}' 에 flagship 작업이 ${leads.length}개다 — 1개만 둔다`)
+  }
 }
 
 if (!projects.some((project) => project.kind === 'operation')) {
@@ -215,7 +244,7 @@ if (!projects.some((project) => project.kind === 'operation')) {
 }
 
 /* ------------------------------------------------------------------ *
- * 5. 문서 간 역할 분리
+ * 6. 문서 간 역할 분리
  * ------------------------------------------------------------------ */
 
 const sentences = (text: string) =>
@@ -237,11 +266,16 @@ for (const group of skills) {
   }
 }
 
-// /resume 하이라이트 — 입력 블록에 그룹명·제목이 없으면 TBD 로 두고 여기서 목록으로 남긴다.
+// /resume 하이라이트 — 입력 블록에 제목이 없으면 TBD 로 두고 여기서 목록으로 남긴다.
 for (const experience of experiences) {
   for (const group of experience.groups) {
-    if (group.product === TBD) {
-      todo(`content/experience.ts '${experience.companyId}' 그룹명(product) 미확정`)
+    const product = products.find((item) => item.id === group.productId)
+    if (!product) {
+      error(`content/experience.ts 에 content/products.ts 가 모르는 productId '${group.productId}'`)
+    } else if (product.companyId !== experience.companyId) {
+      error(
+        `content/experience.ts '${experience.companyId}' 그룹이 다른 회사의 제품 '${product.id}' 를 가리킨다`
+      )
     }
     for (const highlight of group.highlights) {
       if (highlight.title === TBD) {
@@ -252,7 +286,7 @@ for (const experience of experiences) {
 }
 
 /* ------------------------------------------------------------------ *
- * 6. 세 문서의 커버리지
+ * 7. 세 문서의 커버리지
  * ------------------------------------------------------------------ */
 
 // /careers 는 모든 회사를 렌더한다. 회사 하나가 빠지면 최신 경력이 통째로 사라진다.
@@ -266,28 +300,33 @@ for (const company of companies) {
   }
 }
 
-// 하위 프로젝트의 서술은 회사 경력기술서에서 <ProjectNarrative> 로 상위 섹션 뒤에 자리를 잡아야 한다.
-// 자리가 없으면 CareerList 가 회사 본문 끝에 붙여 상위 프로젝트와 멀리 떨어진다.
+// 서술이 있는 작업은 회사 경력기술서에서 <ProjectNarrative> 로 자리를 잡아야 한다.
+// 자리가 없으면 CareerList 가 회사 본문 끝에 붙여 같은 제품의 다른 작업과 멀리 떨어진다.
 for (const project of projects) {
-  if (!project.parentId || !project.narrative) continue
+  if (!project.narrative) continue
   const path = join('data', 'careers', `${project.companyId}.mdx`)
   if (!existsSync(join(ROOT, path))) continue
   const placeholder = new RegExp(`<ProjectNarrative\\s[^>]*?\\bid="${project.id}"`)
   if (!placeholder.test(readFileSync(join(ROOT, path), 'utf-8'))) {
     warn(
-      `content/projects/${project.id}.ts 는 하위 프로젝트인데 ${path} 에 <ProjectNarrative> 자리가 없다 — /careers 에서 회사 끝에 붙는다`
+      `content/projects/${project.id}.ts 의 서술이 ${path} 에 자리가 없다 — /careers 에서 회사 끝에 붙는다`
     )
   }
 }
 
-// content/projects 와 data/projects/*.mdx 는 id 로 1:1 대응해야 한다.
-const mdxIds = new Set(readDir('data/projects', '.mdx').map((file) => basename(file.path, '.mdx')))
-for (const id of projectIds) {
-  if (!mdxIds.has(id)) error(`content/projects '${id}' 에 대응하는 data/projects/${id}.mdx 가 없다`)
+// content/ 와 MDX 는 id 로 1:1 대응해야 한다. 제품과 작업이 각각이다.
+const pair = (dir: string, ids: Set<string>, source: string) => {
+  const mdxIds = new Set(readDir(dir, '.mdx').map((file) => basename(file.path, '.mdx')))
+  for (const id of ids) {
+    if (!mdxIds.has(id)) error(`${source} '${id}' 에 대응하는 ${dir}/${id}.mdx 가 없다`)
+  }
+  for (const id of mdxIds) {
+    if (!ids.has(id)) error(`${dir}/${id}.mdx 에 대응하는 ${source} 항목이 없다`)
+  }
 }
-for (const id of mdxIds) {
-  if (!projectIds.has(id)) error(`data/projects/${id}.mdx 에 대응하는 content/projects 항목이 없다`)
-}
+
+pair('data/products', productIds, 'content/products.ts')
+pair('data/projects', projectIds, 'content/projects')
 
 /* ------------------------------------------------------------------ *
  * 결과

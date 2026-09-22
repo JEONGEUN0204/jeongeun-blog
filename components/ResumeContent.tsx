@@ -5,6 +5,7 @@ import { FaGithub } from 'react-icons/fa'
 import Image from '@/components/Image'
 import Section from '@/components/mdx/Section'
 import { formatPeriod, getCompany } from '@/content/companies'
+import { getProduct, productLabel } from '@/content/products'
 import { experiences } from '@/content/experience'
 import { getMetrics, resumeMetricIds } from '@/content/metrics'
 import {
@@ -245,9 +246,9 @@ export default function ResumeContent() {
 
                 <div className="mt-5 space-y-5">
                   {experience.groups.map((group) => (
-                    <div key={group.product} className="break-inside-avoid-page">
+                    <div key={group.productId} className="break-inside-avoid-page">
                       <h5 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                        {group.product}
+                        {productLabel(getProduct(group.productId))}
                       </h5>
                       {/*
                         화면에서는 title 을 독립 줄로 세워 부연(detail)에 묻히지 않게 하고,

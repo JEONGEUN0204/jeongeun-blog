@@ -7,22 +7,27 @@ Claude 챗에서 내용을 확정한 뒤 이 형태로 Claude Code 에 붙여넣
 `depth: flagship` 인데 `DECISION.rejected` 가 비면 `npm run verify` 가 실패하므로,
 챗에서 그 칸을 채우지 않으면 포트폴리오에 올라가지 않는다.
 
-## 한 프로젝트가 놓이는 두 파일
+## 한 작업이 놓이는 두 파일
 
-| 파일                       | 담는 것                                 | 블록의 어느 부분                  |
-| -------------------------- | --------------------------------------- | --------------------------------- |
-| `content/projects/{id}.ts` | **사실** — 회사·역할·스택·지표·7단 서술 | `company` ~ `LEARNING`, `METRICS` |
-| `data/projects/{id}.mdx`   | **표현** — 한 줄 요약·스크린샷·본문     | `summary`, `platform`, `images`   |
+| 파일                       | 담는 것                                      | 블록의 어느 부분                  |
+| -------------------------- | -------------------------------------------- | --------------------------------- |
+| `content/projects/{id}.ts` | **사실** — 회사·제품·역할·스택·지표·7단 서술 | `company` ~ `LEARNING`, `METRICS` |
+| `data/projects/{id}.mdx`   | **표현** — 한 줄 요약·스크린샷·본문          | `summary`, `platform`, `images`   |
 
 파일명(`{id}`)이 둘을 잇는 유일한 키다. 한쪽만 있으면 verify 가 실패한다.
+
+작업이 놓인 **제품**도 같은 모양으로 두 파일을 갖는다 — `content/products.ts` 의 한 항목과
+`data/products/{제품 id}.mdx` 다. /portfolio 의 카드 한 장이 곧 제품 하나이고,
+카드의 요약·대표 스크린샷은 제품 MDX 에서 온다.
 
 ---
 
 ## 프로젝트 블록
 
 ```
-### PROJECT: codit-chatcodit
+### PROJECT: codit-chatcodit-streaming
 company: codit
+product: codit-chatcodit
 depth: flagship
 kind: improvement
 role: 설계·구현 리드
@@ -57,32 +62,37 @@ ASK:
 
 ### 필드가 코드로 가는 곳
 
-| 블록                   | `Project` 필드                      | 규칙                                                                   |
-| ---------------------- | ----------------------------------- | ---------------------------------------------------------------------- |
-| `PROJECT:`             | `id`                                | `data/projects/{id}.mdx` 와 같은 이름이어야 한다                       |
-| `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다            |
-| `parent`               | `parentId`                          | 다른 프로젝트의 하위 작업일 때만. 아래 '하위 프로젝트' 참고            |
-| `depth`                | `depth`                             | `flagship` \| `supporting`. flagship 은 1개 원칙 (2개 이상이면 경고)   |
-| `kind`                 | `kind`                              | `improvement` \| `build` \| `operation`                                |
-| `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD` |
-| `roleDetail`           | `roleDetail`                        | 비어 있으면 verify 실패                                                |
-| `contribution`         | `contribution`                      | 문자열 또는 `TBD`                                                      |
-| `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                            |
-| `PROBLEM` ~ `LEARNING` | `narrative`                         | 7단이 다 오지 않으면 `narrative` 자체를 만들지 않는다                  |
-| `METRICS`              | `metricIds` + `content/metrics.ts`  | 지표는 `metrics.ts` 에 먼저 등록하고 id 만 참조한다                    |
-| `ASK`                  | —                                   | 코드로 옮기지 않는다. 작업 종료 시 질문 목록으로 되돌려준다            |
+| 블록                   | `Project` 필드                      | 규칙                                                                     |
+| ---------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
+| `PROJECT:`             | `id`                                | `data/projects/{id}.mdx` 와 같은 이름이어야 한다                         |
+| `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다              |
+| `product`              | `productId`                         | **필수.** `content/products.ts` 에 없는 id 면 제품부터 등록하고 물어본다 |
+| `depth`                | `depth`                             | `flagship` \| `supporting`. flagship 은 1개 원칙 (2개 이상이면 경고)     |
+| `kind`                 | `kind`                              | `improvement` \| `build` \| `operation`                                  |
+| `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD`   |
+| `roleDetail`           | `roleDetail`                        | 비어 있으면 verify 실패                                                  |
+| `contribution`         | `contribution`                      | 문자열 또는 `TBD`                                                        |
+| `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                              |
+| `PROBLEM` ~ `LEARNING` | `narrative`                         | 7단이 다 오지 않으면 `narrative` 자체를 만들지 않는다                    |
+| `METRICS`              | `metricIds` + `content/metrics.ts`  | 지표는 `metrics.ts` 에 먼저 등록하고 id 만 참조한다                      |
+| `ASK`                  | —                                   | 코드로 옮기지 않는다. 작업 종료 시 질문 목록으로 되돌려준다              |
 
-### 하위 프로젝트 (`parent`)
+### 제품 (`product`)
 
-`parent: codit-codit` 처럼 상위 프로젝트 id 를 주면 `Project.parentId` 가 되고, 그 프로젝트의 하위 작업이 된다.
-역할·7단 서술은 하위 프로젝트가 그대로 갖고, 렌더 위치만 상위 안으로 들어간다.
-같은 회사의 최상위 프로젝트만 가리킬 수 있고, 하위 프로젝트는 flagship 이 될 수 없다 (verify 가 검사).
+`product: codit-platform` 처럼 제품 id 를 주면 `Project.productId` 가 된다. 모든 작업에 필요하고,
+제품에 작업이 하나뿐이어도 생략하지 않는다. 같은 회사의 제품만 가리킬 수 있고,
+한 제품의 flagship 작업은 최대 하나다 (verify 가 검사).
 
-| 경로         | 렌더 위치                                                                                                                            |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `/resume`    | `content/experience.ts` 의 상위 제품 그룹에 하이라이트로 넣는다. 그룹을 따로 만들지 않는다                                           |
-| `/careers`   | 회사 MDX 의 상위 제품 `<ProductGroup>` 구분선 아래에 `<ProjectNarrative id="..." no="NN" />` 로 자리를 잡는다. 제목에는 name 만 쓴다 |
-| `/portfolio` | 카드로 세지 않는다. 상위 프로젝트 상세 끝에 소제목과 카드 1개 분량으로 붙는다                                                        |
+작업 이름(`name`)에는 제품 이름을 붙이지 않는다. 제품 이름은 아래 세 자리가 각각 적는다.
+
+| 경로         | 제품이 적히는 자리                                   | 작업이 적히는 자리                                                    |
+| ------------ | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `/resume`    | 그룹 소제목 — `content/experience.ts` 의 `productId` | 그룹 안의 하이라이트                                                  |
+| `/careers`   | `<ProductGroup id="..." />` 구분선                   | `<ProjectNarrative id="..." no="NN" />` 자리. 제목에는 `name` 만 쓴다 |
+| `/portfolio` | 카드 제목과 상세 헤더                                | 상세 본문의 섹션. 작업이 하나뿐인 제품은 섹션 없이 개요에 바로 실린다 |
+
+새 제품을 등록할 때는 `content/products.ts` 에 `id`·`companyId`·`name`·`platform` 을 적고
+`data/products/{id}.mdx` 를 함께 만든다. 이름과 platform 이 입력 블록에 없으면 지어내지 말고 물어본다.
 
 ---
 
@@ -142,11 +152,11 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 ## 지금 비어 있는 칸
 
-`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 21건:
+`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 18건:
 
-- 프로젝트 6건의 `role` · `contribution`
-- 기술 지표 3건(`ezl-inquiry-api`, `ezl-crash-free`, `sse-parser-lines`)의 `evidence` 와 사업 지표
-- `ezl-mau` 의 `evidence`
-- flagship `codit-chatcodit` 의 7단 서술 — 특히 `DECISION.rejected`
+- 작업 2건(`codit-chatcodit-app-infra`, `codit-thecodit-app`)의 `role` · `contribution`
+- `codit-appshell` 의 `name`
+- 기술 지표들의 `label` 과 연결할 사업 지표
+- `content/experience.ts` 코딧 하이라이트 제목 2건
 
-경고 1건: `kind: operation` 프로젝트가 0건 (운영 중 발생한 문제 대응 사례 없음)
+경고 1건: `kind: operation` 작업이 0건 (운영 중 발생한 문제 대응 사례 없음)

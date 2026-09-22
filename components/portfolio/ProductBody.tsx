@@ -1,21 +1,21 @@
 'use client'
 
 import type { MouseEvent } from 'react'
-import { overviewId, scrollBehavior, type PortfolioProject } from './portfolio'
+import { overviewId, scrollBehavior, type PortfolioProduct } from './portfolio'
 
 /**
- * 고른 프로젝트의 본문 — 개요와 작업 섹션을 순서대로 한 번에 펼친다.
+ * 고른 제품의 본문 — 개요와 작업 섹션을 순서대로 한 번에 펼친다.
  *
  * 섹션마다 id 와 tabIndex=-1 을 단다. 목차가 그 자리로 스크롤한 뒤 포커스를 옮겨,
  * 키보드 사용자의 다음 Tab 이 목차가 아니라 읽던 자리에서 이어지게 한다.
  */
-export default function ProjectBody({ project }: { project: PortfolioProject }) {
+export default function ProductBody({ product }: { product: PortfolioProduct }) {
   return (
     <>
-      <div id={overviewId(project.id)} tabIndex={-1} className="outline-none">
-        {project.overview}
+      <div id={overviewId(product.id)} tabIndex={-1} className="outline-none">
+        {product.overview}
       </div>
-      {project.sections.map((section) => (
+      {product.sections.map((section) => (
         <section
           key={section.id}
           id={section.id}
@@ -32,10 +32,10 @@ export default function ProjectBody({ project }: { project: PortfolioProject }) 
 type Entry = { id: string; title: string; sub: boolean }
 
 /** 개요 → 섹션 → 섹션 안 하위 자리 순서로 편다. */
-function entriesOf(project: PortfolioProject): Entry[] {
+function entriesOf(product: PortfolioProduct): Entry[] {
   return [
-    { id: overviewId(project.id), title: '개요', sub: false },
-    ...project.sections.flatMap((section) => [
+    { id: overviewId(product.id), title: '개요', sub: false },
+    ...product.sections.flatMap((section) => [
       { id: section.id, title: section.title, sub: false },
       ...(section.items ?? []).map((item) => ({ ...item, sub: true })),
     ]),
@@ -56,22 +56,22 @@ function jump(event: MouseEvent<HTMLAnchorElement>, id: string) {
  * - rail: 1440px 이상에서 왼쪽 여백 레일(PortfolioBrowser) 안에 세로로 선다.
  * - bar: 그보다 좁으면 본문 맨 위에 가로 줄로 붙어 스크롤을 따라온다. 하위 자리는 옅은 톤으로 잇는다.
  */
-export function ProjectIndex({
-  project,
+export function ProductIndex({
+  product,
   layout,
   className = '',
 }: {
-  project: PortfolioProject
+  product: PortfolioProduct
   layout: 'rail' | 'bar'
   className?: string
 }) {
-  const entries = entriesOf(project)
-  const label = `${project.name} 목차`
+  const entries = entriesOf(product)
+  const label = `${product.name} 목차`
 
   if (layout === 'rail') {
     return (
       <nav aria-label={label} className={className}>
-        <p className="pl-3 text-xs font-bold text-gray-900 dark:text-gray-100">{project.name}</p>
+        <p className="pl-3 text-xs font-bold text-gray-900 dark:text-gray-100">{product.name}</p>
         <ol className="mt-2 border-l border-gray-200 dark:border-gray-700">
           {entries.map((entry) => (
             <li key={entry.id}>

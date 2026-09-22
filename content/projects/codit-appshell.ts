@@ -15,7 +15,7 @@ import type { Project } from '../schema'
 export const coditAppShell: Project = {
   id: 'codit-appshell',
   companyId: 'codit',
-  parentId: 'codit-codit',
+  productId: 'codit-platform',
   name: 'TBD',
   role: '단독 담당',
   roleDetail:

@@ -80,27 +80,43 @@ export type ProjectDepth = 'flagship' | 'supporting'
 /** operation = 운영 중 발생한 문제 대응 사례. 비어 있으면 verify가 경고한다. */
 export type ProjectKind = 'improvement' | 'build' | 'operation'
 
+/**
+ * 제품 — 내가 한 '작업'이 놓였던 대상. Project 와 층이 다르다.
+ *
+ * 예전에는 제품도 Project 로 표현해서, 'Codit 플랫폼' 처럼 작업이 없는 레코드가
+ * role·roleDetail·contribution 을 전부 TBD 로 채운 채 남아 있었다. 채울 값이 없어서가 아니라
+ * 그 레코드가 작업이 아니어서 채울 것이 없었다. 제품을 따로 두면 그 빈칸이 사라진다.
+ *
+ * 세 문서가 이 이름을 공유한다 — /portfolio 카드 제목, /careers 의 <ProductGroup> 구분선,
+ * /resume 의 그룹 소제목. 문자열을 세 곳에 각각 적던 자리다.
+ */
+export type Product = {
+  /** data/products/{id}.mdx 파일명과 반드시 같다. */
+  id: string
+  companyId: CompanyId
+  /** 화면에 그대로 노출되는 제품명. 예: 'ChatCODIT App' */
+  name: string
+  /** 제품이 놓인 자리. 예: 'iOS · Android'. 라벨은 `이름 · platform` 으로 만든다. */
+  platform: string
+}
+
 export type Project = {
   /** data/projects/{id}.mdx 파일명과 반드시 같다. 두 소스를 잇는 유일한 키. */
   id: string
   companyId: CompanyId
   /**
-   * 다른 프로젝트의 하위 작업일 때 그 프로젝트 id. 예: AGENTS.md 작업 → 'codit-codit'.
+   * 이 작업이 놓인 제품. content/products.ts 의 Product['id'] 와 같아야 한다(verify 가 검사).
    *
-   * 기간·역할·서술은 하위 프로젝트가 따로 갖고, 렌더 위치만 상위 안으로 들어간다 —
-   * /portfolio 는 카드로 세지 않고 상위 상세에 붙이고, /careers 는 상위 제품 이름을 <ProductGroup>
-   * 구분선에 한 번 적고 제목에는 name(작업)만 쓴다.
-   * 같은 회사의 최상위 프로젝트만 가리킬 수 있고 flagship 이 될 수 없다(verify 가 검사).
+   * 예외 없이 모든 작업이 제품에 속한다 — 제품에 작업이 하나뿐이어도 마찬가지다.
+   * '제품에 속한 작업'과 '그렇지 않은 작업'이 갈라져 있던 자리라, 한쪽에만 적용되는 규칙이
+   * 계속 생겼다.
    */
-  parentId?: string
-  name: string
+  productId: string
   /**
-   * /portfolio 에서 name 대신 쓰는 짧은 이름. name 과 다를 때만 둔다.
-   *
-   * name 은 '제품 · 작업', cardName 은 그중 제품이다. /portfolio 는 회사 덱 안의 카드라 제품명이면 충분하다.
-   * /careers 는 제품을 <ProductGroup> 구분선이 적으므로 name 앞의 'cardName · ' 를 떼고 작업만 쓴다.
+   * 작업 이름. 제품 이름을 앞에 붙이지 않는다 — 제품은 카드 제목과 <ProductGroup> 구분선이 적는다.
+   * 예: 'ChatCODIT App · 구축·결제' 가 아니라 '구축·결제'.
    */
-  cardName?: string
+  name: string
   role: ProjectRole
   /** 역할을 한 줄로 구체화. 예: 'SSE 프로토콜 초안 설계 및 프론트 파서 전면 교체' */
   roleDetail: string
@@ -125,8 +141,8 @@ export type ExperienceHighlight = {
 }
 
 export type ExperienceGroup = {
-  /** 예: 'ChatCODIT (Web)' */
-  product: string
+  /** content/products.ts 의 Product['id']. 소제목 문자열은 제품에서 만든다. */
+  productId: string
   highlights: ExperienceHighlight[]
 }
 

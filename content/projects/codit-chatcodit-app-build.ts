@@ -4,10 +4,9 @@ import type { Project } from '../schema'
  * 서술은 narrative 가 원천이다. /portfolio 는 supporting 카드(문제·관점·선택·결과)를,
  * /careers 는 codit.mdx 의 08 자리(<ProjectNarrative>)에서 7단 요약을 렌더한다.
  *
- * name 을 'ChatCODIT App' 에서 'ChatCODIT App · 구축·결제' 로 바꾸고 cardName 을 뒀다.
  * 인증·보안·배포는 codit-chatcodit-app-infra 로 떼어 냈고(입력 블록이 다루지 않은 범위),
- * 남은 이 프로젝트의 작업 범위가 구축·결제이기 때문이다. /careers 는 'cardName · ' 를 떼어
- * '08. 구축·결제' 로, /portfolio 는 cardName 으로 카드를 세운다.
+ * 남은 이 작업의 범위가 구축·결제라 name 이 '구축·결제' 다. 제품 이름('ChatCODIT App')은
+ * content/products.ts 의 codit-chatcodit-app 이 적는다.
  *
  * 예전 roleDetail·MDX summary·experience.ts 의 '웹→네이티브 마이그레이션' 은 교체했다.
  * 입력 블록의 제약이 '기존 React 모바일 웹은 그대로 유지' 이고 PROBLEM 도 앱을 새로 만든 일이라,
@@ -19,11 +18,11 @@ import type { Project } from '../schema'
  * learning 은 입력 블록이 TBD 로 준 값이다. 지어내지 않고 그대로 둔다 — Narrative 컴포넌트가
  * TBD 를 거르지 않아 /careers 요약의 '배움' 칸에 그대로 보인다.
  */
-export const coditChatCoditApp: Project = {
-  id: 'codit-chatcodit-app',
+export const coditChatCoditAppBuild: Project = {
+  id: 'codit-chatcodit-app-build',
   companyId: 'codit',
-  name: 'ChatCODIT App · 구축·결제',
-  cardName: 'ChatCODIT App',
+  productId: 'codit-chatcodit-app',
+  name: '구축·결제',
   role: '설계·구현 리드',
   roleDetail:
     'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱 추가 — 초기 구조·배포·스트리밍·구독 결제 담당',

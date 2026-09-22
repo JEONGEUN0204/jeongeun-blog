@@ -11,9 +11,9 @@ interface Props {
 }
 
 /**
- * 프로젝트 스크린샷.
+ * 제품·작업 스크린샷.
  *
- * 폭은 A4 인쇄 시 컨텐츠 폭(약 640px = 인쇄 폭 688px - 좌우 패딩) 안에서 한 프로젝트의
+ * 폭은 A4 인쇄 시 컨텐츠 폭(약 640px = 인쇄 폭 688px - 좌우 패딩) 안에서 한 제품의
  * 이미지가 gap-6(24px)을 포함해 한 줄에 모두 들어가도록 정한다. 예: 2장이면 폭 300.
  * 높이는 h-auto 라 비율이 다른 이미지가 섞여도 찌그러지지 않는다.
  *
@@ -22,7 +22,7 @@ interface Props {
  * 넓은 화면·인쇄에는 폭 클래스를 걸지 않는다(max-sm: 만 쓴다). w-auto 라도 걸리면 width 속성을
  * 이겨서 이미지가 원본 픽셀 폭으로 커지고 인쇄 쪽수가 늘어난다.
  */
-export default function ProjectImages({ images, imageSize, imageFrame, alt }: Props) {
+export default function Screenshots({ images, imageSize, imageFrame, alt }: Props) {
   if (images.length === 0) return null
 
   return (

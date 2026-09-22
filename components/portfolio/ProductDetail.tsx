@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import * as _jsx_runtime from 'react/jsx-runtime'
 import type { MDXComponents } from 'mdx/types'
-import { allProjects, type Projects } from 'contentlayer/generated'
+import { allProjects, type Products, type Projects } from 'contentlayer/generated'
 import { components } from '@/components/MDXComponents'
 import {
   NARRATIVE_STAGES,
@@ -16,11 +16,12 @@ import {
   NarrativeFull,
   narrativeStageId,
 } from '@/components/Narrative'
-import ProjectHeader, { ProjectMeta, StackTags } from './ProjectHeader'
-import ProjectImages from './ProjectImages'
-import type { ProjectSection } from './portfolio'
-import { getSubprojects, portfolioName } from '@/content/projects'
-import type { Narrative, Project } from '@/content/schema'
+import ProductHeader from './ProductHeader'
+import Screenshots from './Screenshots'
+import { StackTags, WorkMeta } from './WorkMeta'
+import type { DetailSection } from './portfolio'
+import { worksOf } from '@/content/projects'
+import type { Narrative, Product, Project } from '@/content/schema'
 
 type MDXContent = (props: { components?: MDXComponents }) => ReactElement<{ children?: ReactNode }>
 
@@ -84,134 +85,161 @@ function Prose({ children }: { children: ReactNode }) {
   return <div className="prose dark:prose-invert prose-doc max-w-none">{children}</div>
 }
 
+/** 작업의 표현(요약·플랫폼·MDX 본문). 작업마다 data/projects/{id}.mdx 하나가 짝이다. */
+const workDoc = (work: Project): Projects | undefined =>
+  allProjects.find((item) => item.slug === work.id)
+
 interface Props {
-  project: Project
-  doc: Projects
+  product: Product
+  doc: Products
   /** 번호 배지에 들어갈 '01' 형태의 두 자리 문자열. 순서는 page.tsx 가 정한다. */
   no: string
 }
 
 /**
- * 프로젝트 한 건을 '개요 + 작업 섹션' 으로 나눈다 — /portfolio 본문·목차·카드 뒷면이 같은 단위를 쓴다.
+ * 제품 한 건을 '개요 + 작업 섹션' 으로 나눈다 — /portfolio 본문·목차·카드 뒷면이 같은 단위를 쓴다.
  *
- * 섹션은 세 곳에서 오고 순서도 이대로다.
- *  1. flagship 의 7단 서술(narrative). 작업 하나라 섹션 하나로 두고, 칸(문제·관점…)은 목차의 하위 자리가 된다
- *  2. MDX 본문의 `###` 소제목
- *  3. parentId 로 이 프로젝트를 가리키는 하위 프로젝트 — 상위 안에서 렌더하고 카드로 세지 않는다
+ * 섹션은 이 순서로 온다.
+ *  1. flagship 작업의 7단 서술. 칸(문제·관점…)은 목차의 하위 자리가 된다
+ *  2. 제품 MDX 본문의 `###` 소제목
+ *  3. 나머지 작업 — 작업마다 역할·스택·요약·서술 카드 한 벌. 이어서 그 작업 MDX 의 `###` 소제목
  *
- * 섹션 제목은 카드 뒷면에 '무슨 작업을 했나' 로 올라간다. 그래서 서술 섹션의 제목은 제품명(cardName)이 아니라
- * '제품 · 작업' 모양의 name 이다 — MDX 소제목('ChatCODIT App · 구축 & 결제 신뢰성')과 같은 모양이다.
+ * 작업이 하나뿐인 제품은 그 작업을 섹션으로 세우지 않는다. 제품 이름과 작업 이름이 같은 자리를
+ * 두 번 차지하기 때문이다 — 역할·서술은 개요(ProductHeader)가 맡는다.
  *
  * 섹션 본문은 제목(h3)을 스스로 담는다. 인쇄에서는 목차 없이 본문만 이어지기 때문이다.
- * id 는 목차가 가리키는 자리라 페이지 전체에서 겹치지 않도록 프로젝트 id 를 앞에 붙인다.
+ * id 는 목차가 가리키는 자리라 페이지 전체에서 겹치지 않도록 제품·작업 id 를 앞에 붙인다.
  *
- * 선택되지 않은 프로젝트는 display:none 인 채 마운트되므로 관찰자(IntersectionObserver) 기반 연출은 쓰지 않는다.
+ * 선택되지 않은 제품은 display:none 인 채 마운트되므로 관찰자(IntersectionObserver) 기반 연출은 쓰지 않는다.
  */
-export function projectBody({ project, doc, no }: Props): {
+export function productBody({ product, doc, no }: Props): {
   overview: ReactNode
-  sections: ProjectSection[]
+  sections: DetailSection[]
 } {
   const { lead, sections } = splitMdx(doc.body.code)
-  const { narrative } = project
+  const works = worksOf(product.id)
+  const single = works.length === 1 ? works[0] : undefined
+  const flagship = works.find((work) => work.depth === 'flagship' && work.narrative)
+
+  /** 그 작업 MDX 본문의 `###` 소제목들. 작업 섹션 바로 뒤에 잇는다. */
+  const mdxSections = (work: Project): DetailSection[] => {
+    const code = workDoc(work)?.body.code
+    if (!code) return []
+    return splitMdx(code).sections.map(({ title, nodes }, index) => ({
+      id: `${work.id}-section-${index + 1}`,
+      title,
+      node: <Prose>{nodes}</Prose>,
+    }))
+  }
 
   return {
     /*
       개요·서술 섹션은 서버 컴포넌트 엘리먼트로 넘긴다. 같은 트리를 <div> 엘리먼트로 만들어 prop 으로 클라이언트
       컴포넌트에 넘겼을 때 dev 에서 "Each child in a list should have a unique key" 경고가 났다.
     */
-    overview: <ProjectOverview project={project} doc={doc} no={no} lead={lead} />,
+    overview: <ProductOverview product={product} doc={doc} no={no} lead={lead} single={single} />,
     sections: [
-      ...(narrative && project.depth === 'flagship'
+      ...(flagship?.narrative
         ? [
             {
-              id: `${project.id}-narrative`,
-              title: project.name,
+              id: `${flagship.id}-narrative`,
+              title: flagship.name,
               items: NARRATIVE_STAGES.map(({ key, label }) => ({
-                id: narrativeStageId(project.id, key),
+                id: narrativeStageId(flagship.id, key),
                 title: label,
               })),
-              node: <NarrativeSection project={project} narrative={narrative} />,
+              node: <NarrativeSection work={flagship} narrative={flagship.narrative} />,
             },
           ]
         : []),
       ...sections.map(({ title, nodes }, index) => ({
-        id: `${project.id}-section-${index + 1}`,
+        id: `${product.id}-section-${index + 1}`,
         title,
         node: <Prose>{nodes}</Prose>,
       })),
-      ...getSubprojects(project.id).map((subproject) => ({
-        id: `${project.id}-${subproject.id}`,
-        title: portfolioName(subproject),
-        node: (
-          <Prose>
-            <Subproject
-              project={subproject}
-              doc={allProjects.find((item) => item.slug === subproject.id)}
-            />
-          </Prose>
-        ),
-      })),
+      ...works.flatMap((work) => [
+        ...(work === single || work === flagship
+          ? []
+          : [
+              {
+                id: `${product.id}-${work.id}`,
+                title: work.name,
+                node: (
+                  <Prose>
+                    <WorkSection work={work} doc={workDoc(work)} />
+                  </Prose>
+                ),
+              },
+            ]),
+        ...mdxSections(work),
+      ]),
     ],
   }
 }
 
-/** 개요 — 헤더 · 스크린샷 · supporting 서술 카드 · 첫 소제목 앞의 MDX. 본문 맨 앞에 온다. */
-function ProjectOverview({ project, doc, no, lead }: Props & { lead: ReactNode[] }) {
-  const { narrative } = project
-
+/** 개요 — 헤더 · 스크린샷 · (작업이 하나뿐이면) 그 작업의 서술 카드 · 첫 소제목 앞의 MDX. 본문 맨 앞에 온다. */
+function ProductOverview({
+  product,
+  doc,
+  no,
+  lead,
+  single,
+}: Props & { lead: ReactNode[]; single?: Project }) {
   return (
     <div className="space-y-6">
-      <ProjectHeader project={project} badge={no} platform={doc.platform} summary={doc.summary} />
+      <ProductHeader product={product} badge={no} summary={doc.summary} work={single} />
       {doc.images.length > 0 && (
-        <ProjectImages
+        <Screenshots
           images={doc.images}
           imageSize={doc.imageSize}
           imageFrame={doc.imageFrame}
-          alt={portfolioName(project)}
+          alt={product.name}
         />
       )}
-      {/* supporting 은 카드 1개 분량이라 섹션으로 쪼개지 않고 개요에 둔다 */}
-      {narrative && project.depth !== 'flagship' && <NarrativeCard narrative={narrative} />}
+      {/* flagship 은 7단 풀 전개를 따로 받는다. 그 밖의 단일 작업은 카드 1개 분량이라 개요에 둔다. */}
+      {single?.narrative && single.depth !== 'flagship' && (
+        <NarrativeCard narrative={single.narrative} />
+      )}
       {hasContent(lead) && <Prose>{lead}</Prose>}
     </div>
   )
 }
 
 /** flagship 서술 섹션 — 작업 제목(h3) + 7단 풀 전개. h3 는 MDX 소제목과 같은 prose-doc 모양을 쓴다. */
-function NarrativeSection({ project, narrative }: { project: Project; narrative: Narrative }) {
+function NarrativeSection({ work, narrative }: { work: Project; narrative: Narrative }) {
   return (
     <>
       <Prose>
-        <h3>{project.name}</h3>
+        <h3>{work.name}</h3>
       </Prose>
       <div className="mt-6">
-        <NarrativeFull narrative={narrative} idPrefix={project.id} />
+        <NarrativeFull narrative={narrative} idPrefix={work.id} />
       </div>
     </>
   )
 }
 
 /**
- * 하위 프로젝트 한 건 — 소제목 · 역할 · 스택 · 요약 · 서술 카드.
+ * 작업 한 건 — 소제목 · 역할 · 스택 · 요약 · 서술 카드.
  *
- * 서술은 depth 와 무관하게 카드 1개 분량이다 — 하위 프로젝트는 flagship 이 될 수 없다.
+ * 서술은 카드 1개 분량이다. 풀 전개는 제품마다 flagship 하나만 받는다.
  */
-function Subproject({ project, doc }: { project: Project; doc?: Projects }) {
+function WorkSection({ work, doc }: { work: Project; doc?: Projects }) {
   return (
     <section>
       {/* 섹션 본문의 첫 요소라 prose 의 h3 위 여백을 뗀다 */}
-      <h3 className="mt-0">{portfolioName(project)}</h3>
+      <h3 className="mt-0">{work.name}</h3>
       <div className="not-prose space-y-3">
         {doc?.platform && (
           <p className="text-sm text-gray-500 dark:text-gray-400">{doc.platform}</p>
         )}
-        <ProjectMeta project={project} />
-        <StackTags project={project} />
+        <WorkMeta work={work} />
+        <StackTags stack={work.stack} />
       </div>
       {doc?.summary && <p>{doc.summary}</p>}
-      {project.narrative && (
+      {work.narrative && (
         <div className="not-prose mt-4">
-          <NarrativeCard narrative={project.narrative} />
+          <NarrativeCard narrative={work.narrative} />
         </div>
       )}
     </section>

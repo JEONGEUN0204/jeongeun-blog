@@ -177,11 +177,30 @@ export const Projects = defineDocumentType(() => ({
   contentType: 'mdx',
   fields: {
     /**
-     * 이 파일은 '표현'만 담는다. 이름·회사·기간·기술 스택·노출 순서 같은 사실은
+     * 작업 한 건의 '표현'만 담는다. 이름·회사·역할·기술 스택·노출 순서 같은 사실은
      * content/projects/{파일명}.ts 가 원천이고, 파일명이 두 소스를 잇는 키다.
+     * 제품 단위 표현(카드 요약·대표 스크린샷)은 data/products/{제품 id}.mdx 쪽이다.
      */
     platform: { type: 'string' },
-    /** 프로젝트 한 줄 요약. 원본 PDF처럼 스크린샷 위에 노출한다. */
+    /** 작업 한 줄 요약. 원본 PDF처럼 스크린샷 위에 노출한다. */
+    summary: { type: 'string' },
+    images: { type: 'list', of: { type: 'string' }, default: [] },
+    imageSize: { type: 'list', of: { type: 'number' }, default: [200, 300] },
+    /** 'phone'이면 스크린샷을 폰 프레임으로 감싼다. 비율만으로는 세로형 데스크톱 캡처와 구분되지 않는다. */
+    imageFrame: { type: 'string' },
+  },
+  computedFields,
+}))
+
+export const Products = defineDocumentType(() => ({
+  name: 'Products',
+  filePathPattern: 'products/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    /**
+     * 제품 카드의 '표현'만 담는다. 제품 이름·platform 같은 사실은 content/products.ts 가
+     * 원천이고, 파일명이 두 소스를 잇는 키다.
+     */
     summary: { type: 'string' },
     images: { type: 'list', of: { type: 'string' }, default: [] },
     imageSize: { type: 'list', of: { type: 'number' }, default: [200, 300] },
@@ -193,7 +212,7 @@ export const Projects = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors, Careers, Projects],
+  documentTypes: [Blog, Authors, Careers, Products, Projects],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [

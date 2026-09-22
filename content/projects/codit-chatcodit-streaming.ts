@@ -5,18 +5,17 @@ import type { Project } from '../schema'
  *
  * 서술은 narrative 가 원천이다. /portfolio 는 7단 풀 전개 + decision.rejected 를,
  * /careers 는 codit.mdx 의 05 자리(<ProjectNarrative>)에서 7단 요약을 렌더한다.
+ * 제품 이름('ChatCODIT')은 여기에 적지 않는다 — content/products.ts 의 codit-chatcodit 이 원천이다.
  * narrative 밖의 내용(연결 안정성·상태 단일화)만 codit.mdx 05 에 남아 있다.
  *
  * 스택은 입력 블록(React·TypeScript·SSE / streamdown)이 아니라 확인 질문에서 받은 답
  * (Next.js·TypeScript·Zustand / SSE·streamdown)을 따른다.
  */
-export const coditChatCodit: Project = {
-  id: 'codit-chatcodit',
+export const coditChatCoditStreaming: Project = {
+  id: 'codit-chatcodit-streaming',
   companyId: 'codit',
-  name: 'ChatCODIT · 실시간 스트리밍',
-  // /careers 05 는 name 에서 'ChatCODIT · ' 를 뗀 '실시간 스트리밍' 을 쓴다. 제품명은 <ProductGroup> 구분선이 적는다.
-  // /portfolio 서술 섹션 제목(카드 뒷면)은 name 그대로다.
-  cardName: 'ChatCODIT',
+  productId: 'codit-chatcodit',
+  name: '실시간 스트리밍',
   role: '설계·구현 리드',
   roleDetail: '스트리밍 응답 규격을 설계해 백엔드·PM에 제안하고, 새 규격에 맞춰 프론트엔드 구현',
   contribution:

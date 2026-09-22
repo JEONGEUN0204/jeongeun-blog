@@ -46,7 +46,7 @@
 ```
 ### PROJECT: <id>              # 아래 '기존 id' 목록에 있으면 그대로, 새 프로젝트면 kebab-case
 company: codit | ezllabs
-parent: <상위 프로젝트 id>     # 다른 프로젝트의 하위 작업일 때만. 아니면 이 줄을 지운다
+product: <제품 id>             # 필수. 이 작업이 놓인 제품 (예: codit-platform)
 depth: flagship | supporting
 kind: improvement | build | operation
 role: 단독 담당 | 설계·구현 리드 | 기능 담당 | 일부 참여   # 넷 중 하나. 섞어 쓰지 않는다

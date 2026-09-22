@@ -280,16 +280,12 @@ export function NarrativeSummary({
   )
 
   /*
-    제품 이름은 회사 MDX 의 <ProductGroup> 구분선이 한 번 적으므로 제목에는 작업만 남긴다.
-    하위 프로젝트(parentId)의 name 은 이미 작업이다. '제품 · 작업' 모양의 name 은 앞의
-    'cardName · '(제품)을 뗀다 — 'ChatCODIT · 실시간 스트리밍' → '실시간 스트리밍'.
+    제목에는 작업 이름만 쓴다. 제품 이름은 회사 MDX 의 <ProductGroup> 구분선이 한 번 적는다 —
+    제목마다 제품 이름이 반복되면 작업 이름이 뒤로 밀려 안 읽힌다.
+    예전에는 name 이 '제품 · 작업' 이라 앞부분을 잘라 냈는데, 지금은 name 자체가 작업이다.
   */
-  const product = project.cardName ? `${project.cardName} · ` : ''
-  const title =
-    product && project.name.startsWith(product) ? project.name.slice(product.length) : project.name
-
   return (
-    <Section title={`${no}. ${title}${suffix ? ` (${suffix})` : ''}`}>
+    <Section title={`${no}. ${project.name}${suffix ? ` (${suffix})` : ''}`}>
       <Meta
         tech={[...project.stack.primary, ...project.stack.secondary].join(' · ')}
         role={project.roleDetail}

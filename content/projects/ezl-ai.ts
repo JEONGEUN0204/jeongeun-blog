@@ -24,6 +24,7 @@ import type { Project } from '../schema'
 export const ezlAi: Project = {
   id: 'ezl-ai',
   companyId: 'ezllabs',
+  productId: 'ezl-ai',
   name: 'Jira/Confluence 검색 AI',
   role: '기능 담당',
   roleDetail: 'Jira 검색 AI의 LLM 인터페이스 레이어(프롬프트, 도구 호출, 응답 포맷) 담당',

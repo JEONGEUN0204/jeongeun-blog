@@ -8,6 +8,10 @@
 문서를 서비스한다. 세 문서는 같은 사실을 다른 압축률로 보여주는 뷰이며,
 사실의 원천은 항상 `content/` 다.
 
+사실은 두 층이다. **제품**(`content/products.ts`)은 내가 한 일이 놓였던 대상이고,
+**작업**(`content/projects/{id}.ts`)은 그 위에서 내가 한 일 하나다.
+작업은 예외 없이 `productId` 로 제품에 속한다 — 제품에 작업이 하나뿐이어도 마찬가지다.
+
 ## 절대 규칙
 
 1. **`app/**`에 사실을 하드코딩하지 않는다.**
@@ -39,15 +43,20 @@
 - `profile.summary`(resume)와 `profile.about`(portfolio)는 문장이 겹치면 안 된다.
   겹치면 verify 가 실패한다.
 - /careers 는 모든 회사를 렌더한다. 회사 하나가 빠지면 안 된다.
-- /portfolio 의 `depth:'supporting'` 프로젝트는 카드 1개 분량을 넘기지 않는다.
-- `parentId` 가 있는 하위 프로젝트는 상위 안에서 렌더한다. /portfolio 는 카드로 세지 않고,
-  /careers 는 회사 MDX 에 `<ProjectNarrative>` 로 상위 섹션 뒤에 자리를 잡고,
-  /resume 은 상위 제품 그룹(`content/experience.ts`)의 하이라이트로 넣는다.
+- /portfolio 의 `depth:'supporting'` 작업은 카드 1개 분량을 넘기지 않는다.
+  `flagship` 은 제품마다 최대 하나다(verify 가 검사).
+- **/portfolio 의 카드 한 장은 제품 하나다.** 작업은 카드로 세지 않고 제품 본문의 섹션으로 들어간다.
+  작업이 하나뿐인 제품은 섹션을 세우지 않고 개요에 바로 싣는다 — 제목이 두 번 반복되기 때문이다.
+- 작업 이름에 제품 이름을 붙이지 않는다. `'ChatCODIT App · 구축·결제'` 가 아니라 `'구축·결제'` 다.
+  제품 이름은 /portfolio 카드 제목, /careers 의 `<ProductGroup id="...">` 구분선,
+  /resume 의 그룹 소제목이 각각 `content/products.ts` 에서 읽어 적는다(verify 가 검사).
+- 서술이 있는 작업은 회사 MDX 에 `<ProjectNarrative id="..." no="NN" />` 로 자리를 잡는다.
+  자리가 없으면 /careers 회사 본문 끝에 붙는다(verify 가 경고).
 
 ## 내가 콘텐츠를 전달하는 방식
 
 Claude 챗에서 정리한 내용을 아래 블록 형태로 붙여넣는다.
-이 블록을 받으면 `content/projects/{id}.ts` 를 생성/수정하고,
+이 블록을 받으면 `content/projects/{id}.ts`(작업)를 생성/수정하고,
 세 페이지 중 영향받는 곳을 함께 갱신한 뒤 `pnpm verify` 를 돌린다.
 (블록 스펙은 `docs/handoff-format.md` 참조)
 
@@ -58,6 +67,8 @@ Claude 챗에서 정리한 내용을 아래 블록 형태로 붙여넣는다.
 2. 새 수치가 있으면 `metrics.ts` 에 `evidence` 와 함께 먼저 등록한다.
    evidence 가 입력 블록에 없으면 등록하지 말고 물어본다.
 3. `content/projects/{id}.ts` 작성. 스키마 필드를 임의로 비우지 않는다.
+   `productId` 가 `content/products.ts` 에 없으면 제품부터 등록하고 물어본다 —
+   제품 이름·platform 은 지어내지 않는다.
 4. 영향받는 페이지 컴포넌트 갱신. 렌더 로직만 수정하고 문구는 건드리지 않는다.
 5. `pnpm verify && pnpm build` 실행.
 6. 보고: ①변경 파일 ②TBD 목록 ③세 문서 중 추가 동기화가 필요한 지점.

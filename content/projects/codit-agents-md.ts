@@ -7,7 +7,7 @@ import type { Project } from '../schema'
 export const coditAgentsMd: Project = {
   id: 'codit-agents-md',
   companyId: 'codit',
-  parentId: 'codit-codit',
+  productId: 'codit-platform',
   name: 'AGENTS.md · 에이전트 컨텍스트 단일 원본',
   role: '설계·구현 리드',
   roleDetail: '에이전트 컨텍스트 도입을 제안하고 문서 구조와 내용을 직접 작성',

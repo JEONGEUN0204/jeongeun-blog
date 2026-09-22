@@ -1,4 +1,4 @@
-import { experiences } from '@/content/experience'
+import { products, productLabel } from '@/content/products'
 
 /**
  * /careers 에서 같은 제품의 번호 섹션을 묶는 구분선. 'Codit 플랫폼 · Web' 라벨 + 가로선.
@@ -7,19 +7,17 @@ import { experiences } from '@/content/experience'
  * 'Codit 플랫폼 · …' 이 반복되면 작업 이름이 뒤로 밀려 안 읽힌다.
  * 번호 섹션(h3)보다 작게 둔다. 섹션 제목과 경쟁하지 않고 경계만 긋는 자리다.
  *
- * product 는 content/experience.ts 의 그룹 이름(/resume 의 제품 소제목)과 같은 문자열이어야 한다.
- * 두 문서가 같은 묶음을 쓰도록, 없는 이름이면 조용히 그리는 대신 빌드를 멈춘다.
+ * 라벨은 content/products.ts 에서 만든다. 예전에는 제품 이름을 여기 문자열로 적고
+ * content/experience.ts 의 그룹 이름과 대조해서 갈라지는 것을 막았는데, 대조하는 대신
+ * 같은 원천을 읽는다. 없는 id 면 조용히 그리는 대신 빌드를 멈춘다.
  */
-export default function ProductGroup({ product }: { product: string }) {
-  const exists = experiences.some((experience) =>
-    experience.groups.some((group) => group.product === product)
-  )
-  if (!exists) {
-    throw new Error(`<ProductGroup product="${product}"> — content/experience.ts 에 없는 그룹이다`)
+export default function ProductGroup({ id }: { id: string }) {
+  const product = products.find((item) => item.id === id)
+  if (!product) {
+    throw new Error(`<ProductGroup id="${id}"> — content/products.ts 에 없는 제품이다`)
   }
 
-  /* 'ChatCODIT App (iOS · Android)' → 'ChatCODIT App · iOS · Android' */
-  const label = product.replace(/\s*\(([^)]+)\)$/, ' · $1')
+  const label = productLabel(product)
 
   /*
     앞 섹션과는 멀리(mt-14), 뒤 섹션과는 섹션끼리의 간격만큼 둔다 — 뒤 섹션 제목(h3)의 prose 위 여백이

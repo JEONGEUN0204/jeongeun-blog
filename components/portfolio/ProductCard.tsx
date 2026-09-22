@@ -6,13 +6,13 @@ import Image from '@/components/Image'
 import {
   cardId,
   detailId,
-  type PortfolioProject,
+  type PortfolioProduct,
   type ProjectCover,
   type TileSize,
 } from './portfolio'
 
 interface Props {
-  project: PortfolioProject
+  product: PortfolioProduct
   /** 그리드에 놓인 순서. 등장 지연과 small 타일의 면 색에 쓴다. */
   index: number
   /** 타일 크기. PortfolioBrowser 가 같은 값으로 그리드 칸을 잡는다. */
@@ -72,15 +72,15 @@ const tones = {
 } satisfies Record<string, Tone>
 
 /**
- * 프로젝트 타일 한 장. 벤토 그리드의 한 칸이고, 올려 두면 그 자리에서 뒤집혀 뒷면에 미리보기가 드러난다.
+ * 제품 타일 한 장. 벤토 그리드의 한 칸이고, 올려 두면 그 자리에서 뒤집혀 뒷면에 미리보기가 드러난다.
  *
  * 앞면은 타일이 클수록 많이 싣는다. lead 는 요약·주력 스택 전부·기간, wide 는 스택 두 개·기간,
  * small 은 번호·플랫폼·이름뿐이다 — small 에서 빠진 기간은 뒷면 머리에 있다.
  * 스크린샷은 MDX images 의 첫 장이다. 웹 화면은 타일 밖으로 흘려 잘라내고, 기기 화면은 아래에서 올라오게 놓는다.
  * 스크린샷은 장식이라 alt 를 비운다. 무엇의 화면인지는 버튼 텍스트(이름)가 이미 말한다.
  *
- * 뒷면은 무엇을 했는지를 작업 제목으로 답한다 — 제목은 본문 섹션 제목(MDX 소제목·서술 섹션의 name·하위 프로젝트 이름)을
- * 그대로 올린 것이라 문구를 새로 짓지 않는다. 섹션이 없는 프로젝트는 뒷면에 요약을 싣는다.
+ * 뒷면은 무엇을 했는지를 작업 제목으로 답한다 — 제목은 본문 섹션 제목(제품 안의 작업 이름·MDX 소제목)을
+ * 그대로 올린 것이라 문구를 새로 짓지 않는다. 섹션이 없는 제품은 뒷면에 요약을 싣는다.
  * 넘치는 제목은 아래쪽을 흐리게 잘라낸다.
  *
  * 마우스 올리기와 키보드 포커스(:focus-visible)로 뒤집고, 넓은 화면(lg)에서만 뒤집는다. 좁은 타일에는
@@ -89,10 +89,10 @@ const tones = {
  *
  * 버튼 안이라 요소는 전부 span 이다. 기기 프레임도 DeviceFrame(div) 대신 같은 라운드 값으로 span 을 짠다.
  */
-export default function ProjectCard({ project, index, size, selected, onSelect }: Props) {
+export default function ProductCard({ product, index, size, selected, onSelect }: Props) {
   const [flipped, setFlipped] = useState(false)
-  const previewId = `preview-${project.id}`
-  const titles = project.sections.map((section) => section.title)
+  const previewId = `preview-${product.id}`
+  const titles = product.sections.map((section) => section.title)
   const tone =
     size === 'lead'
       ? tones.ink
@@ -112,7 +112,7 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
   return (
     <button
       type="button"
-      id={cardId(project.id)}
+      id={cardId(product.id)}
       onClick={onSelect}
       onPointerEnter={(event) => {
         if (event.pointerType === 'mouse') setFlipped(true)
@@ -124,7 +124,7 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
       }}
       onBlur={() => setFlipped(false)}
       aria-pressed={selected}
-      aria-controls={detailId(project.id)}
+      aria-controls={detailId(product.id)}
       aria-describedby={previewId}
       className={`group block h-full w-full rounded-2xl text-left transition-[translate] duration-300 motion-reduce:transition-none md:rounded-3xl ${
         selected ? '-translate-y-1.5' : 'hover:-translate-y-1'
@@ -142,9 +142,9 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
         >
           {/* 앞면 */}
           <span className={`${face(tone.ring)} ${tone.face}`}>
-            {size === 'lead' && <LeadFront project={project} tone={tone} />}
-            {size === 'wide' && <WideFront project={project} tone={tone} />}
-            {size === 'small' && <SmallFront project={project} tone={tone} />}
+            {size === 'lead' && <LeadFront product={product} tone={tone} />}
+            {size === 'wide' && <WideFront product={product} tone={tone} />}
+            {size === 'small' && <SmallFront product={product} tone={tone} />}
           </span>
 
           {/* 뒷면 — 미리보기 */}
@@ -155,24 +155,24 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
             }`}
           >
             <span className="text-accent-700 dark:text-accent-300 block truncate text-[11px] tabular-nums">
-              {project.platform}
+              {product.platform}
             </span>
             <span
               className={`mt-1 block leading-snug font-bold break-keep text-gray-900 dark:text-gray-100 ${
                 size === 'lead' ? 'text-2xl' : 'text-sm'
               }`}
             >
-              {project.name}
+              {product.name}
             </span>
 
             {/*
-              lead 는 요약을 제목 목록 앞에 둔다. 목록을 앞에 두면 섹션이 하나뿐인 프로젝트에서 목록과 요약 사이가
+              lead 는 요약을 제목 목록 앞에 둔다. 목록을 앞에 두면 섹션이 하나뿐인 제품에서 목록과 요약 사이가
               통째로 비었다. 목록은 남은 높이를 채우고 넘치면 아래쪽을 흐린다 — 흐림이 빈 여백에 걸리도록 목록이 마지막이다.
               나머지 타일은 높이가 작아 목록만 싣는다.
             */}
-            {size === 'lead' && titles.length > 0 && project.summary && (
+            {size === 'lead' && titles.length > 0 && product.summary && (
               <span className="mt-3 line-clamp-4 text-[15px] leading-7 text-gray-700 dark:text-gray-300">
-                {project.summary}
+                {product.summary}
               </span>
             )}
             {titles.length > 0 ? (
@@ -199,7 +199,7 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
                 ))}
               </span>
             ) : (
-              project.summary && (
+              product.summary && (
                 <span
                   className={`mt-3 text-gray-700 dark:text-gray-300 ${
                     size === 'lead'
@@ -207,7 +207,7 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
                       : 'line-clamp-5 text-xs leading-5'
                   }`}
                 >
-                  {project.summary}
+                  {product.summary}
                 </span>
               )
             )}
@@ -218,11 +218,11 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
   )
 }
 
-type FrontProps = { project: PortfolioProject; tone: Tone }
+type FrontProps = { product: PortfolioProduct; tone: Tone }
 
 /** 2×2 대표 타일. 웹 화면은 위쪽에 크게 깔고 아래를 면 색으로 덮어 글자를 올린다. 기기 화면은 오른쪽에 세운다. */
-function LeadFront({ project, tone }: FrontProps) {
-  const { cover } = project
+function LeadFront({ product, tone }: FrontProps) {
+  const { cover } = product
   const device = Boolean(cover?.frame)
 
   return (
@@ -252,19 +252,19 @@ function LeadFront({ project, tone }: FrontProps) {
           device ? 'right-[42%]' : 'right-5 sm:right-7'
         }`}
       >
-        <Eyebrow project={project} tone={tone} />
+        <Eyebrow product={product} tone={tone} />
         <span
           className={`mt-1.5 text-2xl leading-tight font-extrabold tracking-tight break-keep sm:text-4xl ${tone.name}`}
         >
-          {project.name}
+          {product.name}
         </span>
-        {project.summary && (
+        {product.summary && (
           <span className={`mt-2 line-clamp-2 text-sm leading-6 max-sm:hidden ${tone.meta}`}>
-            {project.summary}
+            {product.summary}
           </span>
         )}
         <span className="mt-4 flex flex-wrap items-center gap-1.5">
-          {project.stack.map((tag) => (
+          {product.stack.map((tag) => (
             <Chip key={tag} tone={tone}>
               {tag}
             </Chip>
@@ -279,8 +279,8 @@ function LeadFront({ project, tone }: FrontProps) {
  * 가로 2칸 타일. 글자는 왼쪽, 스크린샷은 오른쪽에서 타일 밖으로 흘린다.
  * 컨테이너가 1024px 이 되는 xl 전에는 타일 폭이 350px 안팎이라 글자 칸을 넓히고 스택 칩을 뺀다.
  */
-function WideFront({ project, tone }: FrontProps) {
-  const { cover } = project
+function WideFront({ product, tone }: FrontProps) {
+  const { cover } = product
 
   return (
     <>
@@ -307,14 +307,14 @@ function WideFront({ project, tone }: FrontProps) {
           cover ? 'w-[56%] xl:w-[46%]' : ''
         }`}
       >
-        <Eyebrow project={project} tone={tone} />
+        <Eyebrow product={product} tone={tone} />
         <span
           className={`mt-1 text-lg leading-snug font-extrabold tracking-tight break-keep xl:text-2xl ${tone.name}`}
         >
-          {project.name}
+          {product.name}
         </span>
         <span className="mt-auto hidden flex-wrap gap-1 pt-3 xl:flex">
-          {project.stack.slice(0, 2).map((tag) => (
+          {product.stack.slice(0, 2).map((tag) => (
             <Chip key={tag} tone={tone}>
               {tag}
             </Chip>
@@ -326,8 +326,8 @@ function WideFront({ project, tone }: FrontProps) {
 }
 
 /** 한 칸 타일. 이름 아래로 스크린샷 윗부분이 올라와 보인다. */
-function SmallFront({ project, tone }: FrontProps) {
-  const { cover } = project
+function SmallFront({ product, tone }: FrontProps) {
+  const { cover } = product
 
   return (
     <>
@@ -348,12 +348,12 @@ function SmallFront({ project, tone }: FrontProps) {
         </span>
       )}
       <span className="relative flex flex-col items-start p-3 sm:p-5 md:p-4 xl:p-5">
-        <Eyebrow project={project} tone={tone} compact />
+        <Eyebrow product={product} tone={tone} compact />
         {/* 4열이 되는 md 부터 xl 전까지는 타일이 170px 안팎이라 글자를 한 단 내린다 */}
         <span
           className={`mt-1 line-clamp-3 text-[15px] leading-snug font-extrabold tracking-tight break-keep sm:text-lg md:text-base xl:text-lg ${tone.name}`}
         >
-          {project.name}
+          {product.name}
         </span>
       </span>
     </>
@@ -364,14 +364,14 @@ function SmallFront({ project, tone }: FrontProps) {
  * '01 · Web · 핵심'. 한 줄로 자른다 — 두 줄로 늘어나면 아래 스크린샷과 겹친다. 전체 플랫폼 이름은 뒷면 머리에 있다.
  * compact(small 타일)는 가장 좁은 화면에서 번호만 남긴다.
  */
-function Eyebrow({ project, tone, compact }: FrontProps & { compact?: boolean }) {
+function Eyebrow({ product, tone, compact }: FrontProps & { compact?: boolean }) {
   return (
     <span
       className={`block max-w-full truncate text-[10px] font-bold tracking-[0.12em] uppercase sm:text-[11px] ${tone.eyebrow}`}
     >
-      <span className="tabular-nums">{project.no}</span>
-      {project.platform && (
-        <span className={compact ? 'max-sm:hidden' : ''}> · {project.platform}</span>
+      <span className="tabular-nums">{product.no}</span>
+      {product.platform && (
+        <span className={compact ? 'max-sm:hidden' : ''}> · {product.platform}</span>
       )}
     </span>
   )

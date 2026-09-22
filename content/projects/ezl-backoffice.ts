@@ -19,6 +19,7 @@ import type { Project } from '../schema'
 export const ezlBackoffice: Project = {
   id: 'ezl-backoffice',
   companyId: 'ezllabs',
+  productId: 'ezl-backoffice',
   name: '백오피스',
   role: '기능 담당',
   roleDetail:

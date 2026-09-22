@@ -18,6 +18,7 @@ import type { Project } from '../schema'
 export const ezlDesignSystem: Project = {
   id: 'ezl-design-system',
   companyId: 'ezllabs',
+  productId: 'ezl-design-system',
   name: '디자인 시스템',
   role: '기능 담당',
   roleDetail:

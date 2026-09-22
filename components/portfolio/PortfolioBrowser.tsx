@@ -1,8 +1,8 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import ProjectBody, { ProjectIndex } from './ProjectBody'
-import ProjectCard from './ProjectCard'
+import ProductBody, { ProductIndex } from './ProductBody'
+import ProductCard from './ProductCard'
 import {
   detailId,
   scrollBehavior,
@@ -19,7 +19,7 @@ const tileSpan: Record<TileSize, string> = {
 }
 
 interface Props {
-  /** 화면에는 보이지 않는 페이지 제목(h1). 눈에 보이는 제목은 회사 제목과 프로젝트 헤더가 맡는다. */
+  /** 화면에는 보이지 않는 페이지 제목(h1). 눈에 보이는 제목은 회사 제목과 제품 헤더가 맡는다. */
   title: string
   companies: PortfolioCompany[]
 }
@@ -27,31 +27,31 @@ interface Props {
 /**
  * /portfolio 화면.
  *
- * 흐름: 책갈피로 회사를 고른다(처음엔 첫 회사) → 그 회사의 프로젝트 타일이 벤토 그리드로 깔린다 → 타일을 고르면
- * 아래에 그 프로젝트 본문이 펼쳐진다(처음엔 첫 프로젝트). 본문은 한 번에 전부 보이고 목차는 위치 이동만 한다.
+ * 흐름: 책갈피로 회사를 고른다(처음엔 첫 회사) → 그 회사의 제품 타일이 벤토 그리드로 깔린다 → 타일을 고르면
+ * 아래에 그 제품 본문이 펼쳐진다(처음엔 첫 제품). 본문은 한 번에 전부 보이고 목차는 위치 이동만 한다.
  *
  * 그리드는 좁은 화면 2열, md 부터 4열이다. 타일 크기는 회사 안 순서로 정하고(tileSize) 행 높이는 고정이라,
- * 프로젝트 수가 달라져도 dense 배치가 빈칸을 small 타일로 메운다.
+ * 제품 수가 달라져도 dense 배치가 빈칸을 small 타일로 메운다.
  *
  * 책갈피와 목차는 왼쪽 여백 레일에 둔다. 컨테이너가 xl 에서 1024px 이라 레일(w-40 + mr-6)이 여백에
  * 들어가는 1440px(min-[90rem])부터 레일을 쓰고, 그보다 좁으면 책갈피는 타일 위 알약 토글, 목차는 본문 위 가로 줄로 온다.
  *
- * 본문(article)은 두 회사의 모든 프로젝트를 항상 DOM 에 둔다. 화면에서는 고른 하나만 보이고
+ * 본문(article)은 두 회사의 모든 제품을 항상 DOM 에 둔다. 화면에서는 고른 하나만 보이고
  * 인쇄·JS 없는 환경에서는 전부 펼쳐진다 — 이 페이지의 인쇄물은 포트폴리오 전체다.
  * 숨김에 `hidden` 속성 대신 클래스를 쓴다. Tailwind v4 preflight 의 `[hidden]{display:none!important}` 는
  * @layer base 의 important 선언이라 utilities 의 print:block 으로 이길 수 없다.
  */
 export default function PortfolioBrowser({ title, companies }: Props) {
   const [companyId, setCompanyId] = useState<string | undefined>(companies[0]?.id)
-  const [projectId, setProjectId] = useState<string | undefined>(companies[0]?.projects[0]?.id)
+  const [productId, setProjectId] = useState<string | undefined>(companies[0]?.products[0]?.id)
   const gridRef = useRef<HTMLElement>(null)
 
   const company = companies.find((item) => item.id === companyId)
-  const project = company?.projects.find((item) => item.id === projectId)
+  const product = company?.products.find((item) => item.id === productId)
 
   const pickCompany = (id: string) => {
     setCompanyId(id)
-    setProjectId(companies.find((item) => item.id === id)?.projects[0]?.id)
+    setProjectId(companies.find((item) => item.id === id)?.products[0]?.id)
     // 스크롤을 내린 채 바꿨을 때만 타일 위치로 올린다. 맨 위에서 바꿀 때 사이트 헤더를 밀어 올리지 않는다.
     requestAnimationFrame(() => {
       const grid = gridRef.current
@@ -84,7 +84,7 @@ export default function PortfolioBrowser({ title, companies }: Props) {
               onPick={pickCompany}
               layout="rail"
             />
-            {project && <ProjectIndex project={project} layout="rail" className="mt-10" />}
+            {product && <ProductIndex product={product} layout="rail" className="mt-10" />}
           </div>
         </aside>
       )}
@@ -114,15 +114,15 @@ export default function PortfolioBrowser({ title, companies }: Props) {
               key={company.id}
               className="mt-6 grid grid-flow-row-dense auto-rows-[11rem] grid-cols-2 gap-3 sm:gap-4 md:auto-rows-[13.5rem] md:grid-cols-4"
             >
-              {company.projects.map((item, index) => {
+              {company.products.map((item, index) => {
                 const size = tileSize(index)
                 return (
                   <li key={item.id} className={tileSpan[size]}>
-                    <ProjectCard
-                      project={item}
+                    <ProductCard
+                      product={item}
                       index={index}
                       size={size}
-                      selected={item.id === project?.id}
+                      selected={item.id === product?.id}
                       onSelect={() => selectProject(item.id)}
                     />
                   </li>
@@ -153,12 +153,12 @@ export default function PortfolioBrowser({ title, companies }: Props) {
             </p>
           </header>
 
-          {item.projects.map((entry, projectIndex) => (
+          {item.products.map((entry, projectIndex) => (
             <article
               key={entry.id}
               id={detailId(entry.id)}
               className={`scroll-mt-6 [&_[id]]:scroll-mt-20 min-[90rem]:[&_[id]]:scroll-mt-8 ${
-                entry.id === project?.id
+                entry.id === product?.id
                   ? 'mt-12 block border-t border-gray-200 pt-6 min-[90rem]:pt-10 dark:border-gray-700'
                   : 'hidden'
               } print:mt-8 print:block print:border-0 print:pt-0 noscript:mt-12 noscript:block ${
@@ -166,12 +166,12 @@ export default function PortfolioBrowser({ title, companies }: Props) {
               }`}
             >
               {/* 가로 목차는 article 의 직계 자식이어야 한다. 감싸면 sticky 가 감싼 요소 높이 안에 갇힌다. */}
-              <ProjectIndex
-                project={entry}
+              <ProductIndex
+                product={entry}
                 layout="bar"
                 className="mb-8 min-[90rem]:hidden print:hidden noscript:hidden"
               />
-              <ProjectBody project={entry} />
+              <ProductBody product={entry} />
             </article>
           ))}
         </div>

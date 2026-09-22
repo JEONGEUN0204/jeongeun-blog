@@ -13,6 +13,7 @@ import type { Project } from '../schema'
 export const ezlCharge: Project = {
   id: 'ezl-charge',
   companyId: 'ezllabs',
+  productId: 'ezl-charge',
   name: '이즐충전소',
   role: '기능 담당',
   roleDetail: '이즐워크 조회 API 호출 개선·충전 실패 재시도 플로우 구현·Sentry 이슈 대응',

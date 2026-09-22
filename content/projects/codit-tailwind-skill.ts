@@ -7,7 +7,7 @@ import type { Project } from '../schema'
 export const coditTailwindSkill: Project = {
   id: 'codit-tailwind-skill',
   companyId: 'codit',
-  parentId: 'codit-codit',
+  productId: 'codit-platform',
   name: 'Tailwind 마이그레이션 작업 표준화',
   role: '설계·구현 리드',
   roleDetail: '마이그레이션 방식과 확인 절차를 정하고 문서로 작성',

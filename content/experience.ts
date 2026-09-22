@@ -4,6 +4,8 @@ import type { Experience } from './schema'
  * /resume 의 Experience 하이라이트 — 경력기술서의 축약판.
  *
  * 회사명·재직기간은 여기에 두지 않는다. companyId 로 companies.ts 를 참조한다.
+ * 제품 소제목도 마찬가지로 productId 로 products.ts 를 참조한다 — 예전에는 그룹 이름을
+ * 문자열로 적어 두고 회사 MDX 의 <ProductGroup> 과 대조해서 갈라지는 것을 막고 있었다.
  * 7단 narrative 이관이 끝나면 이 목록은 projects 의 problem·decision·result 에서
  * 파생되어야 하며, 그때까지는 손으로 관리하는 압축본이다.
  */
@@ -15,9 +17,9 @@ export const experiences: Experience[] = [
       '정책·입법 데이터 플랫폼 「Codit」과 분리 서비스 「ChatCODIT」의 웹·iOS·Android 앱 프론트엔드 담당',
     groups: [
       {
-        product: 'Codit 플랫폼 (Web)',
+        productId: 'codit-platform',
         highlights: [
-          // codit-dashboard · codit-appshell · codit-agents-md · codit-tailwind-skill 은 parentId 로 Codit 플랫폼에 속한다. 그룹을 따로 떼지 않는다.
+          // codit-dashboard · codit-appshell · codit-agents-md · codit-tailwind-skill 은 productId 로 Codit 플랫폼에 속한다. 그룹을 따로 떼지 않는다.
           {
             /*
               codit-dashboard. 제목은 기존 값을 두고, 내용은 narrative.result 첫 문장을 그대로 옮겼다.
@@ -46,7 +48,7 @@ export const experiences: Experience[] = [
         ],
       },
       {
-        product: 'ChatCODIT (Web)',
+        productId: 'codit-chatcodit',
         highlights: [
           {
             title: '실시간 스트리밍 프로토콜 설계',
@@ -66,7 +68,7 @@ export const experiences: Experience[] = [
         ],
       },
       {
-        product: 'ChatCODIT App (iOS · Android)',
+        productId: 'codit-chatcodit-app',
         highlights: [
           {
             /*
@@ -93,7 +95,7 @@ export const experiences: Experience[] = [
         ],
       },
       {
-        product: '더코딧 앱 (iOS · Android · WebView)',
+        productId: 'codit-thecodit-app',
         highlights: [
           {
             title: '코딧 웹을 WebView로 감싼 iOS·Android 앱',
@@ -111,7 +113,7 @@ export const experiences: Experience[] = [
       'MAU 30만 교통카드 충전·조회 서비스 「이즐충전소」 운영, 앱·웹·디자인 시스템·내부 AI 전반 개발',
     groups: [
       {
-        product: '이즐충전소 (React Native · 앱)',
+        productId: 'ezl-charge',
         /*
           ezl-charge. 제목은 roleDetail 의 첫 항목, 내용은 narrative.result 를 그대로 옮겼다.
           Sentry·재시도 플로우는 입력 블록에 서술이 없어 하이라이트를 두지 않는다.
@@ -125,17 +127,25 @@ export const experiences: Experience[] = [
         ],
       },
       {
-        product: '백오피스 · 디자인 시스템 · 내부 AI (React · React Native)',
+        productId: 'ezl-backoffice',
         highlights: [
           {
             /*
               ezl-backoffice. 제목은 기존 값을 두고, 내용은 narrative.result 를 그대로 옮겼다.
               예전 내용의 '가독성·유지보수성 향상' 은 입력 블록에 없는 주장이라 함께 걷어냈다.
+
+              제품을 그룹으로 나누기 전에는 백오피스·디자인 시스템·내부 AI 가 한 그룹이라 제목이
+              제품을 가리켰다. 지금은 소제목이 같은 이름을 적어 겹친다 — 문구는 챗에서 확정해 바꾼다.
             */
             title: '백오피스',
             detail:
               '7개 도메인에 목록 단위 에러 경계를 적용했다. 일주일 뒤부터 동료 개발자가 같은 파일 규칙과 구성으로 다른 화면을 작성했고, 2025.09에는 동료가 쓴 기능별 README에 기본 구조로 실렸다.',
           },
+        ],
+      },
+      {
+        productId: 'ezl-design-system',
+        highlights: [
           {
             /*
               ezl-design-system. 제목은 기존 값을 두고, 내용은 narrative.result 를 그대로 옮겼다.
@@ -144,6 +154,11 @@ export const experiences: Experience[] = [
             title: '디자인 시스템',
             detail: '신규·확장 컴포넌트가 이즐충전소 앱과 모바일 이즐 앱에 반영됨',
           },
+        ],
+      },
+      {
+        productId: 'ezl-ai',
+        highlights: [
           {
             /*
               ezl-ai. 제목은 기존 값을 두고, 내용은 narrative.result 를 그대로 옮겼다.
