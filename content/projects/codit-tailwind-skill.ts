@@ -1,10 +1,6 @@
 import type { Project } from '../schema'
 
 /**
- * periodOverride 를 쓰는 이유: 코딧 재직은 2025.11 부터지만 이 작업은 2026.09 에 시작했다.
- * 회사 기간을 상속하면 확인 절차·작업 문서를 입사 직후부터 만들어 온 것처럼 읽힌다.
- * 입력 블록의 '2026.09 ~ 진행 중' 은 end:'present' 로 두어 화면에는 '현재' 로 나온다.
- *
  * 완료 판정 기준은 스타일 값 비교 하나다. ACTION 의 확인 절차에는 화면 비교도 있지만 그건
  * 절차 설명이지 판정 기준이 아니다. AFTER 와 tw-migration-check 에 화면 비교를 넣지 않는 이유다.
  */
@@ -13,7 +9,6 @@ export const coditTailwindSkill: Project = {
   companyId: 'codit',
   parentId: 'codit-codit',
   name: 'Tailwind 마이그레이션 작업 표준화',
-  periodOverride: { start: '2026.09', end: 'present' },
   role: '설계·구현 리드',
   roleDetail: '마이그레이션 방식과 확인 절차를 정하고 문서로 작성',
   contribution: '확인 절차를 먼저 정하고 그에 맞춘 작업 문서를 설계',

@@ -1,9 +1,6 @@
 import type { Project } from '../schema'
 
 /**
- * periodOverride 를 쓰는 이유: 코딧 재직은 2025.11 부터지만 이 작업은 그보다 한참 뒤에
- * 시작했다. 회사 기간을 상속하면 저장소 문서 정리를 입사 직후부터 해 온 것처럼 읽힌다.
- *
  * 지표가 없는 프로젝트다. METRICS 가 비어 있으므로 metricIds 도 비운다 —
  * 숫자를 만들어 채우면 그 자리가 그대로 방어 못 하는 문장이 된다.
  */
@@ -12,7 +9,6 @@ export const coditAgentsMd: Project = {
   companyId: 'codit',
   parentId: 'codit-codit',
   name: 'AGENTS.md · 에이전트 컨텍스트 단일 원본',
-  periodOverride: { start: '2026.09', end: 'present' },
   role: '설계·구현 리드',
   roleDetail: '에이전트 컨텍스트 도입을 제안하고 문서 구조와 내용을 직접 작성',
   contribution: '도구 중립 단일 원본 방식 결정, AGENTS.md 작성',

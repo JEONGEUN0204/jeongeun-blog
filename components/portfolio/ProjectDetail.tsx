@@ -19,7 +19,7 @@ import {
 import ProjectHeader, { ProjectMeta, StackTags } from './ProjectHeader'
 import ProjectImages from './ProjectImages'
 import type { ProjectSection } from './portfolio'
-import { formatProjectPeriod, getSubprojects, portfolioName } from '@/content/projects'
+import { getSubprojects, portfolioName } from '@/content/projects'
 import type { Narrative, Project } from '@/content/schema'
 
 type MDXContent = (props: { components?: MDXComponents }) => ReactElement<{ children?: ReactNode }>
@@ -192,10 +192,8 @@ function NarrativeSection({ project, narrative }: { project: Project; narrative:
 }
 
 /**
- * 하위 프로젝트 한 건 — 소제목 · 기간 · 역할 · 스택 · 요약 · 서술 카드.
+ * 하위 프로젝트 한 건 — 소제목 · 역할 · 스택 · 요약 · 서술 카드.
  *
- * 기간을 따로 보여주는 이유: 하위 작업은 상위와 기간이 다를 수 있고(periodOverride),
- * 상위 헤더의 기간만 보이면 입사 직후부터 해 온 작업처럼 읽힌다.
  * 서술은 depth 와 무관하게 카드 1개 분량이다 — 하위 프로젝트는 flagship 이 될 수 없다.
  */
 function Subproject({ project, doc }: { project: Project; doc?: Projects }) {
@@ -204,10 +202,9 @@ function Subproject({ project, doc }: { project: Project; doc?: Projects }) {
       {/* 섹션 본문의 첫 요소라 prose 의 h3 위 여백을 뗀다 */}
       <h3 className="mt-0">{portfolioName(project)}</h3>
       <div className="not-prose space-y-3">
-        <p className="flex flex-wrap gap-x-3 text-sm text-gray-500 dark:text-gray-400">
-          {doc?.platform && <span>{doc.platform}</span>}
-          <span>{formatProjectPeriod(project)}</span>
-        </p>
+        {doc?.platform && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">{doc.platform}</p>
+        )}
         <ProjectMeta project={project} />
         <StackTags project={project} />
       </div>

@@ -155,7 +155,7 @@ export default function ProjectCard({ project, index, size, selected, onSelect }
             }`}
           >
             <span className="text-accent-700 dark:text-accent-300 block truncate text-[11px] tabular-nums">
-              {[project.platform, project.period].filter(Boolean).join(' · ')}
+              {project.platform}
             </span>
             <span
               className={`mt-1 block leading-snug font-bold break-keep text-gray-900 dark:text-gray-100 ${
@@ -269,9 +269,6 @@ function LeadFront({ project, tone }: FrontProps) {
               {tag}
             </Chip>
           ))}
-          <span className={`ml-auto text-[11px] tabular-nums sm:text-xs ${tone.meta}`}>
-            {project.period}
-          </span>
         </span>
       </span>
     </>
@@ -316,17 +313,12 @@ function WideFront({ project, tone }: FrontProps) {
         >
           {project.name}
         </span>
-        <span className="mt-auto flex flex-col items-start gap-2 pt-3">
-          <span className="hidden flex-wrap gap-1 xl:flex">
-            {project.stack.slice(0, 2).map((tag) => (
-              <Chip key={tag} tone={tone}>
-                {tag}
-              </Chip>
-            ))}
-          </span>
-          <span className={`text-[11px] tabular-nums sm:text-xs ${tone.meta}`}>
-            {project.period}
-          </span>
+        <span className="mt-auto hidden flex-wrap gap-1 pt-3 xl:flex">
+          {project.stack.slice(0, 2).map((tag) => (
+            <Chip key={tag} tone={tone}>
+              {tag}
+            </Chip>
+          ))}
         </span>
       </span>
     </>

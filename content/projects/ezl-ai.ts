@@ -12,8 +12,6 @@ import type { Project } from '../schema'
  * 7단 서술과 roleDetail 이 Jira 만 말하는 것은 맡은 작업의 범위가 거기였기 때문이다 —
  * 도구 전체의 범위(name)와 내가 한 일의 범위(roleDetail)는 다른 칸이고, 어긋난 게 아니다.
  *
- * periodOverride 2025.07 ~ 2025.08 은 재직 기간(2024.06 ~ 2025.10) 안의 일부라 여기서만 덮어쓴다.
- *
  * metricIds 는 비운다. beforeAfter 의 '질의 1건당 LLM 호출 1회' 는 입력 블록에 evidence 가 없어
  * metrics.ts 에 등록하지 않는다.
  *
@@ -27,7 +25,6 @@ export const ezlAi: Project = {
   id: 'ezl-ai',
   companyId: 'ezllabs',
   name: 'Jira/Confluence 검색 AI',
-  periodOverride: { start: '2025.07', end: '2025.08' },
   role: '기능 담당',
   roleDetail: 'Jira 검색 AI의 LLM 인터페이스 레이어(프롬프트, 도구 호출, 응답 포맷) 담당',
   contribution:

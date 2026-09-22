@@ -14,16 +14,12 @@ import type { Project } from '../schema'
  *
  * role·contribution 은 입력 블록에 없어 TBD 다. roleDetail·stack 은 예전 codit.mdx 09 의
  * <Meta> 에 확정돼 있던 값을 그대로 옮겼다.
- *
- * periodOverride 는 상위와 같은 2026.03 ~ 현재 다. 회사 기간(2025.11 ~ 현재)을 상속하면
- * /portfolio 하위 프로젝트 자리의 기간이 앱 시작보다 넉 달 앞서 찍힌다.
  */
 export const coditChatCoditAppInfra: Project = {
   id: 'codit-chatcodit-app-infra',
   companyId: 'codit',
   parentId: 'codit-chatcodit-app',
   name: '인증·보안·배포',
-  periodOverride: { start: '2026.03', end: 'present' },
   role: 'TBD',
   roleDetail: '소셜 로그인·딥링크 처리·앱 보안·EAS 무중단 배포 담당',
   contribution: 'TBD',

@@ -2,15 +2,13 @@ import type { Project } from '../schema'
 
 /**
  * 입력 블록은 `PROJECT: codit-codit` 으로 왔다. codit-codit 은 AppShell·AGENTS.md·Tailwind 작업이
- * parentId 로 걸린 'Codit 플랫폼' 상위라, 블록의 periodOverride 를 그쪽에 넣으면 /portfolio 카드 기간이
- * 2026.06 ~ 2026.07 로 줄어 그 안의 2026.09 ~ 현재 작업과 어긋난다. 확인 질문에서 대시보드를 하위로
- * 떼라는 답을 받아 이 id 로 옮겼다.
+ * parentId 로 걸린 'Codit 플랫폼' 상위라, 블록의 기간을 그쪽에 넣으면 /portfolio 카드 기간이
+ * 2026.06 ~ 2026.07 로 줄어 그 안의 2026.09 ~ 현재 작업과 어긋났다. 확인 질문에서 대시보드를 하위로
+ * 떼라는 답을 받아 이 id 로 옮겼다. (작업별 기간 표시는 이후 제거됐다.)
  *
  * name '대시보드' 는 예전 codit.mdx 01 의 손으로 쓴 제목 'Codit 플랫폼 · 대시보드' 에서 왔다. 블록에 name 이 없어
  * 그 제목을 그대로 쓰라는 답을 받았다. 지금 /careers 는 'Codit 플랫폼' 을 <ProductGroup> 구분선에 적고
  * 제목에는 '대시보드' 만 쓴다.
- *
- * periodOverride 를 쓰는 이유: 코딧 재직은 2025.11 부터지만 이 작업은 2026.06 ~ 2026.07 에 했다.
  *
  * 예전 codit.mdx 01 · codit-codit.mdx 에만 있던 'deviceType 자동 주입' · '화살표 네비' · '드래그 스냅' ·
  * 'useDashboard 단일 훅' 은 빠져도 된다는 답을 받았다. 마지막은 AFTER 의 '훅 7개' 와도 맞지 않는다.
@@ -20,7 +18,6 @@ export const coditDashboard: Project = {
   companyId: 'codit',
   parentId: 'codit-codit',
   name: '대시보드',
-  periodOverride: { start: '2026.06', end: '2026.07' },
   role: '설계·구현 리드',
   roleDetail:
     '대시보드 캐러셀 데이터 로딩을 슬라이드 단위로 재설계하고 쿼리 계층·스와이프 인터랙션 구현',

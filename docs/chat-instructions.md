@@ -52,7 +52,6 @@ kind: improvement | build | operation
 role: 단독 담당 | 설계·구현 리드 | 기능 담당 | 일부 참여   # 넷 중 하나. 섞어 쓰지 않는다
 roleDetail: <한 줄로 구체화>
 contribution: <실제 수행 + 의사결정 기여 범위>              # 모르면 TBD
-periodOverride: 2024.07 ~ 2025.10   # 회사 재직 기간과 다를 때만. 같으면 이 줄을 지운다
 
 stack.primary: <주력 3~5개>
 stack.secondary: <보조>

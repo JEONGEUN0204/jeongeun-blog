@@ -1,9 +1,6 @@
 import type { Project } from '../schema'
 
 /**
- * periodOverride 를 쓰는 이유: 코딧 재직은 2025.11 부터지만 이 작업은 2026.06 ~ 2026.07 에 했다.
- * 회사 기간을 상속하면 입사 직후부터 이어 온 작업처럼 읽힌다.
- *
  * 예전에는 data/careers/codit.mdx 02 와 data/projects/codit-codit.mdx 가 이 작업을 손으로 적어 두었다.
  * 이 파일이 원천이 되면서 둘 다 걷어냈다. 그쪽에만 있던 'Suspense L1/L3 계층화' ·
  * '첫 진입 폴백 최소화' 는 확인 질문에서 빠져도 된다는 답을 받았다.
@@ -20,7 +17,6 @@ export const coditAppShell: Project = {
   companyId: 'codit',
   parentId: 'codit-codit',
   name: 'TBD',
-  periodOverride: { start: '2026.06', end: '2026.07' },
   role: '단독 담당',
   roleDetail:
     '화면 전환 로딩 문제를 직접 발견해 원인 파악부터 AppShell 구조 설계·구현·전후 측정까지 담당',

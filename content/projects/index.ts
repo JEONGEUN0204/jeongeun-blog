@@ -1,5 +1,4 @@
-import type { Period, Project } from '../schema'
-import { getCompany, formatPeriod } from '../companies'
+import type { Project } from '../schema'
 import { coditCodit } from './codit-codit'
 import { coditChatCodit } from './codit-chatcodit'
 import { coditChatCoditApp } from './codit-chatcodit-app'
@@ -50,13 +49,4 @@ export function getSubprojects(parentId: string): Project[] {
 /** /portfolio 가 쓰는 이름. cardName 이 없으면 name 이다. */
 export function portfolioName(project: Project): string {
   return project.cardName ?? project.name
-}
-
-/** 프로젝트 기간. periodOverride 가 없으면 회사 재직 기간을 상속한다. */
-function projectPeriod(project: Project): Period {
-  return project.periodOverride ?? getCompany(project.companyId).period
-}
-
-export function formatProjectPeriod(project: Project): string {
-  return formatPeriod(projectPeriod(project))
 }

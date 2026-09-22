@@ -19,11 +19,6 @@ export const ezlDesignSystem: Project = {
   id: 'ezl-design-system',
   companyId: 'ezllabs',
   name: '디자인 시스템',
-  /**
-   * 재직은 2024.06 ~ 2025.10, 디자인 시스템 작업은 2024.07 ~ 2025.07 로 앞뒤가 모두 다르다.
-   * 회사 기간과 프로젝트 기간이 다른 의도된 구분이므로 여기서만 덮어쓴다.
-   */
-  periodOverride: { start: '2024.07', end: '2025.07' },
   role: '기능 담당',
   roleDetail:
     '사내 React Native 디자인 시스템 패키지에서 결제·교통카드 도메인 컴포넌트 구현과 Storybook 앱 배포 자동화 담당',

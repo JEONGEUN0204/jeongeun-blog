@@ -9,9 +9,6 @@ import type { Project } from '../schema'
  * 남은 이 프로젝트의 작업 범위가 구축·결제이기 때문이다. /careers 는 'cardName · ' 를 떼어
  * '08. 구축·결제' 로, /portfolio 는 cardName 으로 카드를 세운다.
  *
- * periodOverride 2026.03 ~ 현재 는 재직 기간(2025.11 ~ 현재) 안의 일부라 여기서만 덮어쓴다.
- * 앱은 웹보다 넉 달 뒤에 시작했고, 회사 기간을 상속하면 앱을 입사 직후부터 한 것처럼 읽힌다.
- *
  * 예전 roleDetail·MDX summary·experience.ts 의 '웹→네이티브 마이그레이션' 은 교체했다.
  * 입력 블록의 제약이 '기존 React 모바일 웹은 그대로 유지' 이고 PROBLEM 도 앱을 새로 만든 일이라,
  * 웹을 앱으로 옮긴 게 아니라 앱을 추가한 것이다.
@@ -27,7 +24,6 @@ export const coditChatCoditApp: Project = {
   companyId: 'codit',
   name: 'ChatCODIT App · 구축·결제',
   cardName: 'ChatCODIT App',
-  periodOverride: { start: '2026.03', end: 'present' },
   role: '설계·구현 리드',
   roleDetail:
     'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱 추가 — 초기 구조·배포·스트리밍·구독 결제 담당',

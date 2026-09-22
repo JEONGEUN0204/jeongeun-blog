@@ -9,10 +9,10 @@ Claude 챗에서 내용을 확정한 뒤 이 형태로 Claude Code 에 붙여넣
 
 ## 한 프로젝트가 놓이는 두 파일
 
-| 파일                       | 담는 것                                      | 블록의 어느 부분                  |
-| -------------------------- | -------------------------------------------- | --------------------------------- |
-| `content/projects/{id}.ts` | **사실** — 회사·기간·역할·스택·지표·7단 서술 | `company` ~ `LEARNING`, `METRICS` |
-| `data/projects/{id}.mdx`   | **표현** — 한 줄 요약·스크린샷·본문          | `summary`, `platform`, `images`   |
+| 파일                       | 담는 것                                 | 블록의 어느 부분                  |
+| -------------------------- | --------------------------------------- | --------------------------------- |
+| `content/projects/{id}.ts` | **사실** — 회사·역할·스택·지표·7단 서술 | `company` ~ `LEARNING`, `METRICS` |
+| `data/projects/{id}.mdx`   | **표현** — 한 줄 요약·스크린샷·본문     | `summary`, `platform`, `images`   |
 
 파일명(`{id}`)이 둘을 잇는 유일한 키다. 한쪽만 있으면 verify 가 실패한다.
 
@@ -28,7 +28,6 @@ kind: improvement
 role: 설계·구현 리드
 roleDetail: SSE 프로토콜 초안 설계, 백엔드 협의, 프론트 파서 전면 교체
 contribution: 프로토콜 설계 100%, 프론트 구현 100%, 백엔드 스키마 합의 주도
-periodOverride: 2025.11 ~ 현재
 
 stack.primary: Next.js, TypeScript, Zustand
 stack.secondary: SSE, fetch ReadableStream
@@ -58,29 +57,25 @@ ASK:
 
 ### 필드가 코드로 가는 곳
 
-| 블록                   | `Project` 필드                      | 규칙                                                                      |
-| ---------------------- | ----------------------------------- | ------------------------------------------------------------------------- |
-| `PROJECT:`             | `id`                                | `data/projects/{id}.mdx` 와 같은 이름이어야 한다                          |
-| `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다               |
-| `parent`               | `parentId`                          | 다른 프로젝트의 하위 작업일 때만. 아래 '하위 프로젝트' 참고               |
-| `depth`                | `depth`                             | `flagship` \| `supporting`. flagship 은 1개 원칙 (2개 이상이면 경고)      |
-| `kind`                 | `kind`                              | `improvement` \| `build` \| `operation`                                   |
-| `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD`    |
-| `roleDetail`           | `roleDetail`                        | 비어 있으면 verify 실패                                                   |
-| `contribution`         | `contribution`                      | 문자열 또는 `TBD`                                                         |
-| `periodOverride`       | `periodOverride`                    | **회사 기간과 다를 때만.** 같으면 필드를 만들지 않고 회사 기간을 상속한다 |
-| `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                               |
-| `PROBLEM` ~ `LEARNING` | `narrative`                         | 7단이 다 오지 않으면 `narrative` 자체를 만들지 않는다                     |
-| `METRICS`              | `metricIds` + `content/metrics.ts`  | 지표는 `metrics.ts` 에 먼저 등록하고 id 만 참조한다                       |
-| `ASK`                  | —                                   | 코드로 옮기지 않는다. 작업 종료 시 질문 목록으로 되돌려준다               |
-
-`periodOverride` 를 쓸 때는 **왜 회사 기간과 다른지 주석으로 남긴다.**
-(예: `ezl-charge` 는 입사 2024.06, 프로젝트 투입 2024.07 로 의도된 구분)
+| 블록                   | `Project` 필드                      | 규칙                                                                   |
+| ---------------------- | ----------------------------------- | ---------------------------------------------------------------------- |
+| `PROJECT:`             | `id`                                | `data/projects/{id}.mdx` 와 같은 이름이어야 한다                       |
+| `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다            |
+| `parent`               | `parentId`                          | 다른 프로젝트의 하위 작업일 때만. 아래 '하위 프로젝트' 참고            |
+| `depth`                | `depth`                             | `flagship` \| `supporting`. flagship 은 1개 원칙 (2개 이상이면 경고)   |
+| `kind`                 | `kind`                              | `improvement` \| `build` \| `operation`                                |
+| `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD` |
+| `roleDetail`           | `roleDetail`                        | 비어 있으면 verify 실패                                                |
+| `contribution`         | `contribution`                      | 문자열 또는 `TBD`                                                      |
+| `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                            |
+| `PROBLEM` ~ `LEARNING` | `narrative`                         | 7단이 다 오지 않으면 `narrative` 자체를 만들지 않는다                  |
+| `METRICS`              | `metricIds` + `content/metrics.ts`  | 지표는 `metrics.ts` 에 먼저 등록하고 id 만 참조한다                    |
+| `ASK`                  | —                                   | 코드로 옮기지 않는다. 작업 종료 시 질문 목록으로 되돌려준다            |
 
 ### 하위 프로젝트 (`parent`)
 
 `parent: codit-codit` 처럼 상위 프로젝트 id 를 주면 `Project.parentId` 가 되고, 그 프로젝트의 하위 작업이 된다.
-기간·역할·7단 서술은 하위 프로젝트가 그대로 갖고, 렌더 위치만 상위 안으로 들어간다.
+역할·7단 서술은 하위 프로젝트가 그대로 갖고, 렌더 위치만 상위 안으로 들어간다.
 같은 회사의 최상위 프로젝트만 가리킬 수 있고, 하위 프로젝트는 flagship 이 될 수 없다 (verify 가 검사).
 
 | 경로         | 렌더 위치                                                                                                                            |

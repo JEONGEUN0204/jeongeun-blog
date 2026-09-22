@@ -4,7 +4,7 @@ import { projectBody } from '@/components/portfolio/ProjectDetail'
 import { pad, type PortfolioCompany } from '@/components/portfolio/portfolio'
 import { companies, formatPeriod } from '@/content/companies'
 import { profile } from '@/content/profile'
-import { formatProjectPeriod, portfolioName, topLevelProjects } from '@/content/projects'
+import { portfolioName, topLevelProjects } from '@/content/projects'
 import { genPageMetadata } from 'app/seo'
 
 export const metadata = genPageMetadata({ title: 'Portfolio' })
@@ -47,7 +47,6 @@ export default function Portfolio() {
             no,
             name: portfolioName(project),
             platform: doc.platform,
-            period: formatProjectPeriod(project),
             summary: doc.summary,
             stack: project.stack.primary,
             cover: cover

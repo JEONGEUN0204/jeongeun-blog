@@ -1,6 +1,6 @@
 import { TBD, type Project } from '@/content/schema'
 import { getCompany } from '@/content/companies'
-import { formatProjectPeriod, portfolioName } from '@/content/projects'
+import { portfolioName } from '@/content/projects'
 
 /**
  * 역할·기여 범위.
@@ -85,7 +85,6 @@ export default function ProjectHeader({ project, badge, platform, summary }: Pro
         </div>
         <div className="hidden shrink-0 text-right text-sm text-gray-400 sm:block print:block">
           {platform && <div>{platform}</div>}
-          <div className="text-xs">{formatProjectPeriod(project)}</div>
         </div>
       </div>
 

@@ -14,11 +14,6 @@ export const ezlCharge: Project = {
   id: 'ezl-charge',
   companyId: 'ezllabs',
   name: '이즐충전소',
-  /**
-   * 입사는 2024.06, 이즐충전소 투입은 2024.07 로 한 달 차이가 있다.
-   * 회사 기간과 프로젝트 기간이 다른 의도된 구분이므로 여기서만 덮어쓴다.
-   */
-  periodOverride: { start: '2024.07', end: '2025.10' },
   role: '기능 담당',
   roleDetail: '이즐워크 조회 API 호출 개선·충전 실패 재시도 플로우 구현·Sentry 이슈 대응',
   contribution:

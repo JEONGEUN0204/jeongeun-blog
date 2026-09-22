@@ -101,8 +101,6 @@ export type Project = {
    * /careers 는 제품을 <ProductGroup> 구분선이 적으므로 name 앞의 'cardName · ' 를 떼고 작업만 쓴다.
    */
   cardName?: string
-  /** 회사 재직 기간과 다를 때만 명시. 없으면 회사 기간을 상속한다. */
-  periodOverride?: Period
   role: ProjectRole
   /** 역할을 한 줄로 구체화. 예: 'SSE 프로토콜 초안 설계 및 프론트 파서 전면 교체' */
   roleDetail: string

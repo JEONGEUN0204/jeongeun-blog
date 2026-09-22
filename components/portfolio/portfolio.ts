@@ -37,7 +37,6 @@ export type PortfolioProject = {
   no: string
   name: string
   platform?: string
-  period: string
   summary?: string
   /** 주력 스택. lead 타일은 전부, wide 타일은 앞의 두 개를 앞면에 올린다. */
   stack: string[]

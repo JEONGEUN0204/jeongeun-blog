@@ -7,9 +7,6 @@ import type { Project } from '../schema'
  * kind 는 'build' 에서 'improvement' 로 바꿨다. 신규 메뉴 구축도 맡았지만 7단 서술이 다루는 건
  * 이미 운영 중이던 백오피스의 에러 처리 구조 개선이다.
  *
- * periodOverride 를 두지 않는 이유: 입력 블록에 기간 지정이 없고, 백오피스 담당 자체가 재직 기간에
- * 걸쳐 있다. 에러 경계를 적용한 시기(2024.08 ~ 2024.09)는 action 에 그대로 있다.
- *
  * 스택은 확인 답변으로 받은 목록을 따른다 — 입력 블록에 함께 있던 MUI·react-hook-form·Vite 는 뺀다.
  *
  * 예전 data/projects/ezl-backoffice.mdx 와 data/careers/ezllabs.mdx 02 에만 있던
