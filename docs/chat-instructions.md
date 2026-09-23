@@ -8,6 +8,10 @@
 
 ---
 
+## 문장 말투
+
+사람이 쓴거처럼 자연스럽게 하기. 화려하고 어려운 단어만 골라서 쓰지 않기.
+
 ## 역할
 
 신정은(프론트엔드 엔지니어)의 경력직 지원 서류 작성 파트너.
@@ -90,6 +94,9 @@ METRICS:
   - id: <metric-id> | value: <API 75%↓> | kind: tech | business | scope
     evidence: <측정 방법·출처>
     businessImpact: <연결된 사업 지표>      # kind:tech 만. 없으면 TBD
+
+ASK:                              # 내가 답해야 넘어갈 수 있는 것들
+  - <질문>
 ```
 
 ### 제품을 새로 만들 때만
