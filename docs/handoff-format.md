@@ -22,17 +22,19 @@ Claude 챗에서 내용을 확정한 뒤 이 형태로 Claude Code 에 붙여넣
 
 ---
 
-## 프로젝트 블록
+## 작업 블록
 
 ```
 ### PROJECT: codit-chatcodit-streaming
 company: codit
 product: codit-chatcodit
+name: 실시간 스트리밍
 depth: flagship
 kind: improvement
 role: 설계·구현 리드
 roleDetail: SSE 프로토콜 초안 설계, 백엔드 협의, 프론트 파서 전면 교체
 contribution: 프로토콜 설계 100%, 프론트 구현 100%, 백엔드 스키마 합의 주도
+summary: 정책·규제 리서치를 위한 AI 챗봇의 실시간 응답 방식을 다시 설계했습니다.
 
 stack.primary: Next.js, TypeScript, Zustand
 stack.secondary: SSE, fetch ReadableStream
@@ -67,11 +69,13 @@ ASK:
 | `PROJECT:`             | `id`                                | `data/projects/{id}.mdx` 와 같은 이름이어야 한다                         |
 | `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다              |
 | `product`              | `productId`                         | **필수.** `content/products.ts` 에 없는 id 면 제품부터 등록하고 물어본다 |
-| `depth`                | `depth`                             | `flagship` \| `supporting`. flagship 은 1개 원칙 (2개 이상이면 경고)     |
+| `name`                 | `name`                              | 작업 이름만. 제품 이름으로 시작하면 verify 실패                          |
+| `depth`                | `depth`                             | `flagship` \| `supporting`. 제품마다 flagship 최대 1개 (초과면 실패)     |
 | `kind`                 | `kind`                              | `improvement` \| `build` \| `operation`                                  |
 | `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD`   |
 | `roleDetail`           | `roleDetail`                        | 비어 있으면 verify 실패                                                  |
 | `contribution`         | `contribution`                      | 문자열 또는 `TBD`                                                        |
+| `summary`              | —                                   | `data/projects/{id}.mdx` 의 `summary` 로 간다. 없으면 줄을 지운다        |
 | `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                              |
 | `PROBLEM` ~ `LEARNING` | `narrative`                         | 7단이 다 오지 않으면 `narrative` 자체를 만들지 않는다                    |
 | `METRICS`              | `metricIds` + `content/metrics.ts`  | 지표는 `metrics.ts` 에 먼저 등록하고 id 만 참조한다                      |
@@ -91,8 +95,29 @@ ASK:
 | `/careers`   | `<ProductGroup id="..." />` 구분선                   | `<ProjectNarrative id="..." no="NN" />` 자리. 제목에는 `name` 만 쓴다 |
 | `/portfolio` | 카드 제목과 상세 헤더                                | 상세 본문의 섹션. 작업이 하나뿐인 제품은 섹션 없이 개요에 바로 실린다 |
 
-새 제품을 등록할 때는 `content/products.ts` 에 `id`·`companyId`·`name`·`platform` 을 적고
-`data/products/{id}.mdx` 를 함께 만든다. 이름과 platform 이 입력 블록에 없으면 지어내지 말고 물어본다.
+### 제품 블록
+
+기존 제품에 작업을 얹을 때는 내지 않는다. 작업 블록의 `product:` 로만 가리킨다.
+**새 제품일 때만** 작업 블록과 함께 온다.
+
+```
+### PRODUCT: codit-chatcodit-app
+company: codit
+name: ChatCODIT App
+platform: iOS · Android
+summary: React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱을 추가하고, 두 스토어 모두 인앱 구독을 붙여 운영 중입니다.
+```
+
+| 블록       | 가는 곳                               | 규칙                                                       |
+| ---------- | ------------------------------------- | ---------------------------------------------------------- |
+| `PRODUCT:` | `content/products.ts` 의 `id`         | `data/products/{id}.mdx` 와 같은 이름이어야 한다           |
+| `company`  | `companyId`                           | 그 제품에 속한 작업과 회사가 같아야 한다                   |
+| `name`     | `name`                                | 카드 제목·구분선·그룹 소제목에 그대로 나간다               |
+| `platform` | `platform`                            | 라벨은 `이름 · platform` 으로 만들어진다                   |
+| `summary`  | `data/products/{id}.mdx` 의 `summary` | /portfolio 카드 요약. 입력에 없으면 지어내지 말고 물어본다 |
+
+스크린샷은 블록으로 오지 않는다. 새 제품의 카드 이미지는 따로 전달받아
+`data/products/{id}.mdx` 의 `images`·`imageSize` 에 넣는다.
 
 ---
 
@@ -152,11 +177,13 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 ## 지금 비어 있는 칸
 
-`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 18건:
+`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 16건, 경고 0건:
 
-- 작업 2건(`codit-chatcodit-app-infra`, `codit-thecodit-app`)의 `role` · `contribution`
+- `codit-chatcodit-app-infra` 의 `role` · `contribution`
 - `codit-appshell` 의 `name`
 - 기술 지표들의 `label` 과 연결할 사업 지표
 - `content/experience.ts` 코딧 하이라이트 제목 2건
 
-경고 1건: `kind: operation` 작업이 0건 (운영 중 발생한 문제 대응 사례 없음)
+verify 가 보고하지 않는 빈칸도 있다. `codit-platform` 제품의 카드 요약
+(`data/products/codit-platform.mdx` 의 `summary`)과, 아직 경력기술서 본문에 손으로 쓴 채
+남아 있는 ChatCODIT(Web)의 작업 2건(Draft · 렌더링·구축·운영)이다.
