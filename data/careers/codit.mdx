@@ -130,29 +130,4 @@ tags:
 
 <ProductGroup id="codit-thecodit-app" />
 
-<Section title="10. WebView 하이브리드">
-
-<Meta
-  tech={
-    'React Native · Expo · expo-router · react-native-webview · EAS · Firebase App Distribution'
-  }
-  role={'WebView 네비게이션·브릿지 트러블슈팅·릴리즈/스토어 배포 담당'}
-/>
-
-**원문링크 모달 2번 열림 — 브릿지 주입 타이밍 이슈 규명**
-
-<Steps
-  problem={
-    '원문링크 클릭 시 모달이 두 번 열림. 근본 원인은 네이티브 판별 상수 isNativeMobile이 모듈 로드 시점에 1번만 평가되는데, 그 시점엔 injectedObjectJson이 아직 늦게 주입돼 값이 false로 캐싱된 것'
-  }
-  improve={
-    '"ReactNativeWebView 객체의 존재 자체가 앱 웹뷰 환경"이라는 판단으로 판별 기준을 Boolean(window.ReactNativeWebView)로 변경해 주입 타이밍 의존을 제거'
-  }
-  result={'중복 오픈 제거, iOS·Android 동작 일관성 확보'}
-/>
-
-**배포 자동화 & 릴리즈 오너십**
-
-- EAS staging 빌드와 Firebase App Distribution 배포 스크립트로 QA/내부 배포 파이프라인을 간소화하고, 여러 마이너 버전의 릴리즈와 스토어 배포 전 과정(브랜치 병합·실서버 반영)을 주도.
-
-</Section>
+<ProjectNarrative id="codit-thecodit-app" no="10" />

@@ -98,9 +98,10 @@ export const experiences: Experience[] = [
         productId: 'codit-thecodit-app',
         highlights: [
           {
+            // codit-thecodit-app. 제목은 기존 값을 두고, 내용은 narrative.result 첫 문장을 옮겼다.
             title: '코딧 웹을 WebView로 감싼 iOS·Android 앱',
             detail:
-              '웹 자산을 활용해 앱 스토어 배포·네이티브 연동을 담당, 빠르게 모바일 앱으로 서비스 제공',
+              '승인·머지까지 끝난 코드가 실서버 배포 전날 스테이징 확인에서 걸렸고, 앞서 얹은 방어 조건이 과했다는 걸 같은 릴리즈 안에서 철회',
           },
         ],
       },
