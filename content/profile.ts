@@ -23,7 +23,8 @@ export const profile: ProfileBasic = {
  * 수치는 여기 적지 않는다 — 바로 위 Metrics 카드와 아래 Experience 가 맡는다.
  * 같은 숫자를 두 번 읽히면 ABOUT 이 요약이 아니라 중복이 된다.
  */
-export const aboutLead = '웹(PC·Mobile)과 iOS·Android 앱을 함께 개발하는 프론트엔드 엔지니어입니다.'
+export const aboutLead =
+  '웹과 앱의 기능 개발부터 운영까지 맡고, 문제가 생기면 근본 원인을 찾아 해결하는 프론트엔드 엔지니어입니다.'
 
 export const about: AboutPoint[] = [
   {
