@@ -171,9 +171,7 @@ export default function ResumeContent() {
         수치는 여기 없다 — 위 Metrics 카드와 아래 Experience 가 맡는다.
       */}
       <Section title="About" titleClassName={sectionTitle} className={sectionSpacing}>
-        <p className={`text-lg leading-8 text-gray-900 dark:text-gray-100 ${measure}`}>
-          {aboutLead}
-        </p>
+        <p className={`leading-7 text-gray-900 dark:text-gray-100 ${measure}`}>{aboutLead}</p>
         <dl className={`mt-5 space-y-4 ${measure}`}>
           {about.map((point) => (
             <div key={point.title} className="break-inside-avoid-page">

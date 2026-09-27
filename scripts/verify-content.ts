@@ -16,7 +16,7 @@ import { companies } from '../content/companies'
 import { metrics } from '../content/metrics'
 import { products } from '../content/products'
 import { projects } from '../content/projects'
-import { summary, about, skills } from '../content/profile'
+import { about, aboutLead, skills } from '../content/profile'
 import { experiences } from '../content/experience'
 import { TBD } from '../content/schema'
 
@@ -265,10 +265,26 @@ const sentences = (text: string) =>
     .map((sentence) => sentence.replace(/\s+/g, ' ').trim())
     .filter((sentence) => sentence.length > 10)
 
-const summarySentences = new Set(sentences(summary))
-for (const sentence of sentences(about.join('\n'))) {
-  if (summarySentences.has(sentence)) {
-    error(`profile.summary 와 profile.about 이 같은 문장을 쓴다: '${sentence}'`)
+/*
+  ABOUT — 예전 summary↔about 문장 중복 검사를 대신한다. profile.summary 를 없애고
+  about 하나로 합쳤으므로 두 문서가 같은 말을 할 여지가 사라졌고, 대신 ABOUT 안에서
+  제목과 본문이 같은 말을 반복하는 것을 막는다.
+*/
+if (!aboutLead.trim()) error('profile.aboutLead 가 비어 있다')
+if (about.length === 0) error('profile.about 이 비어 있다')
+
+const aboutTitles = new Set<string>()
+for (const point of about) {
+  if (!point.title.trim()) error('profile.about 에 제목(title)이 빈 항목이 있다')
+  if (!point.body.trim()) error(`profile.about '${point.title}' 의 본문(body)이 비어 있다`)
+  if (aboutTitles.has(point.title)) {
+    error(`profile.about 에 제목이 겹치는 항목이 있다: '${point.title}'`)
+  }
+  aboutTitles.add(point.title)
+  for (const sentence of sentences(point.body)) {
+    if (sentence.replace(/[.!?]$/, '') === point.title) {
+      error(`profile.about '${point.title}' 의 본문이 제목을 그대로 반복한다`)
+    }
   }
 }
 

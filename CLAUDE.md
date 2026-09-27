@@ -40,8 +40,9 @@
 | /careers   | 경력기술서     | 회사당 제한 없음  | 7단 전체 요약                         |
 | /portfolio | 판단 근거 서술 | flagship 1개 집중 | 7단 풀 전개 + decision.rejected       |
 
-- `profile.summary`(resume)와 `profile.about`(portfolio)는 문장이 겹치면 안 된다.
-  겹치면 verify 가 실패한다.
+- 홈(= resume)의 ABOUT 은 `profile.aboutLead`(한 줄 정체성) + `profile.about`
+  (일하는 방식 `{title, body}` 목록)이다. **수치는 ABOUT 에 적지 않는다** — 바로 위
+  Metrics 카드와 아래 Experience 가 맡는다. 본문이 제목을 그대로 되풀이하면 verify 가 실패한다.
 - /careers 는 모든 회사를 렌더한다. 회사 하나가 빠지면 안 된다.
 - /portfolio 의 `depth:'supporting'` 작업은 카드 1개 분량을 넘기지 않는다.
   `flagship` 은 제품마다 최대 하나다(verify 가 검사).

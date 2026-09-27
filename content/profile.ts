@@ -1,4 +1,11 @@
-import type { Certificate, Collaboration, Education, ProfileBasic, SkillGroup } from './schema'
+import type {
+  AboutPoint,
+  Certificate,
+  Collaboration,
+  Education,
+  ProfileBasic,
+  SkillGroup,
+} from './schema'
 
 export const profile: ProfileBasic = {
   name: '신정은',
@@ -11,30 +18,30 @@ export const profile: ProfileBasic = {
 }
 
 /**
- * /resume 의 SUMMARY. 숫자 중심 압축.
- * about 과 문장이 겹치면 verify 가 실패한다 — 두 문서가 같은 말을 하면 한쪽은 읽을 이유가 없다.
- */
-export const summary =
-  '웹(PC·Mobile)과 iOS·Android 앱을 오가며 회원·인증·구독·결제 같은 핵심 플로우를 실서비스로 구현해 온 프론트엔드 엔지니어입니다(2024.06~현재). 중복 호출·전역 일괄 로딩처럼 드러나지 않는 요청·렌더링 구조의 비효율을 찾아 재설계했고(조회 API 호출 75%↓, 대시보드 순차 로딩 재설계), 거대한 JSON을 문자 단위로 쪼개 보내던 실시간 응답 방식을 블록 단위 SSE 프로토콜로 직접 설계해 백엔드에 제안하며 1,281줄의 수동 파서를 걷어냈습니다. React → Next.js 마이그레이션으로 웹을 0→1로 구축하고 Expo로 iOS·Android 1.0.0을 출시해 EAS OTA 배포까지 운영했으며, MAU 30만 규모 서비스에서는 Sentry로 런타임 에러를 추적해 Crash Free Rate를 3%p 끌어올렸습니다. 판단 근거를 문서로 남겨 백엔드·디자인·QA와 합의하며 일하는 것을 협업의 기본으로 삼습니다.'
-
-/**
- * 렌더 전용 파생값. 한 문단 벽 텍스트를 문장 단위로 끊어 문단을 나눈다.
+ * 홈(= 이력서)의 ABOUT. 한 줄 정체성 + 일하는 방식 네 가지.
  *
- * 원본 summary 문자열은 그대로 둔다 — verify 의 summary↔about 문장 중복 검사 대상이고,
- * 문구를 고치는 일은 이 파일이 아니라 챗에서 확정한다.
- * 분리 기준은 scripts/verify-content.ts 의 sentences() 와 같다. `.` 뒤가 공백일 때만
- * 끊으므로 '2024.06'·'1.0.0'·'Next.js'·'3%p' 는 오분리되지 않는다.
+ * 수치는 여기 적지 않는다 — 바로 위 Metrics 카드와 아래 Experience 가 맡는다.
+ * 같은 숫자를 두 번 읽히면 ABOUT 이 요약이 아니라 중복이 된다.
  */
-export const summarySentences = summary
-  .split(/(?<=[.!?])\s+/)
-  .map((sentence) => sentence.trim())
-  .filter(Boolean)
+export const aboutLead = '웹(PC·Mobile)과 iOS·Android 앱을 함께 개발하는 프론트엔드 엔지니어입니다.'
 
-/** 홈(/)의 About Me. 과정과 태도 중심 서술. summary 와 문장이 겹치면 안 된다. */
-export const about = [
-  '안녕하세요. 웹과 앱 환경에서 프론트엔드 개발을 담당하고 있습니다.',
-  '단순한 기능 구현을 넘어 근본적인 문제 해결과 React 리렌더링 최적화를 통해 성능과 사용자 경험을 개선하는 데 집중해왔습니다.',
-  '지속적으로 효율적이고 확장 가능한 코드를 고민하며 성장하고 있습니다.',
+export const about: AboutPoint[] = [
+  {
+    title: '불필요한 요청을 찾아 줄입니다',
+    body: '같은 API를 여러 번 부르거나, 첫 화면에 필요 없는 데이터까지 한 번에 받는 코드를 찾아 요청의 순서와 단위를 다시 짭니다.',
+  },
+  {
+    title: '실패해도 깨지지 않는 흐름을 만듭니다',
+    body: '결제·구독처럼 중간에 끊기면 안 되는 흐름에서 실패 상황을 먼저 정리하고, 다시 시도하거나 스스로 복구되도록 만듭니다.',
+  },
+  {
+    title: '프론트와 백엔드 사이의 응답 형식을 직접 설계합니다',
+    body: '화면에서 다루기 어려운 응답 구조는 프론트에서 억지로 맞추지 않고, 바꿀 형식을 문서로 제안해 백엔드와 합의합니다.',
+  },
+  {
+    title: '팀이 같이 쓰는 기준을 만듭니다',
+    body: '먼저 정리한 구조와 규칙을 문서로 남겨, 동료들이 같은 방식으로 작업할 수 있게 합니다.',
+  },
 ]
 
 /**

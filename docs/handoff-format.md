@@ -149,15 +149,18 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 문구는 코드에서 다듬지 않는다. 챗에서 확정한 최종본을 통째로 준다.
 
 ```
-### COPY: profile.summary
-웹(PC·Mobile)과 iOS·Android 앱을 오가며 ...
+### COPY: profile.about
+웹(PC·Mobile)과 iOS·Android 앱을 ...
+
+불필요한 요청을 찾아 줄입니다
+같은 API를 여러 번 부르거나 ...
 ```
 
-대상: `profile.summary`(이력서) · `profile.about`(포트폴리오) · `profile.tagline` ·
+대상: `profile.aboutLead` + `profile.about`(홈 ABOUT) · `profile.tagline` ·
 `collaborationIntro` / `collaborationOutro` · `content/experience.ts` 의 하이라이트
 
-`profile.summary` 와 `profile.about` 은 **같은 문장을 쓰면 verify 가 실패한다.**
-두 문서가 같은 말을 하면 한쪽은 읽을 이유가 없어진다.
+ABOUT 은 첫 줄이 `aboutLead`, 그 뒤로 제목 한 줄 + 본문 한 줄이 한 항목(`{title, body}`)이다.
+**본문이 제목을 그대로 되풀이하면 verify 가 실패한다.** 같은 말을 두 번 읽힐 이유가 없다.
 
 ---
 

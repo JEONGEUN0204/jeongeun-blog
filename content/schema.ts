@@ -187,6 +187,16 @@ export type Certificate = {
   date: string
 }
 
+/**
+ * 홈 ABOUT 의 항목 하나. title 은 '~합니다' 로 끝나는 한 줄 서술(일하는 방식),
+ * body 는 그 방식이 실제로 무엇을 하는 일인지. 수치는 여기 적지 않는다 —
+ * Metrics 카드와 Experience 가 맡는다.
+ */
+export type AboutPoint = {
+  title: string
+  body: string
+}
+
 export type Collaboration = {
   audience: string
   body: string
