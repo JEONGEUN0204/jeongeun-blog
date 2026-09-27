@@ -151,6 +151,7 @@ export type Project = {
 /** /resume 의 회사별 압축 하이라이트. 7단 이관이 끝나면 narrative 에서 파생된다. */
 export type ExperienceHighlight = {
   title: string
+  /** `**…**` 로 감싼 부분은 강조해 렌더한다. 수치를 눈에 띄게 할 때 쓴다. */
   detail: string
 }
 

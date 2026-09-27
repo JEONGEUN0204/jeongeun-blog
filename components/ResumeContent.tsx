@@ -260,7 +260,7 @@ export default function ResumeContent() {
                             </span>
                             <span className="hidden print:inline"> — </span>
                             <span className="mt-0.5 block text-gray-600 dark:text-gray-400 print:inline print:text-inherit">
-                              {highlight.detail}
+                              {renderEmphasis(highlight.detail)}
                             </span>
                           </li>
                         ))}
@@ -300,5 +300,18 @@ export default function ResumeContent() {
         </p>
       </Section>
     </div>
+  )
+}
+
+/** detail 의 `**…**` 구간을 <strong> 으로 그린다. 강조 표기 외에는 문자열을 그대로 둔다. */
+function renderEmphasis(text: string) {
+  return text.split(/\*\*(.+?)\*\*/).map((part, index) =>
+    index % 2 === 1 ? (
+      <strong key={index} className="font-semibold text-gray-900 dark:text-gray-100">
+        {part}
+      </strong>
+    ) : (
+      part
+    )
   )
 }
