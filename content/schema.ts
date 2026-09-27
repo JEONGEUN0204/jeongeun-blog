@@ -91,14 +91,28 @@ export type ProjectKind = 'improvement' | 'build' | 'operation'
  * /resume 의 그룹 소제목. 문자열을 세 곳에 각각 적던 자리다.
  */
 export type Product = {
-  /** data/products/{id}.mdx 파일명과 반드시 같다. */
   id: string
   companyId: CompanyId
   /** 화면에 그대로 노출되는 제품명. 예: 'ChatCODIT App' */
   name: string
   /** 제품이 놓인 자리. 예: 'iOS · Android'. 라벨은 `이름 · platform` 으로 만든다. */
   platform: string
+  /** /portfolio 카드 앞면과 제품 개요의 한 줄 소개. 아직 문구를 확정하지 못했으면 비운다. */
+  summary?: string
+  /** 대표 스크린샷. 첫 장이 카드 타일에 깔린다. 비면 카드는 글자만 싣는다. */
+  images?: string[]
+  /**
+   * 스크린샷 [표시 폭, 표시 높이]. images 가 있으면 반드시 있어야 한다(verify 가 검사).
+   *
+   * 폭은 A4 인쇄 폭(약 640px 콘텐츠 폭) 안에서 한 제품의 이미지가 gap 포함 한 줄에
+   * 들어가도록 정한다(2장이면 300 등). 높이는 h-auto 라 원본 비율을 따른다.
+   */
+  imageSize?: [number, number]
+  imageFrame?: ImageFrame
 }
+
+/** 스크린샷을 감쌀 기기 프레임. 비율만으로는 세로형 데스크톱 캡처와 구분되지 않아 명시한다. */
+export type ImageFrame = 'phone' | 'tablet'
 
 export type Project = {
   /** content/projects/{id}.ts 파일명과 같다. /careers 의 <ProjectNarrative id="..."> 가 가리키는 키다. */

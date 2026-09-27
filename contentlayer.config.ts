@@ -171,27 +171,9 @@ export const Careers = defineDocumentType(() => ({
   computedFields,
 }))
 
-export const Products = defineDocumentType(() => ({
-  name: 'Products',
-  filePathPattern: 'products/**/*.mdx',
-  contentType: 'mdx',
-  fields: {
-    /**
-     * 제품 카드의 '표현'만 담는다. 제품 이름·platform 같은 사실은 content/products.ts 가
-     * 원천이고, 파일명이 두 소스를 잇는 키다.
-     */
-    summary: { type: 'string' },
-    images: { type: 'list', of: { type: 'string' }, default: [] },
-    imageSize: { type: 'list', of: { type: 'number' }, default: [200, 300] },
-    /** 'phone'이면 스크린샷을 폰 프레임으로 감싼다. 비율만으로는 세로형 데스크톱 캡처와 구분되지 않는다. */
-    imageFrame: { type: 'string' },
-  },
-  computedFields,
-}))
-
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors, Careers, Products],
+  documentTypes: [Blog, Authors, Careers],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [

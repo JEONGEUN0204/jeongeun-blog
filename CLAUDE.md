@@ -93,6 +93,6 @@ GitHub Pages 정적 export라 서버 PDF 생성이 불가능하다. **브라우�
 2. **사이트 UI는 `print:hidden`.** Header/Footer/ScrollTop 등은 이미 적용되어 있다. 새로 추가하는 네비게이션·버튼류도 마찬가지로 숨긴다.
 3. **다크모드는 인쇄에서 완전히 무력화된다.** `css/tailwind.css`가 `@custom-variant dark`를 `@media not print`로 재정의해 `dark:` 유틸리티 자체가 인쇄 시 적용되지 않게 한다. `css/print.css`의 색상 강제만으로는 부족했기 때문이다 — 이 커스텀 variant를 지우면 다크모드로 보다가 인쇄할 때 본문이 읽히지 않는다.
 4. **배경색 보존.** `css/print.css`가 `print-color-adjust: exact`를 전역으로 걸어 라벨 칩·`StatCard`의 배경이 인쇄에 남는다.
-5. `Projects` 이미지의 `imageSize[0]`(표시 폭)은 **A4 인쇄 폭(약 640px 콘텐츠 폭) 안에서 한 프로젝트의 이미지가 gap 포함 한 줄에 들어가도록** 정한다(2장이면 300 등). 높이는 `h-auto`라 원본 비율을 따른다.
+5. `content/products.ts` 의 `imageSize[0]`(표시 폭)은 **A4 인쇄 폭(약 640px 콘텐츠 폭) 안에서 한 제품의 이미지가 gap 포함 한 줄에 들어가도록** 정한다(2장이면 300 등). 높이는 `h-auto`라 원본 비율을 따른다.
 
 변경 후에는 각 문서 페이지에서 인쇄 미리보기를 실제로 확인한다.

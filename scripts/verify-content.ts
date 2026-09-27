@@ -10,7 +10,7 @@
  * (아직 확보하지 못한 사실을 지어내지 않고 TBD 로 두기 위한 장치다).
  */
 import { readFileSync, readdirSync, existsSync } from 'fs'
-import { join, basename } from 'path'
+import { join } from 'path'
 
 import { companies } from '../content/companies'
 import { metrics } from '../content/metrics'
@@ -47,11 +47,7 @@ function readDir(dir: string, ext: string): SourceFile[] {
 }
 
 /** 사람이 읽는 문구가 들어가는 곳. 금지 표현 검사 대상. */
-const proseFiles: SourceFile[] = [
-  ...readDir('content', '.ts'),
-  ...readDir('data/careers', '.mdx'),
-  ...readDir('data/products', '.mdx'),
-]
+const proseFiles: SourceFile[] = [...readDir('content', '.ts'), ...readDir('data/careers', '.mdx')]
 
 /** 사실을 하드코딩하면 안 되는 곳. 렌더 로직만 있어야 한다. */
 const renderFiles: SourceFile[] = [
@@ -163,6 +159,23 @@ for (const product of products) {
   // 작업이 없는 제품은 /portfolio 카드만 있고 내용이 없다.
   if (!projects.some((project) => project.productId === product.id)) {
     error(`${at} 에 속한 작업이 없다 — content/projects 에서 productId 로 가리키는 파일이 없다`)
+  }
+
+  // /portfolio 카드 앞면이 제목·스택만 남는다. 지어내지 않고 TBD 로 두되 목록으로 남긴다.
+  if (!product.summary?.trim()) todo(`${at} /portfolio 카드 요약(summary) 미확보`)
+
+  /*
+    스크린샷은 경로 문자열이라 오타가 나도 타입이 잡지 못한다. 빌드도 통과하고 화면에서만 깨지므로
+    여기서 실제 파일을 확인한다 — 예전에는 MDX frontmatter 에 있어 검사 대상이 아니었다.
+    imageSize 는 next/image 의 비율이라 이미지가 있으면 반드시 있어야 한다.
+  */
+  if (product.images?.length) {
+    if (!product.imageSize) error(`${at} images 가 있는데 imageSize 가 없다`)
+    for (const image of product.images) {
+      if (!existsSync(join(ROOT, 'public', image))) {
+        error(`${at} 스크린샷 파일이 없다: public${image}`)
+      }
+    }
   }
 }
 
@@ -312,28 +325,6 @@ for (const project of projects) {
     )
   }
 }
-
-/*
-  content/ 와 MDX 를 id 로 맞춘다.
-
-  짝 없는 MDX 는 언제나 error 다 — id 오타이거나 작업을 지우고 남은 파일이다.
-  반대 방향은 제품만 검사한다. 제품은 /portfolio 의 카드라 요약과 대표 스크린샷이 반드시 필요하지만,
-  작업의 표현은 없을 수 있다 — 7단 서술이 content 로 옮겨진 작업은 MDX 에 적을 것이 남지 않는다.
-  예전에는 그 자리를 빈 파일(`---` 두 줄)로 채워 두어, 읽는 사람에게 사실이 빠진 것처럼 보였다.
-*/
-const pair = (dir: string, ids: Set<string>, source: string, requireMdx: boolean) => {
-  const mdxIds = new Set(readDir(dir, '.mdx').map((file) => basename(file.path, '.mdx')))
-  if (requireMdx) {
-    for (const id of ids) {
-      if (!mdxIds.has(id)) error(`${source} '${id}' 에 대응하는 ${dir}/${id}.mdx 가 없다`)
-    }
-  }
-  for (const id of mdxIds) {
-    if (!ids.has(id)) error(`${dir}/${id}.mdx 에 대응하는 ${source} 항목이 없다`)
-  }
-}
-
-pair('data/products', productIds, 'content/products.ts', true)
 
 /* ------------------------------------------------------------------ *
  * 결과

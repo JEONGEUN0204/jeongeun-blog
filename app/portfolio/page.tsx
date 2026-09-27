@@ -1,4 +1,3 @@
-import { allProducts } from 'contentlayer/generated'
 import PortfolioBrowser from '@/components/portfolio/PortfolioBrowser'
 import { productBody } from '@/components/portfolio/ProductDetail'
 import { pad, type PortfolioCompany } from '@/components/portfolio/portfolio'
@@ -16,8 +15,8 @@ export const metadata = genPageMetadata({ title: 'Portfolio' })
   카드 한 장은 제품 하나다. 그 안의 작업은 본문 섹션으로 들어간다 — 예전에는 제품과 작업이
   같은 목록에 섞여 있어서 어떤 것은 카드가 되고 어떤 것은 되지 않았다.
 
-  사실(제품·작업 이름·역할·스택)은 content/, 표현(요약·스크린샷·본문)은 MDX 에 있다.
-  제품은 data/products/{id}.mdx, 작업은 data/projects/{id}.mdx 이고 파일명이 두 소스를 잇는 키다.
+  제품(요약·스크린샷 포함)은 content/products.ts, 작업은 content/projects/{id}.ts 가 전부 들고 있다.
+  예전에는 요약·스크린샷만 data/products/{id}.mdx 에 따로 있어서 한 제품이 두 파일로 갈라져 있었다.
 
   - 회사 순서는 content/companies.ts 순서(최신 회사 먼저)이고, 첫 회사가 처음 선택된다.
   - 회사 안에서는 flagship 작업을 가진 제품을 맨 앞으로 빼고 나머지를 content/products 순서대로 잇는다.
@@ -32,11 +31,7 @@ export default function Portfolio() {
       ...own.filter((product) => leads(product.id)),
       ...own.filter((product) => !leads(product.id)),
     ]
-    const withDocs = ordered.flatMap((product) => {
-      const doc = allProducts.find((item) => item.slug === product.id)
-      return doc ? [{ product, doc }] : []
-    })
-    if (withDocs.length === 0) return []
+    if (ordered.length === 0) return []
 
     return [
       {
@@ -44,28 +39,27 @@ export default function Portfolio() {
         name: company.name,
         period: formatPeriod(company.period),
         context: company.context,
-        products: withDocs.map(({ product, doc }, index) => {
+        products: ordered.map((product, index) => {
           const no = pad(index + 1)
-          const cover = doc.images[0]?.trimEnd()
+          const cover = product.images?.[0]
           return {
             id: product.id,
             no,
             name: product.name,
             platform: product.platform,
-            summary: doc.summary,
+            summary: product.summary,
             stack: productStack(product.id).primary,
-            cover: cover
-              ? {
-                  src: cover,
-                  width: Number(doc.imageSize[0]),
-                  height: Number(doc.imageSize[1]),
-                  frame:
-                    doc.imageFrame === 'phone' || doc.imageFrame === 'tablet'
-                      ? doc.imageFrame
-                      : undefined,
-                }
-              : undefined,
-            ...productBody({ product, doc, no }),
+            // imageSize 는 images 가 있으면 반드시 있다(verify 가 검사). next/image 의 비율로 넘긴다.
+            cover:
+              cover && product.imageSize
+                ? {
+                    src: cover,
+                    width: product.imageSize[0],
+                    height: product.imageSize[1],
+                    frame: product.imageFrame,
+                  }
+                : undefined,
+            ...productBody({ product, no }),
           }
         }),
       },

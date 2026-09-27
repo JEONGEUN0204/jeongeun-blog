@@ -7,8 +7,8 @@ import type { Project } from '../schema'
  * kind 는 'build' 에서 'improvement' 로 바꿨다. 이미 돌아가던 flow 의 LLM 호출 구조를 고친 작업이고,
  * 7단 서술이 다루는 것도 신규 구축이 아니라 2단계 호출을 1회로 줄인 일이다.
  *
- * name 의 Confluence 는 확인 답변으로 포함이 확정됐다. data/projects/ezl-ai.mdx 의
- * summary('사내 Jira·Confluence 데이터를 검색하는')도 같은 범위라 둘 다 그대로 둔다.
+ * name 의 Confluence 는 확인 답변으로 포함이 확정됐다. 제품 summary('사내 Jira·Confluence
+ * 데이터를 검색하는', content/products.ts)도 같은 범위라 둘 다 그대로 둔다.
  * 7단 서술과 roleDetail 이 Jira 만 말하는 것은 맡은 작업의 범위가 거기였기 때문이다 —
  * 도구 전체의 범위(name)와 내가 한 일의 범위(roleDetail)는 다른 칸이고, 어긋난 게 아니다.
  *

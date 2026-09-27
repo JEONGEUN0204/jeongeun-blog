@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
+import type { ImageFrame } from '@/content/schema'
 
 /*
   /portfolio 가 주고받는 모양. 카드 한 장은 제품 하나다.
 
-  서버(app/portfolio/page.tsx)가 content/ 와 data/products · data/projects 의 MDX 를 이 모양으로
-  묶어 넘기고, 클라이언트 컴포넌트(PortfolioBrowser · ProductCard)는 렌더만 한다.
+  서버(app/portfolio/page.tsx)가 content/ 를 이 모양으로 묶어 넘기고,
+  클라이언트 컴포넌트(PortfolioBrowser · ProductCard)는 렌더만 한다.
   사실 문자열은 전부 서버가 채워 온다. 여기에는 표기 규칙만 둔다.
 */
 
@@ -21,14 +22,14 @@ export type DetailSection = IndexItem & {
   items?: IndexItem[]
 }
 
-/** 타일에 까는 스크린샷 한 장. MDX frontmatter 의 images 첫 장과 imageSize·imageFrame 을 옮겨 담는다. */
+/** 타일에 까는 스크린샷 한 장. content/products.ts 의 images 첫 장과 imageSize·imageFrame 을 옮겨 담는다. */
 export type ProjectCover = {
   src: string
   /** next/image 에 넘길 비율. 실제 표시 크기는 타일이 정한다. */
   width: number
   height: number
   /** 기기 화면이면 타일 아래에서 올라오게 놓는다. 없으면 웹 가로 화면이다. */
-  frame?: 'phone' | 'tablet'
+  frame?: ImageFrame
 }
 
 export type PortfolioProduct = {

@@ -7,18 +7,20 @@ Claude 챗에서 내용을 확정한 뒤 이 형태로 Claude Code 에 붙여넣
 `depth: flagship` 인데 `DECISION.rejected` 가 비면 `npm run verify` 가 실패하므로,
 챗에서 그 칸을 채우지 않으면 포트폴리오에 올라가지 않는다.
 
-## 한 작업이 놓이는 두 파일
+## 블록이 가는 곳
 
-| 파일                       | 담는 것                                      | 블록의 어느 부분                  |
-| -------------------------- | -------------------------------------------- | --------------------------------- |
-| `content/projects/{id}.ts` | **사실** — 회사·제품·역할·스택·지표·7단 서술 | `company` ~ `LEARNING`, `METRICS` |
-| `data/projects/{id}.mdx`   | **표현** — 한 줄 요약·스크린샷·본문          | `summary`, `platform`, `images`   |
+| 대상 | 파일                       | 담는 것                                                  |
+| ---- | -------------------------- | -------------------------------------------------------- |
+| 작업 | `content/projects/{id}.ts` | 회사·제품·역할·스택·지표·7단 서술                        |
+| 제품 | `content/products.ts`      | 이름·platform·카드 요약·대표 스크린샷 (항목 하나)        |
+| 회사 | `data/careers/{id}.mdx`    | 로고·소개·태그와 /careers 본문의 배치. **MDX 는 여기뿐** |
 
-파일명(`{id}`)이 둘을 잇는 유일한 키다. 한쪽만 있으면 verify 가 실패한다.
+예전에는 작업과 제품도 `content/` 의 사실과 `data/` 의 MDX 로 나뉘어 있었다. MDX 쪽에 남은 것이
+한 줄 요약과 이미지 경로뿐이라 한 대상이 두 파일로 갈라지기만 했고, "제품에는 MDX 가 반드시
+있어야 한다" 같은 규칙을 verify 가 따로 지켜야 했다. 지금은 사실과 표현이 같은 항목에 있다.
 
-작업이 놓인 **제품**도 같은 모양으로 두 파일을 갖는다 — `content/products.ts` 의 한 항목과
-`data/products/{제품 id}.mdx` 다. /portfolio 의 카드 한 장이 곧 제품 하나이고,
-카드의 요약·대표 스크린샷은 제품 MDX 에서 온다.
+`data/careers/*.mdx` 는 남는다. 여기에는 본문이 있다 — `<ProductGroup>`·`<ProjectNarrative>` 로
+순서를 잡고, 7단 서술을 아직 받지 못한 작업은 `<Section>` 으로 직접 적는다.
 
 ---
 
@@ -66,7 +68,7 @@ ASK:
 
 | 블록                   | `Project` 필드                      | 규칙                                                                     |
 | ---------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
-| `PROJECT:`             | `id`                                | `data/projects/{id}.mdx` 와 같은 이름이어야 한다                         |
+| `PROJECT:`             | `id`                                | `content/projects/{id}.ts` 의 파일명이 된다                              |
 | `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다              |
 | `product`              | `productId`                         | **필수.** `content/products.ts` 에 없는 id 면 제품부터 등록하고 물어본다 |
 | `name`                 | `name`                              | 작업 이름만. 제품 이름으로 시작하면 verify 실패                          |
@@ -75,7 +77,7 @@ ASK:
 | `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD`   |
 | `roleDetail`           | `roleDetail`                        | 비어 있으면 verify 실패                                                  |
 | `contribution`         | `contribution`                      | 문자열 또는 `TBD`                                                        |
-| `summary`              | —                                   | `data/projects/{id}.mdx` 의 `summary` 로 간다. 없으면 줄을 지운다        |
+| `summary`              | —                                   | 작업에는 요약을 두지 않는다. /portfolio 는 제품 요약과 7단 서술로 읽힌다 |
 | `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                              |
 | `PROBLEM` ~ `LEARNING` | `narrative`                         | 7단이 다 오지 않으면 `narrative` 자체를 만들지 않는다                    |
 | `METRICS`              | `metricIds` + `content/metrics.ts`  | 지표는 `metrics.ts` 에 먼저 등록하고 id 만 참조한다                      |
@@ -108,16 +110,16 @@ platform: iOS · Android
 summary: React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱을 추가하고, 두 스토어 모두 인앱 구독을 붙여 운영 중입니다.
 ```
 
-| 블록       | 가는 곳                               | 규칙                                                       |
-| ---------- | ------------------------------------- | ---------------------------------------------------------- |
-| `PRODUCT:` | `content/products.ts` 의 `id`         | `data/products/{id}.mdx` 와 같은 이름이어야 한다           |
-| `company`  | `companyId`                           | 그 제품에 속한 작업과 회사가 같아야 한다                   |
-| `name`     | `name`                                | 카드 제목·구분선·그룹 소제목에 그대로 나간다               |
-| `platform` | `platform`                            | 라벨은 `이름 · platform` 으로 만들어진다                   |
-| `summary`  | `data/products/{id}.mdx` 의 `summary` | /portfolio 카드 요약. 입력에 없으면 지어내지 말고 물어본다 |
+| 블록       | 가는 곳                       | 규칙                                                       |
+| ---------- | ----------------------------- | ---------------------------------------------------------- |
+| `PRODUCT:` | `content/products.ts` 의 `id` | 작업 블록의 `product:` 가 이 id 를 가리킨다                |
+| `company`  | `companyId`                   | 그 제품에 속한 작업과 회사가 같아야 한다                   |
+| `name`     | `name`                        | 카드 제목·구분선·그룹 소제목에 그대로 나간다               |
+| `platform` | `platform`                    | 라벨은 `이름 · platform` 으로 만들어진다                   |
+| `summary`  | `summary`                     | /portfolio 카드 요약. 입력에 없으면 지어내지 말고 물어본다 |
 
-스크린샷은 블록으로 오지 않는다. 새 제품의 카드 이미지는 따로 전달받아
-`data/products/{id}.mdx` 의 `images`·`imageSize` 에 넣는다.
+스크린샷은 블록으로 오지 않는다. 새 제품의 카드 이미지는 따로 전달받아 `public/static/images/` 에
+두고 `content/products.ts` 의 `images`·`imageSize` 에 경로를 적는다. 파일이 없으면 verify 가 실패한다.
 
 ---
 
@@ -170,8 +172,9 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 | `/careers`   | 7단 전체 요약                                                              |
 | `/portfolio` | flagship 은 7단 풀 전개 + `decision.rejected`, supporting 은 카드 1개 분량 |
 
-옮기고 나면 해당 MDX 본문에서 서술 블록(`<Block>`, `<Steps>`)을 걷어내고
-요약·스크린샷만 남긴다. 같은 문장이 두 곳에 남으면 그게 다음 불일치의 씨앗이다.
+옮기고 나면 해당 MDX 본문에서 서술 블록(`<Block>`, `<Steps>`)을 걷어낸다. 같은 문장이 두 곳에
+남으면 그게 다음 불일치의 씨앗이다. 작업 MDX 에 남는 것은 `summary`·`platform`·소제목 본문뿐이고,
+그마저 없으면 파일을 지운다 — 제품 MDX 는 카드 요약과 대표 스크린샷이 있어 그대로 남는다.
 
 ---
 
@@ -181,9 +184,9 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 - `codit-chatcodit-app-infra` 의 `role` · `contribution`
 - `codit-appshell` 의 `name`
+- `codit-platform` 제품의 카드 요약(`summary`)
 - 기술 지표들의 `label` 과 연결할 사업 지표
 - `content/experience.ts` 코딧 하이라이트 제목 2건
 
-verify 가 보고하지 않는 빈칸도 있다. `codit-platform` 제품의 카드 요약
-(`data/products/codit-platform.mdx` 의 `summary`)과, 아직 경력기술서 본문에 손으로 쓴 채
-남아 있는 ChatCODIT(Web)의 작업 2건(Draft · 렌더링·구축·운영)이다.
+verify 가 보고하지 않는 빈칸도 있다. 아직 경력기술서 본문에 손으로 쓴 채 남아 있는
+ChatCODIT(Web)의 작업 2건(Draft · 렌더링·구축·운영)이다.

@@ -1,12 +1,13 @@
 import Image from '@/components/Image'
 import DeviceFrame from '@/components/DeviceFrame'
+import type { ImageFrame } from '@/content/schema'
 
 interface Props {
   images: string[]
   /** [표시 폭, 표시 높이]. 실제 높이는 h-auto 라 원본 비율을 따른다. */
-  imageSize: number[]
-  /** 'phone' | 'tablet' 이면 스크린샷을 디바이스 프레임으로 감싼다. */
-  imageFrame?: string
+  imageSize: [number, number]
+  /** 있으면 스크린샷을 디바이스 프레임으로 감싼다. */
+  imageFrame?: ImageFrame
   alt: string
 }
 
@@ -34,20 +35,16 @@ export default function Screenshots({ images, imageSize, imageFrame, alt }: Prop
       {images.map((image, index) => {
         const img = (
           <Image
-            src={image.trimEnd()}
+            src={image}
             alt={`${alt} 스크린샷 ${index + 1}`}
-            width={Number(imageSize[0])}
-            height={Number(imageSize[1])}
+            width={imageSize[0]}
+            height={imageSize[1]}
             className="h-auto max-w-full rounded-md max-sm:w-full"
           />
         )
         return (
           <div key={image} className="break-inside-avoid-page">
-            {imageFrame ? (
-              <DeviceFrame variant={imageFrame as 'phone' | 'tablet'}>{img}</DeviceFrame>
-            ) : (
-              img
-            )}
+            {imageFrame ? <DeviceFrame variant={imageFrame}>{img}</DeviceFrame> : img}
           </div>
         )
       })}
