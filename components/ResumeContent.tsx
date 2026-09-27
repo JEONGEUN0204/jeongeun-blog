@@ -9,6 +9,8 @@ import { getProduct, productLabel } from '@/content/products'
 import { experiences } from '@/content/experience'
 import { getMetrics, resumeMetricIds } from '@/content/metrics'
 import {
+  about,
+  aboutLead,
   certificates,
   collaborationIntro,
   collaborationOutro,
@@ -16,7 +18,6 @@ import {
   education,
   profile,
   skills,
-  summarySentences,
 } from '@/content/profile'
 
 const sectionTitle =
@@ -153,7 +154,7 @@ export default function ResumeContent() {
               key={metric.id}
               className="bg-sand-100 dark:bg-sand-400/10 break-inside-avoid-page rounded-lg px-4 py-5 text-center"
             >
-              <div className="text-accent-700 dark:text-accent-300 text-2xl leading-tight font-extrabold text-balance break-keep">
+              <div className="text-accent-700 dark:text-accent-300 text-xl leading-tight font-extrabold text-balance break-keep">
                 {metric.value}
               </div>
               <div className="mt-2 text-xs leading-5 break-keep text-gray-600 dark:text-gray-400">
@@ -165,28 +166,22 @@ export default function ResumeContent() {
       </Section>
 
       {/*
-        Summary — content/profile.ts 의 단일 문자열을 문장 단위로 끊어 문단으로 나눈다.
-        문구는 그대로다. 첫 문장(정체성)과 마지막 문장(태도)만 진하게 두고 가운데 근거 문장은
-        한 톤 낮춰, 벽처럼 보이던 한 문단에 위아래 경계를 만든다.
-        문장이 하나뿐이면 첫 문장 분기만 타므로 예전과 같은 한 문단이 된다.
+        About — 한 줄 정체성(aboutLead)을 크게 두고, 일하는 방식 네 가지를 그 아래 나열한다.
+        제목만 훑어도 무엇을 하는 사람인지 읽히고, body 는 그 제목의 근거다.
+        수치는 여기 없다 — 위 Metrics 카드와 아래 Experience 가 맡는다.
       */}
-      <Section title="Summary" titleClassName={sectionTitle} className={sectionSpacing}>
-        <div className={`space-y-3 ${measure}`}>
-          {summarySentences.map((sentence, index) => (
-            <p
-              key={sentence}
-              className={
-                index === 0
-                  ? 'text-lg leading-8 text-gray-900 dark:text-gray-100'
-                  : index === summarySentences.length - 1
-                    ? 'leading-7 text-gray-900 dark:text-gray-100'
-                    : 'leading-7 text-gray-600 dark:text-gray-400'
-              }
-            >
-              {sentence}
-            </p>
+      <Section title="About" titleClassName={sectionTitle} className={sectionSpacing}>
+        <p className={`text-lg leading-8 text-gray-900 dark:text-gray-100 ${measure}`}>
+          {aboutLead}
+        </p>
+        <dl className={`mt-5 space-y-4 ${measure}`}>
+          {about.map((point) => (
+            <div key={point.title} className="break-inside-avoid-page">
+              <dt className="font-semibold text-gray-900 dark:text-gray-100">{point.title}</dt>
+              <dd className="mt-1 leading-7 text-gray-600 dark:text-gray-400">{point.body}</dd>
+            </div>
           ))}
-        </div>
+        </dl>
       </Section>
 
       {/* Skills — 나열만 하면 무엇이 주력인지 알 수 없어 두 단으로 나눈다 */}
