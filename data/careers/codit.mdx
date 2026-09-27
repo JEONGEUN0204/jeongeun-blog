@@ -53,75 +53,13 @@ tags:
 
 </ProjectNarrative>
 
-<Section title="06. 대화형 문서 초안 작성(Draft)">
-
-<Meta
-  tech={'Next.js · SSE · Zustand · TypeScript'}
-  role={'멀티턴 문서 생성 플로우 설계·블록 모델 확장·에러 복원 로직·파일 첨부 파이프라인 구현 담당'}
-/>
-
-**기존 스트리밍 아키텍처 위 멀티턴 문서 생성 확장**
-
-<Steps
-  problem={
-    '템플릿 질문에 순차로 답하면 이를 종합해 법률 문서 초안을 생성하는 "질문→답변→문서" 멀티턴 흐름을, 기존 스트리밍 구조를 깨지 않고 얹어야 함'
-  }
-  improve={
-    '기존 SSE 스토어에 question·user_message·document 블록 타입만 추가해 기존 렌더링 경로 수정 없이 통합(확장 가능한 구조를 실제로 검증), 세션 판정 로직을 draftBlocks.utils로 단일 소스화'
-  }
-  result={'기존 아키텍처 재사용으로 신규 피처를 무중단 확장'}
-/>
-
-**에러 복원력 있는 UX**
-
-<Steps
-  improve={
-    "SSE 에러를 StreamError로 타입화하고 API 에러 코드를 카탈로그화해 재시도가능/입력오류/치명 3갈래 분기. 중복 요청(409) 시 '생성 중' 표시를 유지한 채 Retry-After 대기→세션 폴링→같은 키로 replay하는 자기복구 구현"
-  }
-  result={'중복 요청·네트워크 오류에도 진행 상태를 잃지 않는 복원력 확보'}
-/>
-
-**파일 첨부 파이프라인**
-
-- 초안 질문에 파일을 multipart로 전송하고, 첨부 개수·용량(5MB) 제한과 초과 시 안내, '내 문서에서 업로드' 개수 제한 연동을 처리. 기존 파일은 재업로드하지 않고 existingFileIds로 전달하는 방식으로 설계.
-
-</Section>
-
-<Section title="07. 렌더링·구축·운영">
-
-<Meta
-  tech={'Next.js · React · TypeScript · next-intl · Tailwind CSS'}
-  role={'반응형 웹 대응·0→1 웹 구축(React→Next.js 마이그레이션·회원·인증·SEO·다국어) 담당'}
-/>
-
-**반응형 웹 — 다층 전략 설계**
-
-<Steps
-  problem={
-    '단순 CSS 분기로는 모바일 바텀시트 vs 데스크톱 모달·문서 패널 같은 구조적 차이를 감당하기 어려움'
-  }
-  improve={
-    '① next/server userAgent로 SSR 시점 디바이스 확정(DeviceProvider·useDeviceType)해 hydration 깜빡임 방지 ② desktop/mobile 라우트 분리 + device rewrite ③ Tailwind @theme 커스텀 브레이크포인트 토큰화(1920~480px) ④ 컴포넌트 단위 반응형으로 답변 영역 콘텐츠를 화면 폭에 맞춰 동적 배치'
-  }
-  result={'감지→라우팅→토큰→컴포넌트 전 계층에서 일관된 반응형 확보'}
-/>
-
-**0→1 신규 구축 & 배포 단순화**
-
-- React → Next.js(App Router) 마이그레이션, 로그인 Guard(회원·인증)·next-intl 다국어·SEO 구축. Bitbucket Pipeline으로 테스트 서버 배포 과정을 자동화·단순화.
-
-</Section>
-
 <ProductGroup id="codit-chatcodit-app" />
 
-<ProjectNarrative id="codit-chatcodit-app-build" no="08" />
+<ProjectNarrative id="codit-chatcodit-app-build" no="06" />
 
-<Section title="09. 인증·보안·배포">
+<Section title="07. 인증·보안·배포">
 
-<Meta
-  tech={'Expo · React Native · reCAPTCHA Enterprise · Firebase App Check · EAS'}
-  role={'소셜 로그인·딥링크 처리·앱 보안·EAS 무중단 배포 담당'}
-/>
+<Meta id="codit-chatcodit-app-infra" />
 
 - 이메일·Apple·Google 소셜 로그인을 구현하고, 비밀번호 재설정·이메일 인증 링크를 딥링크로 처리해 앱 설치 시 앱으로, 미설치 시 모바일 웹으로 연결되도록 구현. reCAPTCHA Enterprise 봇 방어 + Firebase App Check로 클라이언트 무결성 검증을 적용.
 - EAS Build 프로파일(dev/staging/production) 분리, EAS Update(OTA)·rollback 스크립트로 무중단 배포·빠른 복구 체계 구축. 출시 이후 발생하는 버그와 운영 이슈를 지속적으로 대응하고, i18n 수정처럼 급한 변경은 OTA로 즉시 반영.
@@ -130,4 +68,4 @@ tags:
 
 <ProductGroup id="codit-thecodit-app" />
 
-<ProjectNarrative id="codit-thecodit-app" no="10" />
+<ProjectNarrative id="codit-thecodit-app" no="08" />

@@ -286,10 +286,8 @@ export function NarrativeSummary({
   */
   return (
     <Section title={`${no}. ${project.name}${suffix ? ` (${suffix})` : ''}`}>
-      <Meta
-        tech={[...project.stack.primary, ...project.stack.secondary].join(' · ')}
-        role={project.roleDetail}
-      />
+      {/* 기술·역할은 Meta 가 content/projects 에서 읽는다 — MDX 의 메타 라인과 같은 문자열을 쓴다. */}
+      <Meta id={project.id} />
       <Rows rows={rows} />
       {children && <div className="mt-6">{children}</div>}
     </Section>

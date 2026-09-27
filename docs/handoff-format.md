@@ -180,7 +180,7 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 ## 지금 비어 있는 칸
 
-`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 16건, 경고 0건:
+`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 17건, 경고 0건:
 
 - `codit-chatcodit-app-infra` 의 `role` · `contribution`
 - `codit-appshell` 의 `name`
@@ -188,5 +188,7 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 - 기술 지표들의 `label` 과 연결할 사업 지표
 - `content/experience.ts` 코딧 하이라이트 제목 2건
 
-verify 가 보고하지 않는 빈칸도 있다. 아직 경력기술서 본문에 손으로 쓴 채 남아 있는
-ChatCODIT(Web)의 작업 2건(Draft · 렌더링·구축·운영)이다.
+verify 가 보고하지 않는 빈칸이 하나 있다. ChatCODIT(Web)의 작업 2건(대화형 문서 초안 작성 ·
+반응형 웹·0→1 구축)은 경력기술서 본문에 손으로 쓴 채 남아 있다가 걷어냈는데,
+`content/projects` 로는 아직 옮기지 못했다. 지금은 /resume 하이라이트 두 줄로만 남아 있어
+/careers 와 /portfolio 에서는 보이지 않는다. 입력 블록을 받으면 작업으로 세운다.
