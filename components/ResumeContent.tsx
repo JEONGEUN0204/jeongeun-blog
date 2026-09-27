@@ -130,9 +130,6 @@ export default function ResumeContent() {
             </div>
           </div>
         </div>
-        <p className={`mt-6 leading-7 text-gray-600 dark:text-gray-300 ${measure}`}>
-          {profile.tagline}
-        </p>
       </Section>
 
       {/*
