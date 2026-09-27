@@ -9,10 +9,9 @@ import type { Project } from '../schema'
  * 그래서 같은 제품 안의 형제 작업으로 떼어 기존 서술을 그대로 보존한다.
  *
  * narrative 는 아직 없다 — 이 작업의 7단 서술 블록을 받지 못했다. 그때까지 /careers 는
- * codit.mdx 의 손으로 쓴 09 Section 이, /portfolio 는 제품 본문의 작업 섹션이
- * data/projects/codit-chatcodit-app-infra.mdx 의 summary 로 대신한다.
+ * codit.mdx 의 손으로 쓴 Section 이 대신하고, /portfolio 의 작업 섹션에는 역할·스택만 남는다.
  *
- * role·contribution 은 입력 블록에 없어 TBD 다. roleDetail·stack 은 예전 codit.mdx 09 의
+ * role·contribution 은 입력 블록에 없어 TBD 다. roleDetail·stack 은 예전 codit.mdx 의
  * <Meta> 에 확정돼 있던 값을 그대로 옮겼다.
  */
 export const coditChatCoditAppInfra: Project = {

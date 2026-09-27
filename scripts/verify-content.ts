@@ -51,7 +51,6 @@ const proseFiles: SourceFile[] = [
   ...readDir('content', '.ts'),
   ...readDir('data/careers', '.mdx'),
   ...readDir('data/products', '.mdx'),
-  ...readDir('data/projects', '.mdx'),
 ]
 
 /** 사실을 하드코딩하면 안 되는 곳. 렌더 로직만 있어야 한다. */
@@ -207,7 +206,7 @@ for (const project of projects) {
 
   if (!project.narrative) {
     if (project.depth === 'flagship') {
-      todo(`${at} flagship 인데 7단 서술이 아직 MDX 본문에 있다 (이관 필요)`)
+      todo(`${at} flagship 인데 7단 서술(narrative)이 없다`)
     }
     continue
   }
@@ -314,19 +313,27 @@ for (const project of projects) {
   }
 }
 
-// content/ 와 MDX 는 id 로 1:1 대응해야 한다. 제품과 작업이 각각이다.
-const pair = (dir: string, ids: Set<string>, source: string) => {
+/*
+  content/ 와 MDX 를 id 로 맞춘다.
+
+  짝 없는 MDX 는 언제나 error 다 — id 오타이거나 작업을 지우고 남은 파일이다.
+  반대 방향은 제품만 검사한다. 제품은 /portfolio 의 카드라 요약과 대표 스크린샷이 반드시 필요하지만,
+  작업의 표현은 없을 수 있다 — 7단 서술이 content 로 옮겨진 작업은 MDX 에 적을 것이 남지 않는다.
+  예전에는 그 자리를 빈 파일(`---` 두 줄)로 채워 두어, 읽는 사람에게 사실이 빠진 것처럼 보였다.
+*/
+const pair = (dir: string, ids: Set<string>, source: string, requireMdx: boolean) => {
   const mdxIds = new Set(readDir(dir, '.mdx').map((file) => basename(file.path, '.mdx')))
-  for (const id of ids) {
-    if (!mdxIds.has(id)) error(`${source} '${id}' 에 대응하는 ${dir}/${id}.mdx 가 없다`)
+  if (requireMdx) {
+    for (const id of ids) {
+      if (!mdxIds.has(id)) error(`${source} '${id}' 에 대응하는 ${dir}/${id}.mdx 가 없다`)
+    }
   }
   for (const id of mdxIds) {
     if (!ids.has(id)) error(`${dir}/${id}.mdx 에 대응하는 ${source} 항목이 없다`)
   }
 }
 
-pair('data/products', productIds, 'content/products.ts')
-pair('data/projects', projectIds, 'content/projects')
+pair('data/products', productIds, 'content/products.ts', true)
 
 /* ------------------------------------------------------------------ *
  * 결과

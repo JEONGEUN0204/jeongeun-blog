@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import * as _jsx_runtime from 'react/jsx-runtime'
 import type { MDXComponents } from 'mdx/types'
-import { allProjects, type Products, type Projects } from 'contentlayer/generated'
+import { type Products } from 'contentlayer/generated'
 import { components } from '@/components/MDXComponents'
 import {
   NARRATIVE_STAGES,
@@ -85,10 +85,6 @@ function Prose({ children }: { children: ReactNode }) {
   return <div className="prose dark:prose-invert prose-doc max-w-none">{children}</div>
 }
 
-/** 작업의 표현(요약·플랫폼·MDX 본문). 작업마다 data/projects/{id}.mdx 하나가 짝이다. */
-const workDoc = (work: Project): Projects | undefined =>
-  allProjects.find((item) => item.slug === work.id)
-
 interface Props {
   product: Product
   doc: Products
@@ -121,17 +117,6 @@ export function productBody({ product, doc, no }: Props): {
   const single = works.length === 1 ? works[0] : undefined
   const flagship = works.find((work) => work.depth === 'flagship' && work.narrative)
 
-  /** 그 작업 MDX 본문의 `###` 소제목들. 작업 섹션 바로 뒤에 잇는다. */
-  const mdxSections = (work: Project): DetailSection[] => {
-    const code = workDoc(work)?.body.code
-    if (!code) return []
-    return splitMdx(code).sections.map(({ title, nodes }, index) => ({
-      id: `${work.id}-section-${index + 1}`,
-      title,
-      node: <Prose>{nodes}</Prose>,
-    }))
-  }
-
   return {
     /*
       개요·서술 섹션은 서버 컴포넌트 엘리먼트로 넘긴다. 같은 트리를 <div> 엘리먼트로 만들어 prop 으로 클라이언트
@@ -157,8 +142,8 @@ export function productBody({ product, doc, no }: Props): {
         title,
         node: <Prose>{nodes}</Prose>,
       })),
-      ...works.flatMap((work) => [
-        ...(work === single || work === flagship
+      ...works.flatMap((work) =>
+        work === single || work === flagship
           ? []
           : [
               {
@@ -166,13 +151,12 @@ export function productBody({ product, doc, no }: Props): {
                 title: work.name,
                 node: (
                   <Prose>
-                    <WorkSection work={work} doc={workDoc(work)} />
+                    <WorkSection work={work} />
                   </Prose>
                 ),
               },
-            ]),
-        ...mdxSections(work),
-      ]),
+            ]
+      ),
     ],
   }
 }
@@ -220,23 +204,19 @@ function NarrativeSection({ work, narrative }: { work: Project; narrative: Narra
 }
 
 /**
- * 작업 한 건 — 소제목 · 역할 · 스택 · 요약 · 서술 카드.
+ * 작업 한 건 — 소제목 · 역할 · 스택 · 서술 카드.
  *
  * 서술은 카드 1개 분량이다. 풀 전개는 제품마다 flagship 하나만 받는다.
  */
-function WorkSection({ work, doc }: { work: Project; doc?: Projects }) {
+function WorkSection({ work }: { work: Project }) {
   return (
     <section>
       {/* 섹션 본문의 첫 요소라 prose 의 h3 위 여백을 뗀다 */}
       <h3 className="mt-0">{work.name}</h3>
       <div className="not-prose space-y-3">
-        {doc?.platform && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">{doc.platform}</p>
-        )}
         <WorkMeta work={work} />
         <StackTags stack={work.stack} />
       </div>
-      {doc?.summary && <p>{doc.summary}</p>}
       {work.narrative && (
         <div className="not-prose mt-4">
           <NarrativeCard narrative={work.narrative} />

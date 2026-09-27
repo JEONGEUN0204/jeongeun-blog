@@ -101,7 +101,7 @@ export type Product = {
 }
 
 export type Project = {
-  /** data/projects/{id}.mdx 파일명과 반드시 같다. 두 소스를 잇는 유일한 키. */
+  /** content/projects/{id}.ts 파일명과 같다. /careers 의 <ProjectNarrative id="..."> 가 가리키는 키다. */
   id: string
   companyId: CompanyId
   /**
@@ -128,8 +128,8 @@ export type Project = {
   depth: ProjectDepth
   kind: ProjectKind
   /**
-   * 7단 서술. 현재는 본문이 data/projects/{id}.mdx 에 있고 이쪽으로 이관 예정이다.
-   * 이관이 끝나기 전까지 undefined 이며, verify가 미이관 목록으로 보고한다.
+   * 7단 서술. 아직 블록을 받지 못한 작업만 undefined 이고, verify 가 목록으로 보고한다.
+   * 서술이 없는 작업은 /careers 회사 MDX 에 손으로 쓴 <Section> 이 대신한다.
    */
   narrative?: Narrative
 }
