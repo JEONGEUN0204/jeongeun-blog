@@ -153,10 +153,10 @@ export default function ResumeContent() {
               key={metric.id}
               className="bg-sand-100 dark:bg-sand-400/10 break-inside-avoid-page rounded-lg px-4 py-5 text-center"
             >
-              <div className="text-accent-700 dark:text-accent-300 text-2xl leading-tight font-extrabold">
+              <div className="text-accent-700 dark:text-accent-300 text-2xl leading-tight font-extrabold text-balance break-keep">
                 {metric.value}
               </div>
-              <div className="mt-2 text-xs leading-5 text-gray-600 dark:text-gray-400">
+              <div className="mt-2 text-xs leading-5 break-keep text-gray-600 dark:text-gray-400">
                 {metric.label}
               </div>
             </div>
