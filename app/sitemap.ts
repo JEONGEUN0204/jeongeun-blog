@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
 
   // 'tags' 는 넣지 않는다 — /tags 인덱스 페이지는 삭제됐고 살아 있는 건 /tags/{태그} 뿐이다.
-  const routes = ['', 'resume', 'careers', 'portfolio', 'blog'].map((route) => ({
+  const routes = ['', 'careers', 'portfolio', 'blog'].map((route) => ({
     url: `${siteUrl}/${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }))

@@ -1,6 +1,6 @@
 {
-  "nextjs": 1,
-  "css": 1,
   "react": 2,
-  "typescript": 1
+  "css": 1,
+  "typescript": 1,
+  "nextjs": 1
 }

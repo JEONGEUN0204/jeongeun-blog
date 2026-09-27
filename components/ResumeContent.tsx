@@ -45,7 +45,7 @@ const Badge = ({ children, muted }: { children: React.ReactNode; muted?: boolean
 
 export default function ResumeContent() {
   const metrics = getMetrics(resumeMetricIds)
-  /* 사진 경로만 authors/default.mdx 에서 가져온다. 홈(layouts/AuthorLayout)과 같은 원천이다. */
+  /* 사진 경로만 authors/default.mdx 에서 가져온다. /blog 작성자 정보와 같은 원천이다. */
   const avatar = allAuthors.find((author) => author.slug === 'default')?.avatar
 
   /*
@@ -55,40 +55,78 @@ export default function ResumeContent() {
   return (
     <div>
       {/*
-        헤더 — 사진 옆에 이름·직함·연락처, 그 아래 한 줄 소개.
+        헤더 — 사진 옆에 이름·직함·연락처, 오른쪽 끝에 Education·Certificate, 그 아래 한 줄 소개.
         사진은 원본 비율(3:4)을 지키고, 인쇄에서는 한 단 줄여 헤더가 길어진 만큼을 되돌린다.
+        좁은 화면에서는 이 단이 프로필 아래로 내려간다. 인쇄 폭은 sm 이상이라 옆에 선다.
       */}
       <Section className="my-0! pt-4 pb-6">
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-5 print:gap-x-6">
-          {avatar && (
-            <Image
-              src={avatar}
-              alt={`${profile.name} 프로필 사진`}
-              width={240}
-              height={320}
-              className="h-40 w-30 shrink-0 rounded-xl object-cover print:h-32 print:w-24"
-            />
-          )}
-          <div className="min-w-0">
-            <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-100">
-              {profile.name}
-            </h1>
-            <p className="text-primary-700 dark:text-primary-400 mt-2 text-2xl font-semibold">
-              {profile.title}
-            </p>
-            <div className="mt-4 flex flex-col gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-              <span className="flex items-center gap-2">
-                <IoIosMail aria-hidden />
-                {profile.email}
-              </span>
-              <span className="flex items-center gap-2">
-                <MdOutlinePhoneIphone aria-hidden />
-                {profile.phone}
-              </span>
-              <span className="flex items-center gap-2">
-                <FaGithub aria-hidden />
-                {profile.github}
-              </span>
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-5 print:gap-x-6">
+            {avatar && (
+              <Image
+                src={avatar}
+                alt={`${profile.name} 프로필 사진`}
+                width={240}
+                height={320}
+                className="h-40 w-30 shrink-0 rounded-xl object-cover print:h-32 print:w-24"
+              />
+            )}
+            <div className="min-w-0">
+              <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-100">
+                {profile.name}
+              </h1>
+              <p className="text-primary-700 dark:text-primary-400 mt-2 text-2xl font-semibold">
+                {profile.title}
+              </p>
+              <div className="mt-4 flex flex-col gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+                <span className="flex items-center gap-2">
+                  <IoIosMail aria-hidden />
+                  {profile.email}
+                </span>
+                <span className="flex items-center gap-2">
+                  <MdOutlinePhoneIphone aria-hidden />
+                  {profile.phone}
+                </span>
+                <span className="flex items-center gap-2">
+                  <FaGithub aria-hidden />
+                  {profile.github}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="shrink-0 space-y-6 sm:border-l sm:border-gray-200 sm:pl-6 dark:sm:border-gray-700">
+            <div>
+              <h2 className={sectionTitle}>Education</h2>
+              <ul className="space-y-3">
+                {education.map((item) => (
+                  <li key={item.school}>
+                    <div className="font-semibold text-gray-900 dark:text-gray-100">
+                      {item.school}
+                      {item.detail && (
+                        <span className="ml-2 text-sm font-normal text-gray-600 dark:text-gray-400">
+                          {item.detail}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{item.period}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className={sectionTitle}>Certificate</h2>
+              <ul className="space-y-3">
+                {certificates.map((item) => (
+                  <li key={item.name}>
+                    <div className="font-semibold text-gray-900 dark:text-gray-100">
+                      {item.name}
+                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      {item.issuer} · ({item.date})
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
@@ -181,43 +219,6 @@ export default function ResumeContent() {
         <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
           진한 배지는 주력, 옅은 배지는 보조입니다.
         </p>
-      </Section>
-
-      {/* Education / Certificate */}
-      <Section className={sectionSpacing}>
-        <div className="grid gap-8 sm:grid-cols-2">
-          <div className="break-inside-avoid-page">
-            <h3 className={sectionTitle}>Education</h3>
-            <ul className="space-y-3">
-              {education.map((item) => (
-                <li key={item.school}>
-                  <div className="font-semibold text-gray-900 dark:text-gray-100">
-                    {item.school}
-                    {item.detail && (
-                      <span className="ml-2 text-sm font-normal text-gray-600 dark:text-gray-400">
-                        {item.detail}
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">{item.period}</div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="break-inside-avoid-page">
-            <h3 className={sectionTitle}>Certificate</h3>
-            <ul className="space-y-3">
-              {certificates.map((item) => (
-                <li key={item.name}>
-                  <div className="font-semibold text-gray-900 dark:text-gray-100">{item.name}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {item.issuer} · ({item.date})
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
       </Section>
 
       {/* Experience — 회사명·기간은 content/companies.ts 에서 온다 */}
