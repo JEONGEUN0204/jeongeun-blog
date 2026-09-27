@@ -9,9 +9,8 @@ import type { Metric } from './schema'
 export const metrics: Metric[] = [
   {
     id: 'ezl-inquiry-api',
-    value: 'API 75%↓',
-    // label 은 입력 블록에 없어 기존 값을 유지한다.
-    label: '조회 로직 캐싱 최적화',
+    value: 'API 호출 75%↓',
+    label: '미션 조회 중복 호출 제거',
     kind: 'tech',
     evidence:
       'React Query Devtools로 이즐워크 페이지 진입 1회당 일일·연속 미션 조회 API 호출 수 비교 (4회 → 1회)',
@@ -97,11 +96,11 @@ export const metrics: Metric[] = [
       '적용 커밋 7e9d315658 vs 직전 커밋 7e3082e36 비교. staging 백엔드, 동일 계정, 언론↔대시보드 4회 전환, PerformanceResourceTiming으로 엔드포인트 전수 집계 (notice/new 4→0, shop/report 4→0, 그 외 콘텐츠 API는 동일). dev 빌드로 측정. 두 커밋의 StrictMode 여부: TBD',
     businessImpact: 'TBD',
   },
-  // codit-dashboard 지표 2건. label 은 입력 블록에 없어 TBD 다.
+  // codit-dashboard 지표 2건. hooks 의 label 은 입력 블록에 없어 TBD 다.
   {
     id: 'codit-dashboard-lcp',
-    value: 'LCP 66%↓',
-    label: 'TBD',
+    value: 'LCP 5.3초 → 1.8초',
+    label: '대시보드 첫 화면 순차 로딩',
     kind: 'tech',
     evidence:
       'dev 빌드(SSR 없음)·dev 백엔드·비로그인·데스크탑 1440×900, headless Chrome 캐시 없는 새 컨텍스트. 개편 전 / 개편 후에서 썸네일 대기만 되살린 변형(after-gate: useDashboardNewsList.ts 한 파일만 029f61c26 직전 내용으로 교체) / 개편 후 세 빌드를 번갈아 8회씩 측정, LCP 요소는 모두 뉴스 썸네일(IMG 210×120). 중앙값 개편 전 5,252ms → after-gate 1,804ms. 썸네일 대기 제거(029f61c26, 이 작업 범위 밖) 효과는 제외한 값. 개편 전과 after-gate 모두 데스크탑에서 썸네일 대기가 적용된 상태(after-gate는 useDashboardNewsList 안). 원인: 첫 응답 목록이 35건 → 9건으로 줄면서, 응답 속 모든 항목의 이미지를 받은 뒤 그리던 대기도 35장 → 9장으로 줄어 데이터 도착 → LCP 구간이 2,276ms → 785ms로 단축. 건수·썸네일 수는 bench/thumbs.js로 NOW_KOREA 응답을 가로채 셈(측정 직전 1회 캡처: 전체 35건 중 thumbnail 35, slide 0 9건 중 9, URL 모두 서로 다름). 벤치 도중 slide 0 응답 크기가 119.4KB(run 1~4) → 129.7KB(run 5~8)로 바뀌었고, 바뀐 뒤의 썸네일 수는 기록하지 않음. 뉴스 데이터 도착 시각 차이는 약 0.1초. 옆 슬라이드는 prefetch로 API JSON만 따로 받고 썸네일 대기는 걸리지 않음. 첫 진입 시 index 1 하나를 게이트 해제로 첫 슬라이드가 렌더된 직후 요청함(after-gate 8회 모두 slide 0 응답 종료 후 +552~+818ms, LCP 기록보다 19~31ms 앞). 그래서 전체 수신량은 줄지 않음(전송량 460KB → 463KB). dev 백엔드 응답 시간이 시간대마다 달라 같은 배치 안에서만 비교(이전 배치의 개편 전 값은 4,220ms). 모바일·로그인 맞춤형은 측정하지 않음',
@@ -129,4 +128,4 @@ export function getMetrics(ids: string[]): Metric[] {
 }
 
 /** /resume 상단 성과 카드. 순서가 곧 노출 순서다. */
-export const resumeMetricIds = ['ezl-inquiry-api', 'zero-to-one', 'web-app-scope']
+export const resumeMetricIds = ['codit-dashboard-lcp', 'ezl-inquiry-api', 'zero-to-one']
