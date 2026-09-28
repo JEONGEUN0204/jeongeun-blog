@@ -367,7 +367,7 @@ function SmallFront({ product, tone }: FrontProps) {
 function Eyebrow({ product, tone, compact }: FrontProps & { compact?: boolean }) {
   return (
     <span
-      className={`block max-w-full truncate text-[10px] font-bold tracking-[0.12em] uppercase sm:text-[11px] ${tone.eyebrow}`}
+      className={`block max-w-full truncate text-[11px] font-semibold sm:text-xs ${tone.eyebrow}`}
     >
       <span className="tabular-nums">{product.no}</span>
       {product.platform && (

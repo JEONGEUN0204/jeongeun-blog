@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * 원본 PDF의 커버 구성(번호 배지 + 회사 · PROJECT + 제목)을 그대로 따른다.
+ * 번호 원 + 회사 이름 + 제목. 원본 PDF 커버의 "회사 · PROJECT" 대문자 머리는 회사 이름만 남겼다.
  *
  * 제목은 제품 이름이다. 작업 이름은 아래 섹션 제목이 맡는다 — 예전에는 한 레코드가 제품과 작업을
  * 겸해서 name 에 'ChatCODIT App · 구축·결제' 처럼 둘을 붙여 적고 렌더에서 앞부분을 잘라 냈다.
@@ -28,17 +28,15 @@ export default function ProductHeader({ product, badge, summary, work }: Props) 
   return (
     <header className="not-prose break-inside-avoid-page break-after-avoid-page">
       <div className="flex items-start gap-4">
-        <div className="bg-primary-700 flex size-12 shrink-0 items-center justify-center rounded-xl text-xl font-bold text-white">
+        {/* 번호 원 — 경력기술서 섹션 번호·서술 줄기의 단계 번호와 같은 모양이다. */}
+        <div className="border-primary-700 text-primary-700 dark:border-primary-400 dark:text-primary-300 mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold tabular-nums">
           {badge}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold tracking-[0.2em] text-gray-900 uppercase dark:text-gray-100">
-            <span className="text-primary-700 dark:text-primary-400">
-              {getCompany(product.companyId).name}{' '}
-            </span>
-            · Project
+          <p className="text-primary-700 dark:text-primary-400 text-sm font-semibold">
+            {getCompany(product.companyId).name}
           </p>
-          <h2 className="mt-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          <h2 className="mt-0.5 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
             {product.name}
           </h2>
         </div>

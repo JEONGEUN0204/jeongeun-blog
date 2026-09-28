@@ -142,7 +142,7 @@ export default function PortfolioBrowser({ title, companies }: Props) {
         >
           {/* 인쇄·JS 없는 환경 전용 회사 머리. 화면에서는 타일 위 회사 제목이 같은 일을 한다. */}
           <header className="hidden break-after-avoid-page print:block noscript:block">
-            <p className="text-primary-700 dark:text-primary-400 text-xs font-bold tracking-[0.2em] uppercase">
+            <p className="text-primary-700 dark:text-primary-400 text-sm font-semibold">
               Portfolio
             </p>
             <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">

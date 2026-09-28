@@ -63,7 +63,7 @@ export default function CareerList() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                  <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
                     {company.name}
                   </h1>
                   {/* 개월 수는 표기하지 않는다 — 매월 갱신해야 하고, 놓치는 순간 문서 간 불일치가 된다. */}

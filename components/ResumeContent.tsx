@@ -8,6 +8,7 @@ import { formatPeriod, getCompany } from '@/content/companies'
 import { getProduct, productLabel } from '@/content/products'
 import { experiences } from '@/content/experience'
 import { getMetrics, resumeMetricIds } from '@/content/metrics'
+import type { Metric } from '@/content/schema'
 import {
   about,
   aboutLead,
@@ -20,14 +21,17 @@ import {
   skills,
 } from '@/content/profile'
 
-const sectionTitle =
-  'mb-4 text-xs font-bold tracking-[0.2em] text-primary-700 uppercase dark:text-primary-400'
+/*
+  섹션 제목은 본문과 같은 대소문자의 굵은 제목이다. 예전의 자간 넓힌 대문자 소제목(ABOUT·SKILLS)은
+  모든 섹션 위에 같은 장식처럼 붙어 있어 제목이 무엇인지보다 장식이 먼저 읽혔다.
+*/
+const sectionTitle = 'mb-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100'
 
 /**
  * 섹션 사이 여백. Section 의 기본 my-8 을 끄고 패딩만 남긴다 —
  * 마진과 위아래 패딩이 겹쳐 섹션 사이가 96px 까지 벌어져 있었다.
  */
-const sectionSpacing = 'my-0! py-6'
+const sectionSpacing = 'my-0! py-8 print:py-5'
 
 /** 문서형 본문의 measure. 한 줄이 한글 90자를 넘으면 눈이 다음 줄의 첫 글자를 놓친다. */
 const measure = 'max-w-[68ch]'
@@ -49,133 +53,78 @@ export default function ResumeContent() {
   /* 사진 경로만 authors/default.mdx 에서 가져온다. /blog 작성자 정보와 같은 원천이다. */
   const avatar = allAuthors.find((author) => author.slug === 'default')?.avatar
 
-  /*
-    섹션 구분은 divide-y 대신 여백과 primary 색 소제목이 맡는다. 가로선이 매 섹션마다 들어가면
-    정작 강조해야 할 지표 카드·하이라이트 제목과 시각적 무게가 비슷해진다.
-  */
   return (
     <div>
       {/*
-        헤더 — 사진 옆에 이름·직함·연락처, 오른쪽 끝에 Education·Certificate, 그 아래 한 줄 소개.
-        사진은 원본 비율(3:4)을 지키고, 인쇄에서는 한 단 줄여 헤더가 길어진 만큼을 되돌린다.
-        좁은 화면에서는 이 단이 프로필 아래로 내려간다. 인쇄 폭은 sm 이상이라 옆에 선다.
+        머리 — 사진·이름·직함을 한 줄로 작게 두고 연락처를 오른쪽 끝에 붙인다.
+        첫 화면의 주인공은 그 아래 한 줄 정체성(aboutLead)이다. 이름은 h1 로 남겨 문서 제목 역할을 한다.
+        좁은 화면에서는 연락처가 이름 아래로 내려간다.
       */}
-      <Section className="my-0! pt-4 pb-6">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-5 print:gap-x-6">
+      <Section className="my-0! pt-2 pb-0">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
             {avatar && (
               <Image
                 src={avatar}
                 alt={`${profile.name} 프로필 사진`}
                 width={240}
                 height={320}
-                className="h-40 w-30 shrink-0 rounded-xl object-cover print:h-32 print:w-24"
+                className="size-16 shrink-0 rounded-full object-cover object-top"
               />
             )}
             <div className="min-w-0">
-              <h1 className="text-4xl leading-tight font-extrabold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-100">
+              <h1 className="text-2xl leading-tight font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
                 {profile.name}
               </h1>
-              <p className="text-primary-700 dark:text-primary-400 mt-2 text-2xl font-semibold">
-                {profile.title}
-              </p>
-              <div className="mt-4 flex flex-col gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-                <span className="flex items-center gap-2">
-                  <IoIosMail aria-hidden />
-                  {profile.email}
-                </span>
-                <span className="flex items-center gap-2">
-                  <MdOutlinePhoneIphone aria-hidden />
-                  {profile.phone}
-                </span>
-                <span className="flex items-center gap-2">
-                  <FaGithub aria-hidden />
-                  {profile.github}
-                </span>
-              </div>
+              <p className="mt-0.5 text-gray-600 dark:text-gray-400">{profile.title}</p>
             </div>
           </div>
-          <div className="shrink-0 space-y-6 sm:border-l sm:border-gray-200 sm:pl-6 dark:sm:border-gray-700">
-            <div>
-              <h2 className={sectionTitle}>Education</h2>
-              <ul className="space-y-3">
-                {education.map((item) => (
-                  <li key={item.school}>
-                    <div className="font-semibold text-gray-900 dark:text-gray-100">
-                      {item.school}
-                      {item.detail && (
-                        <span className="ml-2 text-sm font-normal text-gray-600 dark:text-gray-400">
-                          {item.detail}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{item.period}</div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h2 className={sectionTitle}>Certificate</h2>
-              <ul className="space-y-3">
-                {certificates.map((item) => (
-                  <li key={item.name}>
-                    <div className="font-semibold text-gray-900 dark:text-gray-100">
-                      {item.name}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {item.issuer} · ({item.date})
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="flex flex-col gap-1 text-sm text-gray-600 sm:items-end dark:text-gray-400">
+            <span className="flex items-center gap-2">
+              <IoIosMail aria-hidden />
+              {profile.email}
+            </span>
+            <span className="flex items-center gap-2">
+              <MdOutlinePhoneIphone aria-hidden />
+              {profile.phone}
+            </span>
+            <span className="flex items-center gap-2">
+              <FaGithub aria-hidden />
+              {profile.github}
+            </span>
           </div>
         </div>
+        <p className="mt-10 mb-10 max-w-[22em] text-3xl leading-snug font-bold tracking-tight text-balance break-keep text-gray-900 sm:text-4xl sm:leading-[1.3] dark:text-gray-100 print:mt-6 print:mb-6 print:text-2xl">
+          {aboutLead}
+        </p>
       </Section>
 
       {/*
         성과 지표 — 값·라벨은 content/metrics.ts 가 원천이고, evidence는 렌더하지 않는다.
-        Summary 앞에 둔다. "숫자 중심 압축" 문서라면 스캔의 첫 착지점(인쇄물 첫 페이지 상단)이
-        문단이 아니라 수치여야 한다.
+        "숫자 중심 압축" 문서라 스캔의 첫 착지점이 문단이 아니라 수치여야 한다.
+        전후를 비교하는 값은 실제 비율의 막대로 그린다(compareOf). 막대는 값 문자열에서 읽을 수 있는
+        숫자만 쓴다 — 비교가 아닌 값('0 → 1')은 막대 없이 글자로 둔다.
       */}
-      {/*
-        열 수는 카드 수(resumeMetricIds)를 따른다. 4개는 2×2 에서 넓은 화면 한 줄로,
-        3개는 좁은 화면에서 쌓고 sm 부터 한 줄로 둔다 — 3개를 2열에 두면 마지막 카드가 홀로 남아
-        빠진 칸처럼 보인다. A4 인쇄 폭(약 690px)은 sm 이상 md 미만이다.
-      */}
-      <Section className={sectionSpacing}>
-        <div
-          className={`grid gap-4 ${
-            metrics.length === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-2 md:grid-cols-4'
-          }`}
-        >
+      <Section className="my-0! pb-4">
+        <div className="rounded-2xl bg-white px-5 py-2 sm:px-8 dark:bg-gray-900 print:border print:border-gray-200">
           {metrics.map((metric) => (
-            <div
-              key={metric.id}
-              className="bg-sand-100 dark:bg-sand-400/10 break-inside-avoid-page rounded-lg px-4 py-5 text-center"
-            >
-              <div className="text-accent-700 dark:text-accent-300 text-xl leading-tight font-extrabold text-balance break-keep">
-                {metric.value}
-              </div>
-              <div className="mt-2 text-xs leading-5 break-keep text-gray-600 dark:text-gray-400">
-                {metric.label}
-              </div>
-            </div>
+            <MetricRow key={metric.id} metric={metric} />
           ))}
         </div>
       </Section>
 
       {/*
-        About — 한 줄 정체성(aboutLead)을 크게 두고, 일하는 방식 네 가지를 그 아래 나열한다.
+        About — 일하는 방식 네 가지. 한 줄 정체성(aboutLead)은 위 머리가 싣는다.
         제목만 훑어도 무엇을 하는 사람인지 읽히고, body 는 그 제목의 근거다.
-        수치는 여기 없다 — 위 Metrics 카드와 아래 Experience 가 맡는다.
+        수치는 여기 없다 — 위 성과와 아래 Experience 가 맡는다.
       */}
       <Section title="About" titleClassName={sectionTitle} className={sectionSpacing}>
-        <p className={`leading-7 text-gray-900 dark:text-gray-100 ${measure}`}>{aboutLead}</p>
-        <dl className={`mt-5 space-y-4 ${measure}`}>
+        <dl className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
           {about.map((point) => (
             <div key={point.title} className="break-inside-avoid-page">
-              <dt className="font-semibold text-gray-900 dark:text-gray-100">{point.title}</dt>
+              <dt className="text-lg font-semibold break-keep text-gray-900 dark:text-gray-100">
+                {point.title}
+              </dt>
               <dd className="mt-1 leading-7 text-gray-600 dark:text-gray-400">{point.body}</dd>
             </div>
           ))}
@@ -211,20 +160,28 @@ export default function ResumeContent() {
         </p>
       </Section>
 
-      {/* Experience — 회사명·기간은 content/companies.ts 에서 온다 */}
+      {/*
+        Experience — 회사명·기간은 content/companies.ts 에서 온다.
+        회사들은 세로 줄기 하나에 점으로 매달린다. 두 회사가 한 경력으로 이어져 읽히고,
+        하이라이트마다 달던 왼쪽 선은 이 줄기가 대신한다.
+      */}
       <Section title="Experience" titleClassName={sectionTitle} className={sectionSpacing}>
-        <div className="space-y-10">
+        <div className="relative space-y-12 pl-8 before:absolute before:top-2 before:bottom-0 before:left-[7px] before:w-0.5 before:bg-gray-200 dark:before:bg-gray-800 print:space-y-8">
           {experiences.map((experience) => {
             const company = getCompany(experience.companyId)
 
             return (
-              <div key={company.id}>
+              <div key={company.id} className="relative">
+                <span
+                  aria-hidden
+                  className="bg-accent-500 ring-sand-50 absolute top-2 -left-8 size-4 rounded-full ring-4 dark:ring-gray-950 print:ring-white"
+                />
                 <div className="break-inside-avoid-page break-after-avoid-page">
                   <div className="flex flex-wrap items-baseline gap-x-3">
                     <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                       {company.name}
                     </h4>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm text-gray-600 tabular-nums dark:text-gray-400">
                       {experience.role} · {formatPeriod(company.period)}
                     </span>
                   </div>
@@ -235,10 +192,10 @@ export default function ResumeContent() {
                   </p>
                 </div>
 
-                <div className="mt-5 space-y-5">
+                <div className="mt-6 space-y-6">
                   {experience.groups.map((group) => (
                     <div key={group.productId} className="break-inside-avoid-page">
-                      <h5 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                      <h5 className="text-primary-700 dark:text-primary-400 text-sm font-bold">
                         {productLabel(getProduct(group.productId))}
                       </h5>
                       {/*
@@ -246,13 +203,10 @@ export default function ResumeContent() {
                         인쇄에서는 print:inline 으로 'title — detail' 한 줄로 되돌린다.
                         A4 분량이 늘어나는 것을 막기 위한 분기다.
                       */}
-                      <ul className="mt-2 space-y-2">
+                      <ul className={`mt-2 space-y-3 ${measure}`}>
                         {/* 제목이 TBD 인 하이라이트가 한 그룹에 여럿일 수 있어 제목을 key 로 쓰지 않는다 */}
                         {group.highlights.map((highlight, index) => (
-                          <li
-                            key={index}
-                            className="break-inside-avoid-page border-l-2 border-gray-200 pl-4 text-sm leading-6 dark:border-gray-700"
-                          >
+                          <li key={index} className="break-inside-avoid-page text-sm leading-6">
                             <span className="block font-semibold text-gray-900 dark:text-gray-100 print:inline">
                               {highlight.title}
                             </span>
@@ -277,26 +231,160 @@ export default function ResumeContent() {
         <p className={`leading-7 text-gray-700 dark:text-gray-300 ${measure}`}>
           {collaborationIntro}
         </p>
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
           {collaborations.map((item) => (
             <div
               key={item.audience}
-              className="break-inside-avoid-page rounded-lg border border-gray-200 p-4 dark:border-gray-700"
+              className="break-inside-avoid-page rounded-2xl bg-white p-5 dark:bg-gray-900 print:border print:border-gray-200"
             >
-              <div className="text-primary-700 dark:text-primary-400 text-xs font-bold tracking-widest">
+              <div className="text-primary-700 dark:text-primary-400 text-sm font-bold">
                 {item.audience}
               </div>
               <p className="mt-2 text-sm leading-6 text-gray-700 dark:text-gray-300">{item.body}</p>
-              <p className="mt-2 text-xs leading-5 text-gray-500 dark:text-gray-400">
+              <p className="mt-3 text-xs leading-5 text-gray-500 dark:text-gray-400">
                 예: {item.example}
               </p>
             </div>
           ))}
         </div>
-        <p className={`mt-4 leading-7 text-gray-700 dark:text-gray-300 ${measure}`}>
+        <p className={`mt-5 leading-7 text-gray-700 dark:text-gray-300 ${measure}`}>
           {collaborationOutro}
         </p>
       </Section>
+
+      {/*
+        학력·자격 — 예전에는 머리 오른쪽 칸에 있었다. 머리를 한 줄 정체성에 내주면서 문서 끝으로 옮겼다.
+        두 목록을 나란히 둔다. 좁은 화면에서는 쌓인다.
+      */}
+      <Section className={`${sectionSpacing} grid gap-8 sm:grid-cols-2`}>
+        <div>
+          <h2 className={sectionTitle}>Education</h2>
+          <ul className="space-y-3">
+            {education.map((item) => (
+              <li key={item.school}>
+                <div className="font-semibold text-gray-900 dark:text-gray-100">
+                  {item.school}
+                  {item.detail && (
+                    <span className="ml-2 text-sm font-normal text-gray-600 dark:text-gray-400">
+                      {item.detail}
+                    </span>
+                  )}
+                </div>
+                <div className="text-sm text-gray-500 tabular-nums dark:text-gray-400">
+                  {item.period}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 className={sectionTitle}>Certificate</h2>
+          <ul className="space-y-3">
+            {certificates.map((item) => (
+              <li key={item.name}>
+                <div className="font-semibold text-gray-900 dark:text-gray-100">{item.name}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {item.issuer} · ({item.date})
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
+    </div>
+  )
+}
+
+type Compare = {
+  before: string
+  after: string
+  /** 이후 / 이전. 0 이상 1 미만 — 줄어든 비교만 막대로 그린다. */
+  ratio: number
+}
+
+const toNumber = (text: string) => Number(text.replace(/,/g, ''))
+
+/**
+ * 지표 값에서 전후 비교를 읽는다. 문구를 새로 만들지 않고 값 문자열 안의 숫자만 쓴다.
+ *
+ * - 'LCP 5.3초 → 1.8초' → 5.3초 / 1.8초
+ * - 'API 호출 75%↓'     → 이전 / 이후, 이후 막대는 이전의 25%
+ * - '0 → 1' 처럼 늘어난 값, 숫자가 없는 값은 비교로 보지 않는다(null).
+ */
+function compareOf(value: string): Compare | null {
+  const arrow = value.match(/([\d.,]+)\s*([^\d\s→]*)\s*→\s*([\d.,]+)\s*([^\d\s]*)\s*$/)
+  if (arrow) {
+    const before = toNumber(arrow[1])
+    const after = toNumber(arrow[3])
+    if (before > 0 && after >= 0 && after < before) {
+      return {
+        before: `${arrow[1]}${arrow[2]}`,
+        after: `${arrow[3]}${arrow[4]}`,
+        ratio: after / before,
+      }
+    }
+    return null
+  }
+  const drop = value.match(/([\d.]+)%\s*↓/)
+  if (drop) {
+    const percent = toNumber(drop[1])
+    if (percent > 0 && percent <= 100) {
+      return { before: '이전', after: '이후', ratio: 1 - percent / 100 }
+    }
+  }
+  return null
+}
+
+/**
+ * 성과 한 줄. 왼쪽에 값·라벨, 오른쪽에 전후 막대.
+ *
+ * 이전 막대가 막대 칸의 80% 를 차지하고, 이후 막대는 그 길이에 비율을 곱한다 — 남은 20% 는
+ * 막대 끝에 붙는 값 글자 자리다. 비교가 아닌 값은 막대 자리에 값을 크게 적고 왼쪽엔 라벨만 둔다.
+ */
+function MetricRow({ metric }: { metric: Metric }) {
+  const compare = compareOf(metric.value)
+  const full = 80
+
+  return (
+    <div className="grid break-inside-avoid-page gap-3 border-t border-gray-200 py-5 first:border-t-0 sm:grid-cols-[14rem_minmax(0,1fr)] sm:items-center sm:gap-8 dark:border-gray-800">
+      <div>
+        {compare && (
+          <p className="font-bold break-keep text-gray-900 dark:text-gray-100">{metric.value}</p>
+        )}
+        <p
+          className={
+            compare
+              ? 'mt-0.5 text-sm break-keep text-gray-500 dark:text-gray-400'
+              : 'font-bold break-keep text-gray-900 dark:text-gray-100'
+          }
+        >
+          {metric.label}
+        </p>
+      </div>
+      {compare ? (
+        <div className="space-y-1.5 text-sm tabular-nums" aria-hidden>
+          <div className="flex items-center gap-3">
+            <span
+              className="h-3.5 rounded-sm bg-gray-300 dark:bg-gray-700"
+              style={{ width: `${full}%` }}
+            />
+            <span className="text-gray-500 dark:text-gray-400">{compare.before}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span
+              className="bg-accent-500 h-3.5 min-w-1 rounded-sm"
+              style={{ width: `${full * compare.ratio}%` }}
+            />
+            <span className="text-accent-700 dark:text-accent-300 text-base font-bold">
+              {compare.after}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <p className="text-accent-700 dark:text-accent-300 text-3xl font-extrabold tracking-tight">
+          {metric.value}
+        </p>
+      )}
     </div>
   )
 }
@@ -305,7 +393,10 @@ export default function ResumeContent() {
 function renderEmphasis(text: string) {
   return text.split(/\*\*(.+?)\*\*/).map((part, index) =>
     index % 2 === 1 ? (
-      <strong key={index} className="font-semibold text-gray-900 dark:text-gray-100">
+      <strong
+        key={index}
+        className="text-accent-700 dark:text-accent-300 font-bold tabular-nums print:text-gray-900"
+      >
         {part}
       </strong>
     ) : (

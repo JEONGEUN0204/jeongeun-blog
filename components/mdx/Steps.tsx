@@ -30,14 +30,14 @@ export default function Steps(props: StepsProps) {
           <div
             key={key}
             className={`flex flex-col gap-1 rounded-md px-3 py-1.5 sm:flex-row sm:gap-3 ${
-              emphasis ? 'bg-primary-50 dark:bg-primary-400/10' : ''
+              emphasis ? 'bg-accent-50 dark:bg-accent-400/10' : ''
             }`}
           >
             <span className="sm:w-16 sm:shrink-0">
               <Label kind={kind}>{label}</Label>
             </span>
             <span
-              className={`min-w-0 text-sm leading-7 wrap-break-word ${
+              className={`max-w-[72ch] min-w-0 text-sm leading-7 wrap-break-word ${
                 emphasis
                   ? 'font-medium text-gray-900 dark:text-gray-100'
                   : 'text-gray-700 dark:text-gray-300'

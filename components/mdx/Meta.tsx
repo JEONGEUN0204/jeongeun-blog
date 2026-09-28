@@ -36,9 +36,7 @@ export default function Meta({ id, tech, role }: { id?: string; tech?: string; r
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-3 text-xs leading-6">
-      <dt className="text-primary-700 dark:text-primary-400 w-8 shrink-0 font-bold tracking-wider">
-        {label}
-      </dt>
+      <dt className="text-primary-700 dark:text-primary-400 w-8 shrink-0 font-bold">{label}</dt>
       <dd className="m-0 max-w-[68ch] text-gray-600 dark:text-gray-400">{value}</dd>
     </div>
   )

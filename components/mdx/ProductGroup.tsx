@@ -27,7 +27,7 @@ export default function ProductGroup({ id }: { id: string }) {
   */
   return (
     <div className="not-prose mt-14 flex break-inside-avoid-page break-after-avoid-page items-center gap-3 first:mt-0">
-      <h2 className="text-primary-700 dark:text-primary-400 min-w-0 text-sm leading-5 font-bold tracking-[0.08em]">
+      <h2 className="text-primary-700 dark:text-primary-400 min-w-0 text-sm leading-5 font-bold">
         {label}
       </h2>
       <span aria-hidden className="h-px min-w-8 grow bg-gray-200 dark:bg-gray-700" />

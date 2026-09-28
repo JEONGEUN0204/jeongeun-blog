@@ -35,14 +35,14 @@ function Rows({ rows }: { rows: Row[] }) {
         <div
           key={row.label}
           className={`flex break-inside-avoid-page flex-col gap-1 rounded-md px-3 py-1.5 sm:flex-row sm:gap-3 ${
-            row.emphasis ? 'bg-primary-50 dark:bg-primary-400/10' : ''
+            row.emphasis ? 'bg-accent-50 dark:bg-accent-400/10' : ''
           }`}
         >
           <span className="sm:w-16 sm:shrink-0">
             <Label kind={row.kind}>{row.label}</Label>
           </span>
           <div
-            className={`min-w-0 text-sm leading-7 wrap-break-word ${
+            className={`max-w-[72ch] min-w-0 text-sm leading-7 wrap-break-word ${
               row.emphasis
                 ? 'font-medium text-gray-900 dark:text-gray-100'
                 : 'text-gray-700 dark:text-gray-300'
@@ -87,38 +87,6 @@ export function NarrativeCard({ narrative }: { narrative: Narrative }) {
   )
 }
 
-/** 풀 전개의 한 칸. 라벨 칩을 위, 본문을 아래에 둔다 — 포트폴리오 MDX 의 <Block> 과 같은 모양이다. */
-function Stage({
-  label,
-  kind,
-  emphasis,
-  children,
-}: {
-  label: string
-  kind: LabelKind
-  emphasis?: boolean
-  children: ReactNode
-}) {
-  return (
-    <div
-      className={`break-inside-avoid-page ${
-        emphasis ? 'bg-primary-50 dark:bg-primary-400/10 rounded-lg p-4' : ''
-      }`}
-    >
-      <Label kind={kind}>{label}</Label>
-      <div
-        className={`mt-2 max-w-[68ch] leading-7 ${
-          emphasis
-            ? 'font-medium text-gray-900 dark:text-gray-100'
-            : 'text-gray-700 dark:text-gray-300'
-        }`}
-      >
-        {children}
-      </div>
-    </div>
-  )
-}
-
 const STAGE_LABEL = {
   problem: '문제',
   insight: '관점',
@@ -141,6 +109,53 @@ export const NARRATIVE_STAGES = (Object.keys(STAGE_LABEL) as NarrativeStageKey[]
 export const narrativeStageId = (idPrefix: string, key: NarrativeStageKey) => `${idPrefix}-${key}`
 
 /**
+ * 풀 전개의 한 칸. 줄기 위 번호 원 + 칸 이름 + 본문.
+ *
+ * 번호는 칸의 순서다(문제 1 … 배움 7) — 7단은 실제로 차례대로 읽히는 흐름이라 번호가 정보다.
+ * 결과 칸만 원을 채우고 본문을 크게 올린다. 칸이 모두 같은 무게면 어디가 결과인지 안 읽힌다.
+ */
+function Stage({
+  step,
+  label,
+  emphasis,
+  anchor,
+  children,
+}: {
+  step: number
+  label: string
+  emphasis?: boolean
+  anchor: { id: string; tabIndex: number }
+  children: ReactNode
+}) {
+  return (
+    <div {...anchor} className="relative outline-none">
+      <span
+        aria-hidden
+        className={`absolute top-0 -left-12 flex size-8 items-center justify-center rounded-full border-2 text-[13px] font-bold tabular-nums ${
+          emphasis
+            ? 'border-accent-500 bg-accent-500 text-white'
+            : 'text-primary-700 dark:text-primary-300 border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-950 print:bg-white'
+        }`}
+      >
+        {step}
+      </span>
+      <p className="text-primary-700 dark:text-primary-300 text-[15px] leading-8 font-bold">
+        {label}
+      </p>
+      <div
+        className={`mt-1 max-w-[68ch] ${
+          emphasis
+            ? 'text-xl leading-relaxed font-bold tracking-tight break-keep text-gray-900 dark:text-gray-100'
+            : 'leading-7 text-gray-700 dark:text-gray-300'
+        }`}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
+/**
  * /portfolio 의 depth:'flagship' — 7단 풀 전개 + decision.rejected.
  *
  * 칸은 한 흐름으로 이어진다. 칸마다 id 를 달아 목차가 그 자리로 이동하고, 이동 뒤 포커스를 받도록
@@ -148,36 +163,34 @@ export const narrativeStageId = (idPrefix: string, key: NarrativeStageKey) => `$
  * "왜 이걸 안 했나"가 선택 바로 아래에서 읽혀야 한다.
  *
  * 카드·요약과 달리 라벨 컬럼을 두지 않는다. 문단이 길어서 라벨 컬럼에 폭을 떼 주면
- * 한 줄이 짧아지고 문단이 세로로 늘어진다. 각 칸은 라벨 칩을 스스로 달아 인쇄에서도 칩이 제목 역할을 한다.
+ * 한 줄이 짧아지고 문단이 세로로 늘어진다. 칸 이름은 본문 위에 두고, 순서는 줄기의 번호 원이 맡는다.
  */
 export function NarrativeFull({ narrative, idPrefix }: { narrative: Narrative; idPrefix: string }) {
   const { decision, beforeAfter } = narrative
   const anchor = (key: NarrativeStageKey) => ({ id: narrativeStageId(idPrefix, key), tabIndex: -1 })
+  const step = (key: NarrativeStageKey) =>
+    NARRATIVE_STAGES.findIndex((stage) => stage.key === key) + 1
 
   /*
+    칸들은 왼쪽의 세로 줄기 하나에 번호 원으로 매달린다. 줄기는 컨테이너의 before 로 긋는다.
     prose 컨테이너 안에 놓일 수 있어 not-prose 로 감싼다.
     인쇄에서는 칸 간격을 줄인다 — 화면 간격 그대로면 마지막 칸(배움) 두 줄이 다음 장으로 넘어가 한 장을 비운다.
   */
   return (
-    <div className="not-prose space-y-10 print:space-y-6">
-      <div {...anchor('problem')} className="outline-none">
-        <Stage label={STAGE_LABEL.problem} kind="problem">
-          <p>{narrative.problem}</p>
-        </Stage>
-      </div>
-      <div {...anchor('insight')} className="outline-none">
-        <Stage label={STAGE_LABEL.insight} kind="neutral">
-          <p>{narrative.insight}</p>
-        </Stage>
-      </div>
-      <div {...anchor('decision')} className="space-y-7 outline-none">
-        <Stage label={STAGE_LABEL.decision} kind="approach">
-          <p className="font-semibold text-gray-900 dark:text-gray-100">{decision.chosen}</p>
-        </Stage>
+    <div className="not-prose relative space-y-10 pl-12 before:absolute before:top-4 before:bottom-4 before:left-[15px] before:w-0.5 before:bg-gray-200 dark:before:bg-gray-800 print:space-y-6">
+      <Stage step={step('problem')} label={STAGE_LABEL.problem} anchor={anchor('problem')}>
+        <p>{narrative.problem}</p>
+      </Stage>
+      <Stage step={step('insight')} label={STAGE_LABEL.insight} anchor={anchor('insight')}>
+        <p>{narrative.insight}</p>
+      </Stage>
+      <Stage step={step('decision')} label={STAGE_LABEL.decision} anchor={anchor('decision')}>
+        <p className="font-semibold text-gray-900 dark:text-gray-100">{decision.chosen}</p>
         {/* 대안은 버린 안을 굵게 세우고 이유를 그 아래에 둔다 — "왜 이걸 안 했나"가 이 문서의 요점이다. */}
         {decision.rejected.length > 0 && (
-          <Stage label="대안" kind="neutral">
-            <ul className="space-y-4">
+          <div className="mt-6">
+            <Label kind="neutral">대안</Label>
+            <ul className="mt-2 space-y-4">
               {decision.rejected.map(({ option, reason }) => (
                 <li
                   key={option}
@@ -188,41 +201,43 @@ export function NarrativeFull({ narrative, idPrefix }: { narrative: Narrative; i
                 </li>
               ))}
             </ul>
-          </Stage>
+          </div>
         )}
-        <Stage label="제약" kind="neutral">
-          <p>{decision.constraint}</p>
-        </Stage>
-      </div>
-      <div {...anchor('action')} className="outline-none">
-        <Stage label={STAGE_LABEL.action} kind="approach">
-          <List items={narrative.action} />
-        </Stage>
-      </div>
-      <div {...anchor('before-after')} className="grid gap-4 outline-none sm:grid-cols-2">
-        <div className="break-inside-avoid-page rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <Label kind="neutral">이전</Label>
-          <p className="mt-2 text-sm leading-7 text-gray-700 dark:text-gray-300">
-            {beforeAfter.before}
-          </p>
+        <div className="mt-6">
+          <Label kind="neutral">제약</Label>
+          <p className="mt-1">{decision.constraint}</p>
         </div>
-        <div className="break-inside-avoid-page rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <Label kind="neutral">이후</Label>
-          <p className="mt-2 text-sm leading-7 text-gray-900 dark:text-gray-100">
-            {beforeAfter.after}
-          </p>
+      </Stage>
+      <Stage step={step('action')} label={STAGE_LABEL.action} anchor={anchor('action')}>
+        <List items={narrative.action} />
+      </Stage>
+      <Stage
+        step={step('before-after')}
+        label={STAGE_LABEL['before-after']}
+        anchor={anchor('before-after')}
+      >
+        {/* 이전은 회색 면, 이후는 스카이 면 — 두 칸이 한 판에 붙어 바뀐 방향이 색으로 읽힌다. */}
+        <div className="mt-1 grid overflow-hidden rounded-xl sm:grid-cols-2">
+          <div className="break-inside-avoid-page bg-gray-100 p-4 dark:bg-gray-800/60">
+            <p className="text-sm font-bold text-gray-600 dark:text-gray-400">이전</p>
+            <p className="mt-1 text-sm leading-7 text-gray-600 dark:text-gray-400">
+              {beforeAfter.before}
+            </p>
+          </div>
+          <div className="bg-accent-50 dark:bg-accent-400/10 break-inside-avoid-page p-4">
+            <p className="text-accent-800 dark:text-accent-300 text-sm font-bold">이후</p>
+            <p className="mt-1 text-sm leading-7 text-gray-900 dark:text-gray-100">
+              {beforeAfter.after}
+            </p>
+          </div>
         </div>
-      </div>
-      <div {...anchor('result')} className="outline-none">
-        <Stage label={STAGE_LABEL.result} kind="result" emphasis>
-          <p>{narrative.result}</p>
-        </Stage>
-      </div>
-      <div {...anchor('learning')} className="outline-none">
-        <Stage label={STAGE_LABEL.learning} kind="neutral">
-          <p>{narrative.learning}</p>
-        </Stage>
-      </div>
+      </Stage>
+      <Stage step={step('result')} label={STAGE_LABEL.result} anchor={anchor('result')} emphasis>
+        <p>{narrative.result}</p>
+      </Stage>
+      <Stage step={step('learning')} label={STAGE_LABEL.learning} anchor={anchor('learning')}>
+        <p>{narrative.learning}</p>
+      </Stage>
     </div>
   )
 }
