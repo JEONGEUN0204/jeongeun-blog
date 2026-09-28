@@ -24,7 +24,7 @@ export const profile: ProfileBasic = {
  * 같은 숫자를 두 번 읽히면 ABOUT 이 요약이 아니라 중복이 된다.
  */
 export const aboutLead =
-  '웹과 앱의 기능 개발부터 운영까지 맡고, 문제가 생기면 근본 원인을 찾아 해결하는 프론트엔드 엔지니어입니다.'
+  '더 나은 방법을 고민하고, 팀이 함께 효율적으로 일할 수 있게 만드는 프론트엔드 엔지니어입니다.'
 
 export const about: AboutPoint[] = [
   {
@@ -57,8 +57,8 @@ export const skills: SkillGroup[] = [
   },
   {
     category: 'Frontend',
-    primary: ['React', 'Next.js', 'React Native', 'Expo'],
-    secondary: ['Tailwind'],
+    primary: ['React', 'Next.js', 'React Native', 'Expo', 'Tailwind'],
+    secondary: [],
   },
   {
     category: 'State · Data',
@@ -67,8 +67,8 @@ export const skills: SkillGroup[] = [
   },
   {
     category: 'Dev · Ops',
-    primary: ['Storybook'],
-    secondary: ['Sentry', 'expo-iap', 'EAS', 'Genkit', 'Claude Code'],
+    primary: ['EAS', 'Claude Code'],
+    secondary: ['Storybook', 'Sentry', 'expo-iap', 'Genkit'],
   },
   {
     category: 'Collaboration',
