@@ -205,7 +205,6 @@ export type AboutPoint = {
 export type Collaboration = {
   audience: string
   body: string
-  example: string
 }
 
 export type ProfileBasic = {

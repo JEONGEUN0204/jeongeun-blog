@@ -179,7 +179,7 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 ```
 
 대상: `profile.aboutLead` + `profile.about`(홈 ABOUT) · `profile.tagline` ·
-`collaborationIntro` / `collaborationOutro` · `content/experience.ts` 의 회사 요약(`summary`).
+`collaborationIntro` / `collaborations`(`{audience, body}`) · `content/experience.ts` 의 회사 요약(`summary`).
 이력서 하이라이트는 문구 블록이 아니라 작업 블록의 `name` · `HIGHLIGHT` 로 온다
 
 ABOUT 은 첫 줄이 `aboutLead`, 그 뒤로 제목 한 줄 + 본문 한 줄이 한 항목(`{title, body}`)이다.

@@ -15,7 +15,6 @@ import {
   aboutLead,
   certificates,
   collaborationIntro,
-  collaborationOutro,
   collaborations,
   education,
   profile,
@@ -247,25 +246,23 @@ export default function ResumeContent() {
         >
           {collaborationIntro}
         </p>
-        <div className="mt-5 grid gap-4 md:grid-cols-3 print:mt-4 print:gap-3">
+        {/*
+          인쇄는 md 폭에 못 미쳐 항상 1단이다. 1단 카드는 상자 여백만큼 길어져 아래 학력·자격을
+          다음 쪽으로 밀어냈다 — 인쇄에서는 상자를 걷고 항목 사이 가는 선으로만 나눈다.
+        */}
+        <div className="mt-5 grid gap-4 md:grid-cols-3 print:mt-4 print:gap-0">
           {collaborations.map((item) => (
             <div
               key={item.audience}
-              className="break-inside-avoid-page rounded-2xl bg-white p-5 dark:bg-gray-900 print:border print:border-gray-200 print:p-4"
+              className="break-inside-avoid-page rounded-2xl bg-white p-5 dark:bg-gray-900 print:rounded-none print:border-t print:border-gray-200 print:px-0 print:py-2.5 print:first:border-t-0 print:first:pt-0"
             >
               <div className="text-primary-700 dark:text-primary-400 text-sm font-bold">
                 {item.audience}
               </div>
               <p className="mt-2 text-sm leading-6 text-gray-700 dark:text-gray-300">{item.body}</p>
-              <p className="mt-3 text-xs leading-5 text-gray-500 dark:text-gray-400 print:mt-2">
-                예: {item.example}
-              </p>
             </div>
           ))}
         </div>
-        <p className={`mt-5 leading-7 break-keep text-gray-700 dark:text-gray-300 print:mt-4`}>
-          {collaborationOutro}
-        </p>
       </Section>
 
       {/*
