@@ -18,6 +18,7 @@ import { products } from '../content/products'
 import { projects } from '../content/projects'
 import { about, aboutLead, skills } from '../content/profile'
 import { experiences } from '../content/experience'
+import { highlightMetricIds, renderedHighlight } from '../content/highlight'
 import { TBD } from '../content/schema'
 
 const errors: string[] = []
@@ -103,6 +104,7 @@ for (const file of proseFiles) {
  * ------------------------------------------------------------------ */
 
 const DATE_LITERAL = /(?<!\d)(20\d{2})[.-](0[1-9]|1[0-2])(?!\d)/
+const DATE_LITERAL_G = new RegExp(DATE_LITERAL.source, 'g')
 
 for (const file of renderFiles) {
   codeLines(file.text).forEach((line, index) => {
@@ -183,6 +185,54 @@ for (const product of products) {
  * 5. 작업 — 역할·대안 검토
  * ------------------------------------------------------------------ */
 
+/**
+ * /resume 한 줄 = 작업 하나의 highlight. 이력서는 압축형, 경력기술서는 서술형으로 갈라 쓴다.
+ * 금지 표현(개월 수 등)은 1번 검사가 content/projects/*.ts 전체를 훑으며 함께 잡는다.
+ */
+const HIGHLIGHT_MAX = 110
+/** `{m:}` 밖에 직접 적힌 수치. 날짜(2025.09)는 앞에서 지운 뒤 검사한다. */
+const RAW_NUMBER = /\d[\d,.]*\s*(%|건|초|줄|회|종|장)/
+
+function checkHighlight(project: (typeof projects)[number], at: string) {
+  const highlight = project.highlight.trim()
+  if (!highlight || highlight === TBD) {
+    error(`${at} highlight 가 비어 있거나 TBD 다 — /resume 에 이 작업의 줄이 없다`)
+    return
+  }
+
+  if (/(다\.?|함|됨|\.)$/.test(highlight)) {
+    error(`${at} highlight 가 '다'·'함'·'됨'·마침표로 끝난다 — 명사로 끝낸다`)
+  }
+
+  const referenced = highlightMetricIds(highlight)
+  for (const id of referenced) {
+    if (!project.metricIds.includes(id)) {
+      error(`${at} highlight 의 {m:${id}} 가 이 작업의 metricIds 에 없다`)
+    }
+  }
+  // 없는 id 는 렌더 단계에서 getMetric 이 던진다. 위에서 이미 실패로 보고했으니 길이 검사는 건너뛴다.
+  if (referenced.some((id) => !metricIds.has(id))) return
+
+  const outside = highlight.replace(/\{m:[^}]+\}/g, '').replace(DATE_LITERAL_G, '')
+  const raw = outside.match(RAW_NUMBER)
+  if (raw) {
+    warn(
+      `${at} highlight 에 수치 '${raw[0]}' 가 직접 적혀 있다 — metrics.ts 에 등록하고 {m:id} 로 참조한다`
+    )
+  }
+
+  const rendered = renderedHighlight(highlight)
+  if (rendered.length > HIGHLIGHT_MAX) {
+    warn(
+      `${at} highlight 가 ${rendered.length}자다 — ${HIGHLIGHT_MAX}자를 넘으면 /resume 가 A4 1장을 넘기기 쉽다`
+    )
+  }
+
+  if (project.narrative && rendered === project.narrative.result.trim()) {
+    error(`${at} highlight 가 narrative.result 와 같다 — 이력서는 압축형으로 따로 쓴다`)
+  }
+}
+
 const projectIds = new Set(projects.map((project) => project.id))
 if (projectIds.size !== projects.length) error('content/projects 에 중복 id 가 있다')
 
@@ -193,7 +243,16 @@ for (const project of projects) {
     error(`${at} companies.ts 에 없는 companyId '${project.companyId}'`)
   }
 
-  if (project.name === TBD) todo(`${at} 프로젝트명(name) 미확정`)
+  /*
+    name 은 /resume 하이라이트 제목·/careers 섹션 제목·/portfolio 섹션 제목이 함께 쓴다.
+    예전에는 TBD 를 보고만 했는데, 이력서 제목이 이 값을 그대로 찍으므로 실패로 올린다.
+    '무엇이 바뀌었는지 보이는 이름인가' 는 사람이 판단한다 — 여기서는 끝맺음만 본다.
+  */
+  if (!project.name.trim() || project.name === TBD) {
+    error(`${at} name 이 비어 있거나 TBD 다 — /resume 하이라이트 제목으로 그대로 나간다`)
+  } else if (/(을|를|로|으로|에|의|다\.?)$/.test(project.name.trim())) {
+    error(`${at} name '${project.name}' 이 조사나 '다' 로 끝난다 — 명사로 끝낸다`)
+  }
   if (!project.roleDetail.trim()) error(`${at} roleDetail 이 비어 있다`)
   if (project.role === TBD) todo(`${at} role 미확정 (담당/리드/설계 중 무엇인지)`)
   if (project.contribution === TBD) todo(`${at} 기여 범위 미확보`)
@@ -216,6 +275,8 @@ for (const project of projects) {
   for (const id of project.metricIds) {
     if (!metricIds.has(id)) error(`${at} metrics.ts 에 없는 metricId '${id}'`)
   }
+
+  checkHighlight(project, at)
 
   if (!project.narrative) {
     if (project.depth === 'flagship') {
@@ -291,25 +352,6 @@ for (const point of about) {
 for (const group of skills) {
   if (group.primary.length === 0 && group.secondary.length === 0) {
     error(`profile.skills '${group.category}' 가 비어 있다`)
-  }
-}
-
-// /resume 하이라이트 — 입력 블록에 제목이 없으면 TBD 로 두고 여기서 목록으로 남긴다.
-for (const experience of experiences) {
-  for (const group of experience.groups) {
-    const product = products.find((item) => item.id === group.productId)
-    if (!product) {
-      error(`content/experience.ts 에 content/products.ts 가 모르는 productId '${group.productId}'`)
-    } else if (product.companyId !== experience.companyId) {
-      error(
-        `content/experience.ts '${experience.companyId}' 그룹이 다른 회사의 제품 '${product.id}' 를 가리킨다`
-      )
-    }
-    for (const highlight of group.highlights) {
-      if (highlight.title === TBD) {
-        todo(`content/experience.ts '${experience.companyId}' 하이라이트 제목(title) 미확정`)
-      }
-    }
   }
 }
 

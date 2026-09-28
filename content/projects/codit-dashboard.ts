@@ -5,7 +5,8 @@ import type { Project } from '../schema'
  * 내용은 그 안의 대시보드 작업 하나였다. 확인 질문에서 대시보드를 따로 떼라는 답을 받아 이 id 로
  * 옮겼고, 제품 쪽은 content/products.ts 의 codit-platform 이 됐다.
  *
- * name '대시보드' 는 예전 codit.mdx 01 의 손으로 쓴 제목 'Codit 플랫폼 · 대시보드' 에서 왔다. 블록에 name 이 없어
+ * name 은 narrative.result(무엇이 바뀌었나)에서 지었다(2026-09-29). '대시보드' 만으로는 무엇이 바뀌었는지 안 보였다.
+ * 그 전의 name '대시보드' 는 예전 codit.mdx 01 의 손으로 쓴 제목 'Codit 플랫폼 · 대시보드' 에서 왔다. 블록에 name 이 없어
  * 그 제목을 그대로 쓰라는 답을 받았다. 제품 이름은 /careers 의 <ProductGroup> 구분선과 /portfolio 의
  * 카드 제목이 적으므로 여기에는 '대시보드' 만 둔다.
  *
@@ -16,7 +17,7 @@ export const coditDashboard: Project = {
   id: 'codit-dashboard',
   companyId: 'codit',
   productId: 'codit-platform',
-  name: '대시보드',
+  name: '슬라이드 단위 로딩으로 대시보드 첫 화면 단축',
   role: '설계·구현 리드',
   roleDetail:
     '대시보드 캐러셀 데이터 로딩을 슬라이드 단위로 재설계하고 쿼리 계층·스와이프 인터랙션 구현',
@@ -27,6 +28,8 @@ export const coditDashboard: Project = {
     secondary: ['embla-carousel', 'Tailwind'],
   },
   metricIds: ['codit-dashboard-lcp', 'codit-dashboard-hooks'],
+  highlight:
+    '뉴스를 슬라이드 단위로 요청하고 섹션별 쿼리 훅·queryKey를 한 체계로 합쳐, 첫 화면이 기다리는 목록과 썸네일을 줄여 LCP {m:codit-dashboard-lcp} 단축',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {

@@ -11,7 +11,7 @@ Claude 챗에서 내용을 확정한 뒤 이 형태로 Claude Code 에 붙여넣
 
 | 대상 | 파일                       | 담는 것                                                  |
 | ---- | -------------------------- | -------------------------------------------------------- |
-| 작업 | `content/projects/{id}.ts` | 회사·제품·역할·스택·지표·7단 서술                        |
+| 작업 | `content/projects/{id}.ts` | 회사·제품·역할·스택·지표·7단 서술·이력서 한 줄           |
 | 제품 | `content/products.ts`      | 이름·platform·카드 요약·대표 스크린샷 (항목 하나)        |
 | 회사 | `data/careers/{id}.mdx`    | 로고·소개·태그와 /careers 본문의 배치. **MDX 는 여기뿐** |
 
@@ -55,6 +55,8 @@ AFTER: JSON.parse() 한 줄
 RESULT: ...
 LEARNING: ...
 
+HIGHLIGHT: 불완전한 JSON을 직접 해석하던 구조를 블록 단위 전송 규격({m:sse-protocol-scope})으로 재설계해 백엔드에 제안, 수동 파서 {m:sse-parser-lines} 제거
+
 METRICS:
   - id: sse-parser-lines | value: 1,281줄 제거 | kind: tech
     evidence: useChatStreamingParser.ts 삭제 diff
@@ -71,7 +73,7 @@ ASK:
 | `PROJECT:`             | `id`                                | `content/projects/{id}.ts` 의 파일명이 된다                              |
 | `company`              | `companyId`                         | `codit` \| `ezllabs`. 없는 id 면 회사부터 등록하고 물어본다              |
 | `product`              | `productId`                         | **필수.** `content/products.ts` 에 없는 id 면 제품부터 등록하고 물어본다 |
-| `name`                 | `name`                              | 작업 이름만. 제품 이름으로 시작하면 verify 실패                          |
+| `name`                 | `name`                              | 작업 이름만. 제품 이름으로 시작하거나 TBD·조사·'다' 로 끝나면 실패       |
 | `depth`                | `depth`                             | `flagship` \| `supporting`. 제품마다 flagship 최대 1개 (초과면 실패)     |
 | `kind`                 | `kind`                              | `improvement` \| `build` \| `operation`                                  |
 | `role`                 | `role`                              | `단독 담당` \| `설계·구현 리드` \| `기능 담당` \| `일부 참여` \| `TBD`   |
@@ -81,7 +83,26 @@ ASK:
 | `stack.*`              | `stack.primary` / `stack.secondary` | 버전 표기 금지. primary 가 비면 verify 실패                              |
 | `PROBLEM` ~ `LEARNING` | `narrative`                         | 7단이 다 오지 않으면 `narrative` 자체를 만들지 않는다                    |
 | `METRICS`              | `metricIds` + `content/metrics.ts`  | 지표는 `metrics.ts` 에 먼저 등록하고 id 만 참조한다                      |
+| `HIGHLIGHT`            | `highlight`                         | **필수.** /resume 한 줄. 아래 규칙                                       |
 | `ASK`                  | —                                   | 코드로 옮기지 않는다. 작업 종료 시 질문 목록으로 되돌려준다              |
+
+### 이력서 한 줄 (`name` + `HIGHLIGHT`)
+
+/resume 하이라이트는 따로 쓰지 않는다. 제목은 `name`, 설명은 `HIGHLIGHT` 를 그대로 찍는다.
+**작업 하나 = 이력서 한 줄**이다. 두 줄이 필요하면 작업을 나눠야 한다는 신호다.
+
+- `name` 은 세 문서가 같이 쓴다. 명사로 끝내고, 구조 이름보다 무엇이 바뀌었는지 보이게 쓴다.
+  제품 이름과 같으면 /resume 은 소제목과 겹치지 않게 제목을 생략한다.
+- `HIGHLIGHT` 는 새로 쓰지 않고 7단에서 파생한다 — `DECISION.chosen` + `RESULT` 를 한 줄로.
+  `PROBLEM` 은 판단 이유에 꼭 필요할 때만 앞에 짧게. 7단에 없는 행위·성과는 쓰지 않는다.
+- 끝은 내가 한 행위의 명사형이다 — `적용`·`설계`·`제거`·`구축`. 결과 상태(`없음`·`감소`)나
+  도구가 한 일(`자동 진행`·`판정`), '~하는 구조/방식' 으로 끝내지 않는다.
+- 수치는 타이핑하지 않고 `{m:<metric-id>}` 로 참조한다. id 는 그 작업의 `METRICS` 에 있어야 한다.
+  지표 `value` 가 문장에 어색하면 지표에 `inline` 을 둔다(예: `2건 → 0건`).
+
+verify: 명사로 끝남('다'·'함'·'됨'·마침표 금지), `{m:}` id 가 `metricIds` 안에 있음, `RESULT` 와 글자
+그대로 같으면 실패, 비었거나 `TBD` 면 실패. `{m:}` 밖의 수치+단위(%, 건, 초, 줄, 회, 종, 장)와
+렌더 기준 110자 초과는 경고. 날짜(`2025.09`)는 수치로 보지 않는다.
 
 ### 제품 (`product`)
 
@@ -91,11 +112,11 @@ ASK:
 
 작업 이름(`name`)에는 제품 이름을 붙이지 않는다. 제품 이름은 아래 세 자리가 각각 적는다.
 
-| 경로         | 제품이 적히는 자리                                   | 작업이 적히는 자리                                                    |
-| ------------ | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `/resume`    | 그룹 소제목 — `content/experience.ts` 의 `productId` | 그룹 안의 하이라이트                                                  |
-| `/careers`   | `<ProductGroup id="..." />` 구분선                   | `<ProjectNarrative id="..." no="NN" />` 자리. 제목에는 `name` 만 쓴다 |
-| `/portfolio` | 카드 제목과 상세 헤더                                | 상세 본문의 섹션. 작업이 하나뿐인 제품은 섹션 없이 개요에 바로 실린다 |
+| 경로         | 제품이 적히는 자리                               | 작업이 적히는 자리                                                    |
+| ------------ | ------------------------------------------------ | --------------------------------------------------------------------- |
+| `/resume`    | 그룹 소제목 — 회사의 제품을 `products.ts` 순서로 | 그룹 안의 한 줄 — `name` + `highlight`                                |
+| `/careers`   | `<ProductGroup id="..." />` 구분선               | `<ProjectNarrative id="..." no="NN" />` 자리. 제목에는 `name` 만 쓴다 |
+| `/portfolio` | 카드 제목과 상세 헤더                            | 상세 본문의 섹션. 작업이 하나뿐인 제품은 섹션 없이 개요에 바로 실린다 |
 
 ### 제품 블록
 
@@ -129,6 +150,7 @@ summary: React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱을 추가�
 ### METRIC: cs-inquiry
 value: 40%↓
 label: 충전 실패 CS 인입
+inline: 40%        # 선택. HIGHLIGHT 의 {m:cs-inquiry} 자리에 value 대신 들어갈 표기
 kind: business
 evidence: 2025.03 vs 2025.06 CS 티켓 집계
 ```
@@ -157,7 +179,8 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 ```
 
 대상: `profile.aboutLead` + `profile.about`(홈 ABOUT) · `profile.tagline` ·
-`collaborationIntro` / `collaborationOutro` · `content/experience.ts` 의 하이라이트
+`collaborationIntro` / `collaborationOutro` · `content/experience.ts` 의 회사 요약(`summary`).
+이력서 하이라이트는 문구 블록이 아니라 작업 블록의 `name` · `HIGHLIGHT` 로 온다
 
 ABOUT 은 첫 줄이 `aboutLead`, 그 뒤로 제목 한 줄 + 본문 한 줄이 한 항목(`{title, body}`)이다.
 **본문이 제목을 그대로 되풀이하면 verify 가 실패한다.** 같은 말을 두 번 읽힐 이유가 없다.
@@ -166,12 +189,12 @@ ABOUT 은 첫 줄이 `aboutLead`, 그 뒤로 제목 한 줄 + 본문 한 줄이 
 
 ## `narrative` 가 들어오면 함께 해야 하는 일
 
-지금 세 문서의 서술은 `data/*/*.mdx` 본문과 `content/experience.ts` 가 손으로 나눠 갖고 있다.
+7단 서술을 아직 받지 못한 작업은 `data/careers/*.mdx` 본문이 손으로 들고 있다.
 프로젝트에 `narrative` 가 채워지면 그 프로젝트에 한해 아래로 옮긴다.
 
 | 경로         | 렌더할 단계                                                                |
 | ------------ | -------------------------------------------------------------------------- |
-| `/resume`    | `problem` · `decision.chosen` · `result` 각 1줄                            |
+| `/resume`    | `name` + `highlight` 한 줄 (`decision.chosen` + `result` 에서 파생)        |
 | `/careers`   | 7단 전체 요약                                                              |
 | `/portfolio` | flagship 은 7단 풀 전개 + `decision.rejected`, supporting 은 카드 1개 분량 |
 
@@ -183,15 +206,11 @@ ABOUT 은 첫 줄이 `aboutLead`, 그 뒤로 제목 한 줄 + 본문 한 줄이 
 
 ## 지금 비어 있는 칸
 
-`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 17건, 경고 0건:
+`npm run verify` 의 `TBD` 목록이 곧 다음에 챗에서 확정할 것들이다. 현재 11건, 경고 0건:
 
-- `codit-chatcodit-app-infra` 의 `role` · `contribution`
-- `codit-appshell` 의 `name`
 - `codit-platform` 제품의 카드 요약(`summary`)
 - 기술 지표들의 `label` 과 연결할 사업 지표
-- `content/experience.ts` 코딧 하이라이트 제목 2건
 
-verify 가 보고하지 않는 빈칸이 하나 있다. ChatCODIT(Web)의 작업 2건(대화형 문서 초안 작성 ·
-반응형 웹·0→1 구축)은 경력기술서 본문에 손으로 쓴 채 남아 있다가 걷어냈는데,
-`content/projects` 로는 아직 옮기지 못했다. 지금은 /resume 하이라이트 두 줄로만 남아 있어
-/careers 와 /portfolio 에서는 보이지 않는다. 입력 블록을 받으면 작업으로 세운다.
+verify 가 보고하지 않는 빈칸이 있다. ChatCODIT(Web)의 작업 2건(대화형 문서 초안 작성 ·
+반응형 웹·0→1 구축)과 ChatCODIT App 의 인증·보안·배포는 `content/projects` 에 작업이 없어
+세 문서 어디에도 보이지 않는다. 7단 서술 + `HIGHLIGHT` 로 받으면 작업으로 세운다.

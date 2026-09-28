@@ -30,6 +30,8 @@ export const ezlDesignSystem: Project = {
     secondary: ['Expo', 'EAS', 'Jenkins'],
   },
   metricIds: [],
+  highlight:
+    '신규·확장 컴포넌트를 이즐충전소 앱과 모바일 이즐 앱에 반영하고, main 머지만으로 Storybook 앱 버전 증가·EAS 빌드가 도는 배포 파이프라인 구축',
   depth: 'supporting',
   kind: 'build',
   narrative: {

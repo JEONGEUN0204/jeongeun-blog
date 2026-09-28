@@ -5,8 +5,9 @@ import { FaGithub } from 'react-icons/fa'
 import Image from '@/components/Image'
 import Section from '@/components/mdx/Section'
 import { formatPeriod, getCompany } from '@/content/companies'
-import { getProduct, productLabel } from '@/content/products'
+import { productLabel } from '@/content/products'
 import { experiences } from '@/content/experience'
+import { highlightParts, highlightTitle, resumeGroups } from '@/content/highlight'
 import { getMetrics, resumeMetricIds } from '@/content/metrics'
 import type { Metric } from '@/content/schema'
 import {
@@ -25,20 +26,21 @@ import {
   섹션 제목은 본문과 같은 대소문자의 굵은 제목이다. 예전의 자간 넓힌 대문자 소제목(ABOUT·SKILLS)은
   모든 섹션 위에 같은 장식처럼 붙어 있어 제목이 무엇인지보다 장식이 먼저 읽혔다.
 */
-const sectionTitle = 'mb-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100'
+const sectionTitle =
+  'mb-5 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 print:mb-3'
 
 /**
  * 섹션 사이 여백. Section 의 기본 my-8 을 끄고 패딩만 남긴다 —
  * 마진과 위아래 패딩이 겹쳐 섹션 사이가 96px 까지 벌어져 있었다.
  */
-const sectionSpacing = 'my-0! py-8 print:py-5'
+const sectionSpacing = 'my-0! py-8 print:py-4'
 
 /** 문서형 본문의 measure. 한 줄이 한글 90자를 넘으면 눈이 다음 줄의 첫 글자를 놓친다. */
 const measure = 'max-w-[68ch]'
 
 const Badge = ({ children, muted }: { children: React.ReactNode; muted?: boolean }) => (
   <span
-    className={`mr-1 mb-1 inline-flex h-fit w-fit rounded-md px-2 py-1 text-sm font-medium whitespace-nowrap ${
+    className={`mr-1 mb-1 inline-flex h-fit w-fit rounded-md px-2 py-1 text-sm font-medium whitespace-nowrap print:py-0.5 ${
       muted
         ? 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'
         : 'bg-primary-100 text-primary-800 dark:bg-primary-400/15 dark:text-primary-300'
@@ -94,7 +96,7 @@ export default function ResumeContent() {
             </span>
           </div>
         </div>
-        <p className="mt-10 mb-10 max-w-[22em] text-3xl leading-snug font-bold tracking-tight text-balance break-keep text-gray-900 sm:text-4xl sm:leading-[1.3] dark:text-gray-100 print:mt-6 print:mb-6 print:text-2xl">
+        <p className="mt-10 mb-10 max-w-[22em] text-3xl leading-snug font-bold tracking-tight text-balance break-keep text-gray-900 sm:text-4xl sm:leading-[1.3] dark:text-gray-100 print:mt-4 print:mb-4 print:text-2xl">
           {aboutLead}
         </p>
       </Section>
@@ -105,7 +107,7 @@ export default function ResumeContent() {
         전후를 비교하는 값은 실제 비율의 막대로 그린다(compareOf). 막대는 값 문자열에서 읽을 수 있는
         숫자만 쓴다 — 비교가 아닌 값('0 → 1')은 막대 없이 글자로 둔다.
       */}
-      <Section className="my-0! pb-4">
+      <Section className="my-0! pb-4 print:pb-2">
         <div className="rounded-2xl bg-white px-5 py-2 sm:px-8 dark:bg-gray-900 print:border print:border-gray-200">
           {metrics.map((metric) => (
             <MetricRow key={metric.id} metric={metric} />
@@ -119,13 +121,15 @@ export default function ResumeContent() {
         수치는 여기 없다 — 위 성과와 아래 Experience 가 맡는다.
       */}
       <Section title="About" titleClassName={sectionTitle} className={sectionSpacing}>
-        <dl className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
+        <dl className="grid gap-x-10 gap-y-6 sm:grid-cols-2 print:gap-y-4">
           {about.map((point) => (
             <div key={point.title} className="break-inside-avoid-page">
               <dt className="text-lg font-semibold break-keep text-gray-900 dark:text-gray-100">
                 {point.title}
               </dt>
-              <dd className="mt-1 leading-7 text-gray-600 dark:text-gray-400">{point.body}</dd>
+              <dd className="mt-1 leading-7 text-gray-600 dark:text-gray-400 print:leading-6">
+                {point.body}
+              </dd>
             </div>
           ))}
         </dl>
@@ -133,7 +137,7 @@ export default function ResumeContent() {
 
       {/* Skills — 나열만 하면 무엇이 주력인지 알 수 없어 두 단으로 나눈다 */}
       <Section title="Skills" titleClassName={sectionTitle} className={sectionSpacing}>
-        <dl className="space-y-3">
+        <dl className="space-y-3 print:space-y-1.5">
           {skills.map((group) => (
             <div
               key={group.category}
@@ -192,30 +196,40 @@ export default function ResumeContent() {
                   </p>
                 </div>
 
-                <div className="mt-6 space-y-6">
-                  {experience.groups.map((group) => (
-                    <div key={group.productId} className="break-inside-avoid-page">
+                <div className="mt-6 space-y-6 print:mt-4 print:space-y-4">
+                  {resumeGroups(company.id).map(({ product, works }) => (
+                    <div key={product.id} className="break-inside-avoid-page">
                       <h5 className="text-primary-700 dark:text-primary-400 text-sm font-bold">
-                        {productLabel(getProduct(group.productId))}
+                        {productLabel(product)}
                       </h5>
                       {/*
-                        화면에서는 title 을 독립 줄로 세워 부연(detail)에 묻히지 않게 하고,
-                        인쇄에서는 print:inline 으로 'title — detail' 한 줄로 되돌린다.
+                        하이라이트 한 줄 = 작업 하나. 제목은 name, 설명은 highlight 다.
+                        화면에서는 제목을 독립 줄로 세워 설명에 묻히지 않게 하고,
+                        인쇄에서는 print:inline 으로 '제목 — 설명' 한 줄로 되돌린다.
                         A4 분량이 늘어나는 것을 막기 위한 분기다.
+                        제목이 제품 이름과 같으면 소제목과 겹쳐 설명만 싣는다(highlightTitle).
                       */}
                       <ul className={`mt-2 space-y-3 ${measure}`}>
-                        {/* 제목이 TBD 인 하이라이트가 한 그룹에 여럿일 수 있어 제목을 key 로 쓰지 않는다 */}
-                        {group.highlights.map((highlight, index) => (
-                          <li key={index} className="break-inside-avoid-page text-sm leading-6">
-                            <span className="block font-semibold text-gray-900 dark:text-gray-100 print:inline">
-                              {highlight.title}
-                            </span>
-                            <span className="hidden print:inline"> — </span>
-                            <span className="mt-0.5 block text-gray-600 dark:text-gray-400 print:inline print:text-inherit">
-                              {renderEmphasis(highlight.detail)}
-                            </span>
-                          </li>
-                        ))}
+                        {works.map((work) => {
+                          const title = highlightTitle(work, product)
+                          return (
+                            <li key={work.id} className="break-inside-avoid-page text-sm leading-6">
+                              {title && (
+                                <>
+                                  <span className="block font-semibold text-gray-900 dark:text-gray-100 print:inline">
+                                    {title}
+                                  </span>
+                                  <span className="hidden print:inline"> — </span>
+                                </>
+                              )}
+                              <span
+                                className={`block text-gray-600 dark:text-gray-400 print:inline print:text-inherit ${title ? 'mt-0.5' : ''}`}
+                              >
+                                {renderHighlight(work.highlight)}
+                              </span>
+                            </li>
+                          )
+                        })}
                       </ul>
                     </div>
                   ))}
@@ -228,26 +242,28 @@ export default function ResumeContent() {
 
       {/* Collaboration */}
       <Section title="Collaboration" titleClassName={sectionTitle} className={sectionSpacing}>
-        <p className={`leading-7 text-gray-700 dark:text-gray-300 ${measure}`}>
+        <p
+          className={`leading-7 text-pretty break-keep text-gray-700 dark:text-gray-300 ${measure}`}
+        >
           {collaborationIntro}
         </p>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
+        <div className="mt-5 grid gap-4 md:grid-cols-3 print:mt-4 print:gap-3">
           {collaborations.map((item) => (
             <div
               key={item.audience}
-              className="break-inside-avoid-page rounded-2xl bg-white p-5 dark:bg-gray-900 print:border print:border-gray-200"
+              className="break-inside-avoid-page rounded-2xl bg-white p-5 dark:bg-gray-900 print:border print:border-gray-200 print:p-4"
             >
               <div className="text-primary-700 dark:text-primary-400 text-sm font-bold">
                 {item.audience}
               </div>
               <p className="mt-2 text-sm leading-6 text-gray-700 dark:text-gray-300">{item.body}</p>
-              <p className="mt-3 text-xs leading-5 text-gray-500 dark:text-gray-400">
+              <p className="mt-3 text-xs leading-5 text-gray-500 dark:text-gray-400 print:mt-2">
                 예: {item.example}
               </p>
             </div>
           ))}
         </div>
-        <p className={`mt-5 leading-7 text-gray-700 dark:text-gray-300 ${measure}`}>
+        <p className={`mt-5 leading-7 break-keep text-gray-700 dark:text-gray-300 print:mt-4`}>
           {collaborationOutro}
         </p>
       </Section>
@@ -256,10 +272,10 @@ export default function ResumeContent() {
         학력·자격 — 예전에는 머리 오른쪽 칸에 있었다. 머리를 한 줄 정체성에 내주면서 문서 끝으로 옮겼다.
         두 목록을 나란히 둔다. 좁은 화면에서는 쌓인다.
       */}
-      <Section className={`${sectionSpacing} grid gap-8 sm:grid-cols-2`}>
+      <Section className="my-0! grid gap-8 py-8 sm:grid-cols-2 print:pt-2 print:pb-0">
         <div>
           <h2 className={sectionTitle}>Education</h2>
-          <ul className="space-y-3">
+          <ul className="space-y-3 print:space-y-2">
             {education.map((item) => (
               <li key={item.school}>
                 <div className="font-semibold text-gray-900 dark:text-gray-100">
@@ -279,7 +295,7 @@ export default function ResumeContent() {
         </div>
         <div>
           <h2 className={sectionTitle}>Certificate</h2>
-          <ul className="space-y-3">
+          <ul className="space-y-3 print:space-y-2">
             {certificates.map((item) => (
               <li key={item.name}>
                 <div className="font-semibold text-gray-900 dark:text-gray-100">{item.name}</div>
@@ -346,7 +362,7 @@ function MetricRow({ metric }: { metric: Metric }) {
   const full = 80
 
   return (
-    <div className="grid break-inside-avoid-page gap-3 border-t border-gray-200 py-5 first:border-t-0 sm:grid-cols-[14rem_minmax(0,1fr)] sm:items-center sm:gap-8 dark:border-gray-800">
+    <div className="grid break-inside-avoid-page gap-3 border-t border-gray-200 py-5 first:border-t-0 sm:grid-cols-[14rem_minmax(0,1fr)] sm:items-center sm:gap-8 dark:border-gray-800 print:py-2.5">
       <div>
         {compare && (
           <p className="font-bold break-keep text-gray-900 dark:text-gray-100">{metric.value}</p>
@@ -389,18 +405,18 @@ function MetricRow({ metric }: { metric: Metric }) {
   )
 }
 
-/** detail 의 `**…**` 구간을 <strong> 으로 그린다. 강조 표기 외에는 문자열을 그대로 둔다. */
-function renderEmphasis(text: string) {
-  return text.split(/\*\*(.+?)\*\*/).map((part, index) =>
-    index % 2 === 1 ? (
+/** highlight 의 `{m:id}` 를 metrics.ts 의 값으로 바꾸고 굵게 그린다. 그 밖의 글자는 그대로 둔다. */
+function renderHighlight(highlight: string) {
+  return highlightParts(highlight).map((part, index) =>
+    part.metric ? (
       <strong
         key={index}
         className="text-accent-700 dark:text-accent-300 font-bold tabular-nums print:text-gray-900"
       >
-        {part}
+        {part.text}
       </strong>
     ) : (
-      part
+      part.text
     )
   )
 }

@@ -35,6 +35,8 @@ export const ezlAi: Project = {
     secondary: ['Genkit'],
   },
   metricIds: [],
+  highlight:
+    '개발 외 직군(PM)까지 사내에서 직접 쓰게 된 검색 AI에서, 도구 선택과 응답 작성을 LLM 호출 한 번으로 통합',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {
@@ -61,7 +63,7 @@ export const ezlAi: Project = {
       after: '질의 1건당 LLM 호출 1회',
     },
     result:
-      '수정한 flow가 배포 브랜치의 최종 버전으로 AWS ECS에 배포되어 사내에서 테스트 수준으로 사용됨. 회사 사정으로 본격 사용 전에 중단',
+      'Genkit Developer UI가 그대로 인터페이스가 되는 구조로 배포되어, 개발 외 직군(PM)도 사내에서 직접 검색에 사용함',
     learning: 'TBD',
   },
 }

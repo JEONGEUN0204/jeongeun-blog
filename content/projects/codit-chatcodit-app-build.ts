@@ -2,10 +2,11 @@ import type { Project } from '../schema'
 
 /**
  * 서술은 narrative 가 원천이다. /portfolio 는 supporting 카드(문제·관점·선택·결과)를,
- * /careers 는 codit.mdx 의 08 자리(<ProjectNarrative>)에서 7단 요약을 렌더한다.
+ * /careers 는 codit.mdx 의 06 자리(<ProjectNarrative>)에서 7단 요약을 렌더한다.
  *
- * 인증·보안·배포는 codit-chatcodit-app-infra 로 떼어 냈고(입력 블록이 다루지 않은 범위),
- * 남은 이 작업의 범위가 구축·결제라 name 이 '구축·결제' 다. 제품 이름('ChatCODIT App')은
+ * 인증·보안·배포는 입력 블록이 다루지 않은 범위라 codit-chatcodit-app-infra 로 떼어 두었다가,
+ * 7단 서술이 없어 이력서 한 줄을 파생할 수 없어 삭제했다(2026-09-28). 이 작업의 범위가
+ * 구축·결제다. name 은 '구축·결제' 에서 무엇을 했는지 보이게 바꿨다(2026-09-29). 제품 이름('ChatCODIT App')은
  * content/products.ts 의 codit-chatcodit-app 이 적는다.
  *
  * 예전 roleDetail·MDX summary·experience.ts 의 '웹→네이티브 마이그레이션' 은 교체했다.
@@ -22,7 +23,7 @@ export const coditChatCoditAppBuild: Project = {
   id: 'codit-chatcodit-app-build',
   companyId: 'codit',
   productId: 'codit-chatcodit-app',
-  name: '구축·결제',
+  name: 'iOS·Android 앱 출시와 인앱 구독 운영',
   role: '설계·구현 리드',
   roleDetail:
     'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱 추가 — 초기 구조·배포·스트리밍·구독 결제 담당',
@@ -33,6 +34,8 @@ export const coditChatCoditAppBuild: Project = {
     secondary: ['expo-iap', 'EAS', 'TanStack Query', 'Zustand', 'reCAPTCHA'],
   },
   metricIds: [],
+  highlight:
+    '서버 검증이 성공한 뒤에만 거래를 완료하고 실패한 거래는 스토어 큐에 남겨 다음 실행·로그인 때 다시 검증하도록 구독 결제 흐름 설계',
   depth: 'supporting',
   kind: 'build',
   narrative: {
@@ -62,7 +65,7 @@ export const coditChatCoditAppBuild: Project = {
         '앱 개발 3명, 기존 React 모바일 웹은 그대로 유지, 영수증 검증·구독 상태는 백엔드 담당, App Store 심사 정책',
     },
     action: [
-      '앱 초기 세팅과 구조 설계 (PR #1, 2026.03)',
+      '앱 초기 세팅과 구조 설계 (2026.03)',
       'RN 기본 fetch와 axios로는 응답 스트림을 받을 수 없어 질문 스트리밍만 expo/fetch로 분리하고 일반 API는 axios로 유지. 별도 SSE 라이브러리나 폴리필 없이 구현',
       '웹 스트리밍 파서 구조(청크 읽기, 불완전한 줄 버퍼링, event·data 파싱, 블록 이벤트 조립)를 가져오되, 타임아웃 시 읽기 루프 탈출과 앱 에러 매핑은 앱에 맞게 새로 작성',
       '청크가 30초 동안 오지 않으면 스트림을 끝내고, done 이벤트를 받지 못해도 UI를 종료 처리해 무한 로딩 방지',
@@ -81,7 +84,7 @@ export const coditChatCoditAppBuild: Project = {
     beforeAfter: {
       before: 'React 모바일 웹만 있고 앱과 인앱 결제는 없음',
       after:
-        '2026.04 iOS·Android 앱 1.0.x 출시(결제 없음). 인앱 구독은 Android 1.1.0(2026.06.08), iOS 1.1.2(2026.06.24)부터 제공. 이후 1.4.0(2026.09.16)까지 이어서 배포',
+        '2026.04 iOS·Android 앱 출시(결제 없음). 인앱 구독은 Android 2026.06.08, iOS 2026.06.24부터 제공. 이후 2026.09.16까지 이어서 배포',
     },
     result: 'iOS·Android 앱을 출시하고, 두 스토어 모두 인앱 구독을 붙여 운영 중',
     learning: 'TBD',

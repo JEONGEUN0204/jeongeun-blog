@@ -21,7 +21,7 @@
 ## 사실은 두 층이다 — 제품과 작업
 
 - **제품**은 내가 한 일이 놓였던 대상이다. `ChatCODIT App`, `이즐충전소` 같은 것.
-- **작업**은 그 위에서 내가 한 일 하나다. `구축·결제`, `인증·보안·배포` 같은 것.
+- **작업**은 그 위에서 내가 한 일 하나다. `구축·결제`, `실시간 스트리밍` 같은 것.
 
 작업은 예외 없이 제품 하나에 속한다. 제품에 작업이 하나뿐이어도 마찬가지다.
 블록을 뽑을 때 이 둘을 섞지 않는다.
@@ -65,7 +65,7 @@
 ### PROJECT: <id>              # 아래 '작업 id' 목록에 있으면 그대로, 새 작업이면 kebab-case
 company: codit | ezllabs
 product: <제품 id>             # 필수. 아래 '제품 id' 목록에서 고른다
-name: <작업 이름>              # 제품 이름을 붙이지 않는다. 예: 구축·결제
+name: <작업 이름>              # 제품 이름을 붙이지 않는다. 명사로 끝낸다. 이력서 한 줄의 제목이 된다
 depth: flagship | supporting
 kind: improvement | build | operation
 role: 단독 담당 | 설계·구현 리드 | 기능 담당 | 일부 참여   # 넷 중 하나. 섞어 쓰지 않는다
@@ -90,10 +90,14 @@ AFTER: <바뀐 후 상태, 가능하면 수치>
 RESULT: <결과>
 LEARNING: <배운 점 — 짧게>
 
+HIGHLIGHT: <이력서 한 줄>        # DECISION.chosen + RESULT 를 한 줄로. 내가 한 행위의 명사형(적용·설계·제거)으로 끝낸다('다'·'함'·'됨'·마침표 금지)
+                                  # 수치는 {m:<metric-id>} 로만. RESULT 를 그대로 옮기면 안 된다. 110자 이내
+
 METRICS:
   - id: <metric-id> | value: <API 75%↓> | kind: tech | business | scope
     evidence: <측정 방법·출처>
     businessImpact: <연결된 사업 지표>      # kind:tech 만. 없으면 TBD
+    inline: <문장용 표기>                   # 선택. value 가 HIGHLIGHT 문장에 어색할 때. 예: 2건 → 0건
 
 ASK:                              # 내가 답해야 넘어갈 수 있는 것들
   - <질문>
@@ -145,11 +149,11 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 ## 문서별 압축률 (같은 내용을 세 번 쓰지 않는다)
 
-| 문서       | 쓰는 단계                                 | 분량                                        |
-| ---------- | ----------------------------------------- | ------------------------------------------- |
-| 이력서     | PROBLEM · DECISION.chosen · RESULT 각 1줄 | 인쇄 시 A4 1장. 제품별 소제목 + 하이라이트  |
-| 경력기술서 | 7단 전체 요약                             | 회사당 제한 없음. 제품 구분선 + 작업별 번호 |
-| 포트폴리오 | 7단 풀 전개 + DECISION.rejected           | 카드 1장 = 제품 1개. flagship 만 풀 전개    |
+| 문서       | 쓰는 단계                               | 분량                                        |
+| ---------- | --------------------------------------- | ------------------------------------------- |
+| 이력서     | name + HIGHLIGHT 한 줄 (작업 1개 = 1줄) | 인쇄 시 A4 1장. 제품별 소제목 + 하이라이트  |
+| 경력기술서 | 7단 전체 요약                           | 회사당 제한 없음. 제품 구분선 + 작업별 번호 |
+| 포트폴리오 | 7단 풀 전개 + DECISION.rejected         | 카드 1장 = 제품 1개. flagship 만 풀 전개    |
 
 ## 현재 저장소가 이미 알고 있는 사실 (2026-09-23 기준)
 
@@ -164,11 +168,11 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 **작업 id** — 제품별로 묶어 적는다.
 
-- `codit-platform` — `codit-dashboard`(대시보드), `codit-appshell`(이름 미확정),
+- `codit-platform` — `codit-dashboard`(슬라이드 단위 로딩으로 대시보드 첫 화면 단축), `codit-appshell`(화면 전환 중 헤더 유지와 헤더 API 재호출 제거),
   `codit-agents-md`(AGENTS.md · 에이전트 컨텍스트 단일 원본), `codit-tailwind-skill`(Tailwind 마이그레이션 작업 표준화)
-- `codit-chatcodit` — `codit-chatcodit-streaming`(실시간 스트리밍, 현재 flagship)
-- `codit-chatcodit-app` — `codit-chatcodit-app-build`(구축·결제), `codit-chatcodit-app-infra`(인증·보안·배포)
-- `codit-thecodit-app` — `codit-thecodit-app`(WebView 하이브리드)
+- `codit-chatcodit` — `codit-chatcodit-streaming`(블록 단위 전송 규격으로 수동 파서 제거, 현재 flagship)
+- `codit-chatcodit-app` — `codit-chatcodit-app-build`(iOS·Android 앱 출시와 인앱 구독 운영)
+- `codit-thecodit-app` — `codit-thecodit-app`(브릿지·네비게이션 처리로 앱↔웹 경계 CS 수렴)
 - 이즐랩스 — `ezl-charge`, `ezl-backoffice`, `ezl-design-system`, `ezl-ai` (제품 1 : 작업 1)
 
 **지표 id** — `ezl-inquiry-api`(API 75%↓), `ezl-crash-free`(+3%p), `sse-parser-lines`(1,281줄 제거),
@@ -178,17 +182,16 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 ## 지금 비어 있는 칸 (우선순위 순)
 
-1. **ChatCODIT(Web)의 남은 작업 2건** — `대화형 문서 초안 작성(Draft)` 과 `렌더링·구축·운영` 이
-   아직 경력기술서 본문에 손으로 쓴 채로 있다. 7단 서술로 받으면 작업으로 옮긴다.
-2. **`codit-chatcodit-app-infra` 의 `role` · `contribution` 과 7단 서술** — 지금은 요약 한 줄뿐이다.
-3. **`codit-appshell` 의 작업 이름** — 지금 TBD 라 화면에 그대로 보인다.
-4. **`codit-platform` 제품의 카드 요약** — 예전 요약은 대시보드 작업 설명이라 그쪽으로 옮겼다.
-   Codit 플랫폼 자체를 한 줄로 설명하는 문장이 필요하다 (`PRODUCT` 블록의 `summary`).
-5. **기술 지표들의 `label` 과 사업 지표 연결** — `ezl-inquiry-api`, `ezl-crash-free`,
+1. **ChatCODIT(Web)의 남은 작업 2건** — `대화형 문서 초안 작성(Draft)` 과 `렌더링·구축·운영`.
+   작업이 없어 세 문서 어디에도 보이지 않는다. 7단 서술 + HIGHLIGHT 로 받으면 작업으로 세운다.
+2. **ChatCODIT App 의 인증·보안·배포** — 7단 서술이 없어 작업을 지웠다(2026-09-28). 다시 올리려면
+   7단 서술 + HIGHLIGHT 가 필요하다.
+3. **`codit-platform` 제품의 카드 요약** — Codit 플랫폼 자체를 한 줄로 설명하는 문장
+   (`PRODUCT` 블록의 `summary`).
+4. **기술 지표들의 `label` 과 사업 지표 연결** — `ezl-inquiry-api`, `ezl-crash-free`,
    `sse-parser-lines`, `codit-dashboard-lcp`, `codit-dashboard-hooks` 등
-6. **이력서 이즐랩스 하이라이트 제목 3건** — 제품마다 그룹을 나누면서 제목(`백오피스`,
-   `디자인 시스템`, `Jira/Confluence 검색 AI`)이 바로 위 제품 소제목과 같은 말이 됐다.
-   무엇을 했는지로 바꿀 제목이 필요하다 (`COPY` 블록).
+5. **작업 이름이 제품 이름과 같은 3건** — `백오피스`·`디자인 시스템`·`Jira/Confluence 검색 AI`.
+   이력서는 제목을 생략해 겹침을 피하지만, 무엇이 바뀌었는지 보이는 이름이 있으면 `name` 으로 준다.
 
 이 중 하나를 작업할 때는 **먼저 인터뷰 질문부터 하고**, 내 답이 모인 뒤에 블록을 뽑는다.
 답이 없는 칸을 그럴듯한 문장으로 채우지 않는다.

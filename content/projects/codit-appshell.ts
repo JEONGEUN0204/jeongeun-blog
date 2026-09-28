@@ -8,15 +8,16 @@ import type { Project } from '../schema'
  * 스택은 입력 블록(secondary: Recoil)이 아니라 확인 질문에서 받은 답(Zustand)을 따른다.
  * 예전 02 섹션의 Tailwind CSS · i18next 는 이 작업의 스택이 아니라는 답을 받아 넣지 않는다.
  *
- * name · decision.constraint · learning 은 입력 블록에 없어 TBD 다. Narrative 컴포넌트가 TBD 를
- * 거르지 않아 /careers · /portfolio 에 그대로 보이고, verify 는 name 만 보고한다.
+ * name 은 narrative.result(무엇이 바뀌었나)에서 지었다(2026-09-29). 세 문서가 이 이름을 함께 쓴다.
+ * decision.constraint · learning 은 입력 블록에 없어 TBD 다. Narrative 컴포넌트가 TBD 를
+ * 거르지 않아 /careers · /portfolio 에 그대로 보인다.
  * decision.rejected 는 따로 검토한 대안이 없어 비운다 (supporting 이라 verify 통과).
  */
 export const coditAppShell: Project = {
   id: 'codit-appshell',
   companyId: 'codit',
   productId: 'codit-platform',
-  name: 'TBD',
+  name: '화면 전환 중 헤더 유지와 헤더 API 재호출 제거',
   role: '단독 담당',
   roleDetail:
     '화면 전환 로딩 문제를 직접 발견해 원인 파악부터 AppShell 구조 설계·구현·전후 측정까지 담당',
@@ -27,6 +28,8 @@ export const coditAppShell: Project = {
     secondary: ['Zustand'],
   },
   metricIds: ['codit-header-refetch'],
+  highlight:
+    '헤더·알림·디바이스 모달을 라우트 밖 AppShell로 옮겨 화면 전환 중에도 헤더를 유지하고, 전환당 헤더 API 호출을 {m:codit-header-refetch}으로 축소',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {

@@ -5,7 +5,6 @@ import { coditAgentsMd } from './codit-agents-md'
 import { coditTailwindSkill } from './codit-tailwind-skill'
 import { coditChatCoditStreaming } from './codit-chatcodit-streaming'
 import { coditChatCoditAppBuild } from './codit-chatcodit-app-build'
-import { coditChatCoditAppInfra } from './codit-chatcodit-app-infra'
 import { coditTheCoditApp } from './codit-thecodit-app'
 import { ezlCharge } from './ezl-charge'
 import { ezlBackoffice } from './ezl-backoffice'
@@ -29,7 +28,6 @@ export const projects: Project[] = [
   coditTailwindSkill,
   coditChatCoditStreaming,
   coditChatCoditAppBuild,
-  coditChatCoditAppInfra,
   coditTheCoditApp,
   ezlCharge,
   ezlBackoffice,

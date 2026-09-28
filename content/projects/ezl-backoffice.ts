@@ -31,6 +31,8 @@ export const ezlBackoffice: Project = {
     secondary: ['Recoil', 'AG Grid'],
   },
   metricIds: [],
+  highlight:
+    '목록·그리드만 ErrorBoundary로 감싸 실패한 자리에 재시도 버튼을 두는 목록 단위 에러 경계를 도메인별로 적용',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {
@@ -47,7 +49,7 @@ export const ezlBackoffice: Project = {
     },
     action: [
       'react-error-boundary를 저장소에 처음 추가하고 카드 배경 목록에 첫 적용',
-      '공지·이벤트·뉴스레터, FAQ·이용가이드, 이즐워크, 긴급 관리, URL 관리, 포인트 관리로 확대 (2024.08 ~ 2024.09, 전용 PR 8건)',
+      '공지·이벤트·뉴스레터, FAQ·이용가이드, 이즐워크, 긴급 관리, URL 관리, 포인트 관리로 확대 (2024.08 ~ 2024.09)',
       'QueryErrorResetBoundary의 reset을 ErrorBoundary onReset에 연결해, 재시도 버튼이 쿼리 에러 상태를 지우고 다시 요청하게 함',
       '동료가 만든 EnhancedError를 fallback 전반에 적용하고 공통 ErrorFallback 컴포넌트를 작성해, 화면마다 에러 문구를 따로 쓰지 않게 함',
     ],

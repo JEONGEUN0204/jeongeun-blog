@@ -14,7 +14,8 @@ export const ezlCharge: Project = {
   id: 'ezl-charge',
   companyId: 'ezllabs',
   productId: 'ezl-charge',
-  name: '이즐충전소',
+  // 제품 이름과 같던 name 을 narrative.result 에서 다시 지었다.
+  name: '이즐워크 미션 조회 중복 호출 제거',
   role: '기능 담당',
   roleDetail: '이즐워크 조회 API 호출 개선·충전 실패 재시도 플로우 구현·Sentry 이슈 대응',
   contribution:
@@ -25,6 +26,8 @@ export const ezlCharge: Project = {
     secondary: ['Recoil'],
   },
   metricIds: ['ezl-inquiry-api', 'ezl-crash-free', 'ezl-mau'],
+  highlight:
+    '미션 조회를 useQuery 캐시로 공유해 페이지 진입당 호출을 {m:ezl-inquiry-api}로 줄이고, 보상 버튼은 첫 클릭만 처리해 연속 클릭 에러 제거',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {

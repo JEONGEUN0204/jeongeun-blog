@@ -15,7 +15,8 @@ export const coditChatCoditStreaming: Project = {
   id: 'codit-chatcodit-streaming',
   companyId: 'codit',
   productId: 'codit-chatcodit',
-  name: '실시간 스트리밍',
+  // narrative.result 에서 지은 이름. 세 문서가 함께 쓴다.
+  name: '블록 단위 전송 규격으로 수동 파서 제거',
   role: '설계·구현 리드',
   roleDetail: '스트리밍 응답 규격을 설계해 백엔드·PM에 제안하고, 새 규격에 맞춰 프론트엔드 구현',
   contribution:
@@ -25,6 +26,8 @@ export const coditChatCoditStreaming: Project = {
     secondary: ['SSE', 'streamdown'],
   },
   metricIds: ['sse-parser-lines', 'sse-protocol-scope'],
+  highlight:
+    '불완전한 JSON을 직접 해석하던 구조를 모든 이벤트가 유효한 JSON인 블록 단위 전송 규격({m:sse-protocol-scope})으로 재설계해 백엔드에 제안, 수동 파서 {m:sse-parser-lines} 제거',
   depth: 'flagship',
   kind: 'improvement',
   narrative: {

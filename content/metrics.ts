@@ -10,6 +10,8 @@ export const metrics: Metric[] = [
   {
     id: 'ezl-inquiry-api',
     value: 'API 호출 75%↓',
+    // highlight 문장용. evidence 의 진입 1회당 호출 수 비교(4회 → 1회)와 같은 사실이다.
+    inline: '4회 → 1회',
     label: '미션 조회 중복 호출 제거',
     kind: 'tech',
     evidence:
@@ -33,7 +35,7 @@ export const metrics: Metric[] = [
     label: '웹·앱 신규 구축·운영',
     kind: 'scope',
     evidence:
-      'ChatCODIT Web React → Next.js 신규 구축, ChatCODIT App iOS·Android 1.0.x 출시(2026.04, 결제 없음). 인앱 구독은 Android 1.1.0·iOS 1.1.2 부터',
+      'ChatCODIT Web React → Next.js 신규 구축, ChatCODIT App iOS·Android 출시(2026.04, 결제 없음). 인앱 구독은 Android 2026.06.08·iOS 2026.06.24 부터',
   },
   {
     id: 'web-app-scope',
@@ -45,6 +47,7 @@ export const metrics: Metric[] = [
   {
     id: 'sse-parser-lines',
     value: '수동 파싱 로직 파일 제거(1,281줄)',
+    inline: '1,281줄',
     // label 은 입력 블록에 없어 기존 값을 유지한다.
     label: '수동 스트리밍 파서',
     kind: 'tech',
@@ -54,6 +57,7 @@ export const metrics: Metric[] = [
   {
     id: 'sse-protocol-scope',
     value: '전송 규격 재설계 · 이벤트 9종',
+    inline: '이벤트 9종',
     // label 은 입력 블록에 없어 TBD 다.
     label: 'TBD',
     kind: 'scope',
@@ -80,7 +84,7 @@ export const metrics: Metric[] = [
     value: '눈 확인 → 스타일 값 비교',
     label: '변환 결과 확인 방식',
     kind: 'tech',
-    evidence: '문서에 명시한 완료 조건 4종',
+    evidence: 'SKILL.md 완료 기준 중 값으로 판정하는 4종',
     // 변환 소요 시간·문제 발생률 미측정. 사유를 값에 붙이면 verify 가 TBD 로 잡지 못해 주석으로 둔다.
     businessImpact: 'TBD',
   },
@@ -88,6 +92,7 @@ export const metrics: Metric[] = [
   {
     id: 'codit-header-refetch',
     value: '헤더 API 전환당 2건 → 0건',
+    inline: '2건 → 0건',
     // label 은 입력 블록에 없어 TBD 다.
     label: 'TBD',
     kind: 'tech',
@@ -100,6 +105,7 @@ export const metrics: Metric[] = [
   {
     id: 'codit-dashboard-lcp',
     value: 'LCP 5.3초 → 1.8초',
+    inline: '5.3초 → 1.8초',
     label: '대시보드 첫 화면 순차 로딩',
     kind: 'tech',
     evidence:

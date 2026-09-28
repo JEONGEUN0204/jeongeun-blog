@@ -46,6 +46,11 @@ export type Metric = {
   value: string
   /** 값 아래 라벨 */
   label: string
+  /**
+   * 작업 highlight 의 `{m:id}` 자리에 들어갈 문장용 표기. value 가 문장에 넣기 어색할 때만 둔다.
+   * 예: value 'LCP 5.3초 → 1.8초' → inline '5.3초 → 1.8초'. 없으면 value 를 그대로 쓴다.
+   */
+  inline?: string
   kind: MetricKind
   /** 측정 방법·출처. 화면에 렌더하지 않는다. 면접 대비용. */
   evidence: string | Tbd
@@ -139,6 +144,16 @@ export type Project = {
   /** 버전 표기 금지. primary = 주력, secondary = 보조. */
   stack: { primary: string[]; secondary: string[] }
   metricIds: string[]
+  /**
+   * /resume 의 한 줄 설명. 이력서 하이라이트 제목은 name, 설명은 이 필드다 — 둘 다 따로 쓰지 않는다.
+   *
+   * narrative 에서 파생한다: decision.chosen(무엇을 어떻게 바꿨나) + result(무엇이 달라졌나).
+   * problem 은 판단 이유에 꼭 필요할 때만 앞에 짧게 붙인다. narrative 에 없는 행위·성과는 쓰지 않는다.
+   * 수치는 타이핑하지 않고 `{m:<metric-id>}` 로 참조한다(id 는 metricIds 안에 있어야 한다).
+   * 명사로 끝낸다. 작업 하나 = 이력서 한 줄이라 배열로 만들지 않는다.
+   * /careers · /portfolio 는 이 필드를 쓰지 않는다.
+   */
+  highlight: string
   depth: ProjectDepth
   kind: ProjectKind
   /**
@@ -148,24 +163,14 @@ export type Project = {
   narrative?: Narrative
 }
 
-/** /resume 의 회사별 압축 하이라이트. 7단 이관이 끝나면 narrative 에서 파생된다. */
-export type ExperienceHighlight = {
-  title: string
-  /** `**…**` 로 감싼 부분은 강조해 렌더한다. 수치를 눈에 띄게 할 때 쓴다. */
-  detail: string
-}
-
-export type ExperienceGroup = {
-  /** content/products.ts 의 Product['id']. 소제목 문자열은 제품에서 만든다. */
-  productId: string
-  highlights: ExperienceHighlight[]
-}
-
+/**
+ * /resume 의 회사 머리. 하이라이트는 여기 두지 않는다 — 회사의 제품(products.ts 순서)과
+ * 그 제품의 작업(projects 배열 순서)에서 name · highlight 를 읽어 만든다.
+ */
 export type Experience = {
   companyId: CompanyId
   role: string
   summary: string
-  groups: ExperienceGroup[]
 }
 
 /** 나열만 하면 주력/보조를 알 수 없다는 지적에 따라 두 단으로 나눈다. */

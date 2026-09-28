@@ -17,6 +17,8 @@ export const coditAgentsMd: Project = {
     secondary: [],
   },
   metricIds: [],
+  highlight:
+    'AGENTS.md를 단일 원본으로 두고 도구별 파일이 import로 불러오게 구성해, Cursor와 Claude Code를 함께 쓰는 팀의 참조 문서 통일',
   depth: 'supporting',
   kind: 'build',
   narrative: {
