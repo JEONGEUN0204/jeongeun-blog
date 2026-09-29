@@ -96,7 +96,7 @@ export default function ResumeContent() {
             </span>
           </div>
         </div>
-        <p className="mt-10 mb-10 max-w-[22em] text-3xl leading-snug font-bold tracking-tight text-balance break-keep text-gray-900 sm:text-4xl sm:leading-[1.3] dark:text-gray-100 print:mt-4 print:mb-4 print:text-2xl">
+        <p className="mt-10 mb-10 text-lg leading-relaxed font-semibold tracking-tight break-keep text-gray-900 sm:text-xl dark:text-gray-100 print:mt-4 print:mb-4 print:text-base">
           {aboutLead}
         </p>
       </Section>
