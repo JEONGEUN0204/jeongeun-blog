@@ -16,7 +16,7 @@ export const ezlCharge: Project = {
   productId: 'ezl-charge',
   // 제품 이름과 같던 name 을 narrative.result 에서 다시 지었다.
   name: '이즐워크 미션 조회 중복 호출 제거',
-  role: '기능 담당',
+  role: '기능 구현',
   roleDetail: '이즐워크 조회 API 호출 개선·충전 실패 재시도 플로우 구현·Sentry 이슈 대응',
   contribution:
     '이즐워크 API 호출 개선은 원인 파악부터 구현까지 혼자 진행. 충전 실패 재시도 플로우는 기획을 받아 결과 코드별 분기(처음부터 재충전·미완료 거래 NFC 재처리·카드 불일치 재시도)를 구현. Sentry 이슈 확인·수정은 팀원과 나눠서 담당. Kotlin·Swift는 SDK 연동 코드 일부만 작성',
@@ -27,7 +27,7 @@ export const ezlCharge: Project = {
   },
   metricIds: ['ezl-inquiry-api', 'ezl-crash-free', 'ezl-mau'],
   highlight:
-    '미션 조회를 useQuery 캐시로 공유해 페이지 진입당 호출을 {m:ezl-inquiry-api}로 줄이고, 보상 버튼은 첫 클릭만 처리해 연속 클릭 에러 제거',
+    '이즐워크 API 호출 문제를 원인 파악부터 맡아 미션 조회를 useQuery 캐시로 공유해 진입당 호출을 {m:ezl-inquiry-api}로 줄이고, 보상 버튼 연속 클릭 에러 제거',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {

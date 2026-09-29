@@ -21,9 +21,8 @@ export const ezlBackoffice: Project = {
   companyId: 'ezllabs',
   productId: 'ezl-backoffice',
   name: '백오피스',
-  role: '기능 담당',
-  roleDetail:
-    '이즐충전소 운영용 관리자 페이지(CS팀·운영팀 사용)의 신규 메뉴 구축, 에러 처리 구조 개선, 운영 이슈 대응',
+  role: '기능 구현',
+  roleDetail: 'CS·운영팀용 관리자 페이지 신규 메뉴 구축·에러 처리 구조 개선·운영 이슈 대응',
   contribution:
     '이미 운영 중인 백오피스에 카드 배경 관리·포인트 조회·URL 관리·룰렛 등 신규 화면을 만들고, API 스펙 변경 대응과 버그 수정을 맡았다. 에러 처리에서는 react-error-boundary를 저장소에 처음 도입해 목록 단위 에러 경계를 7개 도메인에 적용하고 공통 ErrorFallback 컴포넌트를 작성했다. 커스텀 에러 객체(EnhancedError)와 throwOnError 전역 설정은 동료가 만들었고, 이를 fallback 전반에 적용하는 일을 했다.',
   stack: {
@@ -32,7 +31,7 @@ export const ezlBackoffice: Project = {
   },
   metricIds: [],
   highlight:
-    '목록·그리드만 ErrorBoundary로 감싸 실패한 자리에 재시도 버튼을 두는 목록 단위 에러 경계를 도메인별로 적용',
+    'react-error-boundary를 저장소에 처음 도입해 실패한 목록 자리에 재시도 버튼을 두는 에러 경계를 적용, 팀 기본 구조로 채택',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {

@@ -24,7 +24,7 @@ export const profile: ProfileBasic = {
  * 같은 숫자를 두 번 읽히면 ABOUT 이 요약이 아니라 중복이 된다.
  */
 export const aboutLead =
-  '더 나은 방법을 고민하고, 팀이 함께 효율적으로 일할 수 있게 만드는 프론트엔드 엔지니어입니다.'
+  'React, Next.js와 React Native로 웹·앱 제품을 설계·구현해 왔습니다. 데이터를 불러오는 구조를 다듬어 사용자가 기다리는 시간을 줄이고, 팀이 함께 쓰는 도구와 규칙을 정리해 협업 효율화에 기여해왔습니다.'
 
 export const about: AboutPoint[] = [
   {

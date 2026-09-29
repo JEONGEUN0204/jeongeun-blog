@@ -26,7 +26,7 @@ export const coditChatCoditAppBuild: Project = {
   name: 'iOS·Android 앱 출시와 인앱 구독 운영',
   role: '설계·구현 리드',
   roleDetail:
-    'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱 추가 — 초기 구조·배포·스트리밍·구독 결제 담당',
+    'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱 추가 — 구조·배포·스트리밍·구독 결제 담당',
   contribution:
     '3명 중 앱 초기 세팅과 구조 설계, 스토어 배포, 채팅 스트리밍, 인앱 구독 결제, iOS 심사 대응을 맡음. Expo와 expo-iap 도입을 직접 결정. 나머지 두 명은 이 구조 위에서 남은 기능을 개발. 영수증 검증과 구독 상태 저장은 백엔드 담당',
   stack: {
@@ -35,7 +35,7 @@ export const coditChatCoditAppBuild: Project = {
   },
   metricIds: [],
   highlight:
-    '서버 검증이 성공한 뒤에만 거래를 완료하고 실패한 거래는 스토어 큐에 남겨 다음 실행·로그인 때 다시 검증하도록 구독 결제 흐름 설계',
+    '3명 중 앱 초기 구조·배포·구독 결제를 맡아, 서버 검증 성공 뒤에만 거래를 완료하고 실패 거래는 다음 실행·로그인 때 재검증하는 결제 흐름 설계',
   depth: 'supporting',
   kind: 'build',
   narrative: {

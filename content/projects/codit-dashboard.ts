@@ -29,7 +29,7 @@ export const coditDashboard: Project = {
   },
   metricIds: ['codit-dashboard-lcp', 'codit-dashboard-hooks'],
   highlight:
-    '뉴스를 슬라이드 단위로 요청하고 섹션별 쿼리 훅·queryKey를 한 체계로 합쳐, 첫 화면이 기다리는 목록과 썸네일을 줄여 LCP {m:codit-dashboard-lcp} 단축',
+    '대시보드 데이터 로딩을 슬라이드 단위 요청과 쿼리 훅·queryKey 단일 체계로 설계·구현해, 첫 화면 LCP {m:codit-dashboard-lcp} 단축',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {

@@ -7,7 +7,7 @@ import { TBD, type Project } from '@/content/schema'
  * 아직 확보하지 못한 값(TBD)은 지어내지 않고 비워 둔다.
  *
  * 작업 단위다 — 같은 제품 안에서도 작업마다 역할이 다르다(대시보드는 '설계·구현 리드',
- * AppShell 은 '단독 담당'). 제품 헤더가 대표로 하나를 고르면 그 순간 나머지가 틀린 말이 된다.
+ * AppShell 은 '기획·구현'). 제품 헤더가 대표로 하나를 고르면 그 순간 나머지가 틀린 말이 된다.
  */
 export function WorkMeta({ work }: { work: Project }) {
   return (

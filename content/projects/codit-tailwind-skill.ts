@@ -10,7 +10,7 @@ export const coditTailwindSkill: Project = {
   productId: 'codit-platform',
   name: 'Tailwind 마이그레이션 작업 표준화',
   role: '설계·구현 리드',
-  roleDetail: '마이그레이션 규칙과 검증 절차를 정해 Claude Code 스킬로 저장소에 고정',
+  roleDetail: '마이그레이션 규칙과 검증 절차를 정해 스킬로 정리',
   contribution: '완료 판정 기준을 먼저 정하고, 그 기준에 맞춘 에이전트 하네스를 설계',
   stack: {
     primary: ['Claude Code', 'Tailwind'],
@@ -18,7 +18,7 @@ export const coditTailwindSkill: Project = {
   },
   metricIds: ['tw-migration-backlog', 'tw-migration-check'],
   highlight:
-    '스타일 값 비교를 완료 기준으로 삼은 변환 규칙·검증 절차를 SKILL.md로 작성해, 팀이 /styled-to-tailwind 명령 하나로 쓰도록 공유',
+    '스타일 값 비교를 완료 기준으로 정하고 변환 규칙·검증 절차를 SKILL.md로 설계해, 팀이 /styled-to-tailwind 명령 하나로 쓰도록 공유',
   depth: 'supporting',
   kind: 'build',
   narrative: {

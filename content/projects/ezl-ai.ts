@@ -26,7 +26,7 @@ export const ezlAi: Project = {
   companyId: 'ezllabs',
   productId: 'ezl-ai',
   name: 'Jira/Confluence 검색 AI',
-  role: '기능 담당',
+  role: '기능 구현',
   roleDetail: 'Jira 검색 AI의 LLM 인터페이스 레이어(프롬프트, 도구 호출, 응답 포맷) 담당',
   contribution:
     '3인 프로젝트에 자발적으로 참여해 client 영역(Genkit flow의 프롬프트·도구 호출 인터페이스·응답 포맷)을 수정. 배포 브랜치의 최종 프롬프트 작성. 수집 배치·검색 서버·인프라는 참여하지 않음',
@@ -36,7 +36,7 @@ export const ezlAi: Project = {
   },
   metricIds: [],
   highlight:
-    '개발 외 직군(PM)까지 사내에서 직접 쓰게 된 검색 AI에서, 도구 선택과 응답 작성을 LLM 호출 한 번으로 통합',
+    '3인 프로젝트에 자발적으로 참여해, PM까지 사내에서 직접 쓰게 된 검색 AI의 프롬프트·도구 호출·응답 포맷을 맡고 최종 프롬프트 작성',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {

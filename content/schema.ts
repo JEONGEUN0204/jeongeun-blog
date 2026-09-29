@@ -77,7 +77,7 @@ export type Narrative = {
 }
 
 /** 담당/리드/설계가 섞여 있으면 어떤 역할로 뽑을지 판단이 서지 않는다. 하나만 고른다. */
-export type ProjectRole = '단독 담당' | '설계·구현 리드' | '기능 담당' | '일부 참여' | Tbd
+export type ProjectRole = '기획·구현' | '설계·구현 리드' | '기능 구현' | '일부 참여' | Tbd
 
 /** flagship 만 /portfolio 에서 풀 전개한다. supporting 은 카드 1개 분량. */
 export type ProjectDepth = 'flagship' | 'supporting'
@@ -149,6 +149,8 @@ export type Project = {
    *
    * narrative 에서 파생한다: decision.chosen(무엇을 어떻게 바꿨나) + result(무엇이 달라졌나).
    * problem 은 판단 이유에 꼭 필요할 때만 앞에 짧게 붙인다. narrative 에 없는 행위·성과는 쓰지 않는다.
+   * 순서는 내 역할 범위 → 한 일 → 결과다. /resume 은 roleDetail 을 싣지 않으므로 역할 범위
+   * (직접 발견·제안·맡은 영역)를 contribution 에서 가져와 이 문장에 넣는다. role 이름은 배지가 보여준다.
    * 수치는 타이핑하지 않고 `{m:<metric-id>}` 로 참조한다(id 는 metricIds 안에 있어야 한다).
    * 명사로 끝낸다. 작업 하나 = 이력서 한 줄이라 배열로 만들지 않는다.
    * /careers · /portfolio 는 이 필드를 쓰지 않는다.

@@ -20,9 +20,8 @@ export const ezlDesignSystem: Project = {
   companyId: 'ezllabs',
   productId: 'ezl-design-system',
   name: '디자인 시스템',
-  role: '기능 담당',
-  roleDetail:
-    '사내 React Native 디자인 시스템 패키지에서 결제·교통카드 도메인 컴포넌트 구현과 Storybook 앱 배포 자동화 담당',
+  role: '기능 구현',
+  roleDetail: '결제·교통카드 도메인 컴포넌트 구현과 Storybook 앱 배포 자동화 담당',
   contribution:
     '요청받은 신규 컴포넌트 6종 구현과 기존 컴포넌트 8종 확장, Storybook 앱 자동 배포 파이프라인 구축, Storybook Controls 적용',
   stack: {
@@ -31,7 +30,7 @@ export const ezlDesignSystem: Project = {
   },
   metricIds: [],
   highlight:
-    '신규·확장 컴포넌트를 이즐충전소 앱과 모바일 이즐 앱에 반영하고, main 머지만으로 Storybook 앱 버전 증가·EAS 빌드가 도는 배포 파이프라인 구축',
+    '신규·확장 컴포넌트를 구현해 이즐충전소 앱과 모바일 이즐 앱에 반영하고, main 머지만으로 Storybook 앱 버전 증가·EAS 빌드가 도는 배포 파이프라인 구축',
   depth: 'supporting',
   kind: 'build',
   narrative: {

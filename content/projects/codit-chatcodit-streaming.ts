@@ -27,7 +27,7 @@ export const coditChatCoditStreaming: Project = {
   },
   metricIds: ['sse-parser-lines', 'sse-protocol-scope'],
   highlight:
-    '불완전한 JSON을 직접 해석하던 구조를 모든 이벤트가 유효한 JSON인 블록 단위 전송 규격({m:sse-protocol-scope})으로 재설계해 백엔드에 제안, 수동 파서 {m:sse-parser-lines} 제거',
+    '불완전한 JSON을 직접 해석하던 스트리밍을 블록 단위 전송 규격({m:sse-protocol-scope})으로 설계해 백엔드·PM에 제안하고 구현, 수동 파서 {m:sse-parser-lines} 제거',
   depth: 'flagship',
   kind: 'improvement',
   narrative: {

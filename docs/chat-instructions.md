@@ -68,7 +68,7 @@ product: <제품 id>             # 필수. 아래 '제품 id' 목록에서 고�
 name: <작업 이름>              # 제품 이름을 붙이지 않는다. 명사로 끝낸다. 이력서 한 줄의 제목이 된다
 depth: flagship | supporting
 kind: improvement | build | operation
-role: 단독 담당 | 설계·구현 리드 | 기능 담당 | 일부 참여   # 넷 중 하나. 섞어 쓰지 않는다
+role: 기획·구현 | 설계·구현 리드 | 기능 구현 | 일부 참여   # 넷 중 하나. 섞어 쓰지 않는다
 roleDetail: <한 줄로 구체화>
 contribution: <실제 수행 + 의사결정 기여 범위>              # 모르면 TBD
 summary: <작업 한 줄 요약>                                 # 없으면 줄을 지운다
@@ -92,6 +92,9 @@ LEARNING: <배운 점 — 짧게>
 
 HIGHLIGHT: <이력서 한 줄>        # DECISION.chosen + RESULT 를 한 줄로. 내가 한 행위의 명사형(적용·설계·제거)으로 끝낸다('다'·'함'·'됨'·마침표 금지)
                                   # 수치는 {m:<metric-id>} 로만. RESULT 를 그대로 옮기면 안 된다. 110자 이내
+                                  # 순서는 내 역할 범위 → 한 일 → 결과(STAR 압축). 이력서에 roleDetail 줄이 없으니
+                                  # 역할 범위(직접 발견해·제안하고·N명 중 ~를 맡아·설계·구현해)를 CONTRIBUTION 에서 가져와 문장에 넣는다.
+                                  # role 이름(설계·구현 리드 등)은 배지가 보여주므로 되풀이하지 않는다
 
 METRICS:
   - id: <metric-id> | value: <API 75%↓> | kind: tech | business | scope

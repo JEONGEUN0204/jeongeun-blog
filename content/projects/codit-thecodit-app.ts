@@ -22,7 +22,7 @@ export const coditTheCoditApp: Project = {
   companyId: 'codit',
   productId: 'codit-thecodit-app',
   name: '브릿지·네비게이션 처리로 앱↔웹 경계 반복 CS 해소',
-  role: '기능 담당',
+  role: '기능 구현',
   roleDetail: 'WebView 모달 네비게이션·브릿지 이슈 대응과 앱 릴리즈/실서버 배포 담당',
   contribution:
     '모달 중첩의 원인을 뒤로가기 경로 분기로 좁혀 핸들러를 일원화하고, 함께 넣은 플랫폼 방어 조건이 과했다는 걸 배포 전 스테이징 확인에서 잡아 철회. 스테이징 실기기 배포 경로 구성, 로딩 인디케이터 추가, 실서버 배포 4회 담당. 앱은 기존 구축분을 이어받아 여러 명이 함께 수정하는 구조',
@@ -32,7 +32,7 @@ export const coditTheCoditApp: Project = {
   },
   metricIds: [],
   highlight:
-    '앱↔웹 경계에서 반복 인입되던 모달 중첩의 원인을 뒤로가기 경로 분기로 좁혀, 하드웨어 백·헤더 백 핸들러 일원화',
+    '앱↔웹 경계에서 반복 인입되던 모달 중첩의 원인을 뒤로가기 경로 분기로 좁히고, 하드웨어 백·헤더 백 핸들러 일원화',
   depth: 'supporting',
   kind: 'operation',
   narrative: {

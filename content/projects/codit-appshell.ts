@@ -18,7 +18,7 @@ export const coditAppShell: Project = {
   companyId: 'codit',
   productId: 'codit-platform',
   name: '화면 전환 중 헤더 유지와 헤더 API 재호출 제거',
-  role: '단독 담당',
+  role: '기획·구현',
   roleDetail:
     '화면 전환 로딩 문제를 직접 발견해 원인 파악부터 AppShell 구조 설계·구현·전후 측정까지 담당',
   contribution:
@@ -29,7 +29,7 @@ export const coditAppShell: Project = {
   },
   metricIds: ['codit-header-refetch'],
   highlight:
-    '헤더·알림·디바이스 모달을 라우트 밖 AppShell로 옮겨 화면 전환 중에도 헤더를 유지하고, 전환당 헤더 API 호출을 {m:codit-header-refetch}으로 축소',
+    '화면 전환 로딩 문제를 직접 발견해 헤더·알림·디바이스 모달을 라우트 밖 AppShell로 옮기고, 전환당 헤더 API 호출을 {m:codit-header-refetch}으로 축소',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {
