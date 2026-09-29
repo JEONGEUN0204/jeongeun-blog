@@ -205,33 +205,43 @@ export default function ResumeContent() {
                         작업 하나 = 항목 하나. 제목은 name 이고, 그 아래 '역할'은 role 배지 + roleDetail,
                         '성과'는 highlight 를 그대로 싣는다 — 이력서 쪽에 따로 적는 문장은 없다.
                         제목이 제품 이름과 같으면 소제목과 겹쳐 역할·성과만 싣는다(highlightTitle).
+                        인쇄에서는 A4 분량을 줄이려고 역할 줄(roleDetail)과 두 라벨을 빼고,
+                        role 배지만 제목 옆(제목이 없으면 성과 앞)에 붙인다.
                       */}
                       <ul className={`mt-2 space-y-4 print:space-y-2.5 ${measure}`}>
                         {works.map((work) => {
                           const title = highlightTitle(work, product)
+                          const badge = (className: string) =>
+                            work.role !== TBD && (
+                              <span
+                                className={`rounded bg-gray-100 px-1.5 py-px text-xs font-medium whitespace-nowrap text-gray-700 dark:bg-gray-800 dark:text-gray-300 ${className}`}
+                              >
+                                {work.role}
+                              </span>
+                            )
                           return (
                             <li key={work.id} className="break-inside-avoid-page text-sm leading-6">
                               {title && (
                                 <p className="font-semibold text-gray-900 dark:text-gray-100">
                                   {title}
+                                  {badge('ml-2 hidden align-[1px] print:inline')}
                                 </p>
                               )}
-                              <dl className="mt-1 grid grid-cols-[2.5rem_minmax(0,1fr)] gap-y-0.5 text-gray-600 dark:text-gray-400 print:mt-0.5 print:gap-y-0 print:leading-5">
-                                <dt className="font-medium text-gray-500 dark:text-gray-500">
+                              <dl className="mt-1 grid grid-cols-[2.5rem_minmax(0,1fr)] gap-y-0.5 text-gray-600 dark:text-gray-400 print:mt-0.5 print:block print:leading-5">
+                                <dt className="font-medium text-gray-500 dark:text-gray-500 print:hidden">
                                   역할
                                 </dt>
-                                <dd>
-                                  {work.role !== TBD && (
-                                    <span className="mr-1.5 rounded bg-gray-100 px-1.5 py-px text-xs font-medium whitespace-nowrap text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                                      {work.role}
-                                    </span>
-                                  )}
+                                <dd className="print:hidden">
+                                  {badge('mr-1.5')}
                                   {work.roleDetail}
                                 </dd>
-                                <dt className="font-medium text-gray-500 dark:text-gray-500">
+                                <dt className="font-medium text-gray-500 dark:text-gray-500 print:hidden">
                                   성과
                                 </dt>
-                                <dd>{renderHighlight(work.highlight)}</dd>
+                                <dd>
+                                  {!title && badge('mr-1.5 hidden print:inline')}
+                                  {renderHighlight(work.highlight)}
+                                </dd>
                               </dl>
                             </li>
                           )
