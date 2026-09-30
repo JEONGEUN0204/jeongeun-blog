@@ -95,7 +95,7 @@ export function productBody({ product, no }: Props): {
 /** 개요 — 헤더 · 스크린샷 · (작업이 하나뿐이면) 그 작업의 서술 카드. 본문 맨 앞에 온다. */
 function ProductOverview({ product, no, single }: Props & { single?: Project }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 print:space-y-4">
       <ProductHeader product={product} badge={no} summary={product.summary} work={single} />
       {product.images && product.imageSize && (
         <Screenshots
@@ -137,13 +137,16 @@ function NarrativeSection({ work, narrative }: { work: Project; narrative: Narra
 function WorkSection({ work }: { work: Project }) {
   return (
     <section>
-      {/* 섹션 본문의 첫 요소라 prose 의 h3 위 여백을 뗀다 */}
-      <h3 className="mt-0">
-        <WorkTitle work={work} />
-      </h3>
-      <div className="not-prose space-y-3">
-        <WorkMeta work={work} />
-        <StackTags stack={work.stack} />
+      {/* 인쇄에서 제목·역할·스택이 쪽 경계로 갈라지거나, 이 머리만 쪽 끝에 남고 서술이 다음 쪽에서 시작하지 않게 묶는다 */}
+      <div className="break-inside-avoid-page break-after-avoid-page">
+        {/* 섹션 본문의 첫 요소라 prose 의 h3 위 여백을 뗀다 */}
+        <h3 className="mt-0">
+          <WorkTitle work={work} />
+        </h3>
+        <div className="not-prose space-y-3">
+          <WorkMeta work={work} />
+          <StackTags stack={work.stack} />
+        </div>
       </div>
       {work.narrative && (
         <div className="not-prose mt-6">

@@ -46,15 +46,17 @@ export default function ProductHeader({ product, badge, summary, work }: Props) 
       </div>
 
       {work && (
-        <div className="mt-4">
+        <div className="mt-4 print:mt-3">
           <WorkMeta work={work} />
         </div>
       )}
-      <div className="mt-4">
+      <div className="mt-4 print:mt-3">
         <StackTags stack={productStack(product.id)} />
       </div>
       {summary && (
-        <p className="mt-4 max-w-[68ch] leading-7 text-gray-600 dark:text-gray-400">{summary}</p>
+        <p className="mt-4 max-w-[68ch] leading-7 text-gray-600 dark:text-gray-400 print:mt-3 print:leading-6">
+          {summary}
+        </p>
       )}
     </header>
   )

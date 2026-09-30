@@ -119,7 +119,7 @@ function Stage({
   return (
     <div
       {...anchor}
-      className={`relative outline-none before:absolute before:top-8 before:-bottom-10 before:-left-[33px] before:w-0.5 before:bg-gray-200 last:before:hidden dark:before:bg-gray-800 ${keepTogether ? 'break-inside-avoid-page' : ''}`}
+      className={`relative outline-none before:absolute before:top-8 before:-bottom-5 before:-left-[33px] before:w-0.5 before:bg-gray-200 last:before:hidden dark:before:bg-gray-800 print:before:-bottom-3 ${keepTogether ? 'break-inside-avoid-page' : ''}`}
     >
       <span
         aria-hidden
@@ -131,11 +131,12 @@ function Stage({
       >
         {step}
       </span>
-      <p className="text-primary-700 dark:text-primary-300 text-[15px] leading-8 font-bold">
+      {/* 긴 칸은 통째로 묶지 않으므로, 라벨만 쪽 끝에 홀로 남지 않게 한다 */}
+      <p className="text-primary-700 dark:text-primary-300 break-after-avoid-page text-[15px] leading-8 font-bold print:leading-7">
         {label}
       </p>
       <div
-        className={`mt-1 max-w-[68ch] ${
+        className={`mt-1 max-w-[68ch] print:leading-6 ${
           emphasis
             ? 'leading-7 font-semibold text-gray-900 dark:text-gray-100'
             : 'leading-7 text-gray-700 dark:text-gray-300'
@@ -215,7 +216,7 @@ export function NarrativeFull({ narrative, idPrefix }: { narrative: Narrative; i
     인쇄에서는 칸 간격을 줄인다 — 화면 간격 그대로면 마지막 칸(배움) 두 줄이 다음 장으로 넘어가 한 장을 비운다.
   */
   return (
-    <div className="not-prose relative space-y-10 pl-12 print:space-y-6">
+    <div className="not-prose relative space-y-5 pl-12 print:space-y-3">
       <Stage step={step('problem')} label={STAGE_LABEL.problem} anchor={anchor('problem')}>
         <p>{narrative.problem}</p>
       </Stage>
@@ -276,7 +277,7 @@ export function NarrativeFull({ narrative, idPrefix }: { narrative: Narrative; i
 export function NarrativeBrief({ narrative }: { narrative: Narrative | ShortNarrative }) {
   if (isShortNarrative(narrative)) return <ShortBrief narrative={narrative} />
   return (
-    <div className="not-prose relative space-y-8 pl-12 print:space-y-5">
+    <div className="not-prose relative space-y-5 pl-12 print:space-y-3">
       <Stage step={1} label={STAGE_LABEL.problem} keepTogether>
         <p>{narrative.problem}</p>
       </Stage>
@@ -301,7 +302,7 @@ export function NarrativeBrief({ narrative }: { narrative: Narrative | ShortNarr
 function ShortBrief({ narrative }: { narrative: ShortNarrative }) {
   const offset = narrative.cause ? 1 : 0
   return (
-    <div className="not-prose relative space-y-8 pl-12 print:space-y-5">
+    <div className="not-prose relative space-y-5 pl-12 print:space-y-3">
       <Stage step={1} label={STAGE_LABEL.problem} keepTogether>
         <p>{narrative.problem}</p>
       </Stage>
