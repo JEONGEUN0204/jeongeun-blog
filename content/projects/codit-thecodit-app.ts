@@ -1,7 +1,7 @@
 import type { Project } from '../schema'
 
 /**
- * 제품 '더코딧 앱' 의 유일한 작업. name 에서 제품 이름을 떼어 'WebView 하이브리드' 만 남겼다가, result 가 보이는 이름으로 바꿨다(2026-09-29) —
+ * 제품 'CODIT 플랫폼 앱' 의 유일한 작업. name 에서 제품 이름을 떼어 'WebView 하이브리드' 만 남겼다가, result 가 보이는 이름으로 바꿨다(2026-09-29) —
  * 제품 이름은 content/products.ts 의 codit-thecodit-app 이 적는다.
  *
  * 서술은 narrative 가 원천이다. /careers 는 codit.mdx 의 07 자리(<ProjectNarrative>)에서

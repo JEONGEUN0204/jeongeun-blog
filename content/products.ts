@@ -21,7 +21,7 @@ export const products: Product[] = [
   {
     id: 'codit-platform',
     companyId: 'codit',
-    name: 'Codit 플랫폼',
+    name: 'CODIT 플랫폼',
     platform: 'Web',
     // summary 는 아직 문구를 받지 못했다 — verify 가 목록으로 보고한다.
     images: ['/static/images/codit-dashboard-1.jpg', '/static/images/codit-dashboard-2.jpg'],
@@ -58,7 +58,7 @@ export const products: Product[] = [
   {
     id: 'codit-thecodit-app',
     companyId: 'codit',
-    name: '더코딧 앱',
+    name: 'CODIT 플랫폼 앱',
     platform: 'iOS · Android · WebView',
     summary:
       '코딧 웹 서비스를 WebView로 래핑한 하이브리드 앱. 네이티브 셸과 웹 콘텐츠 간 브릿지(postMessage) 통신·모달 웹뷰 네비게이션이 핵심입니다.',

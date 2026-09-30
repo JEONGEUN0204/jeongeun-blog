@@ -164,8 +164,8 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
 
 **회사** — `codit`(2025.11 ~ 현재), `ezllabs`(2024.06 ~ 2025.10)
 
-**제품 id** — `codit-platform`(Codit 플랫폼 · Web), `codit-chatcodit`(ChatCODIT · Web),
-`codit-chatcodit-app`(ChatCODIT App · iOS · Android), `codit-thecodit-app`(더코딧 앱 · iOS · Android · WebView),
+**제품 id** — `codit-platform`(CODIT 플랫폼 · Web), `codit-chatcodit`(ChatCODIT · Web),
+`codit-chatcodit-app`(ChatCODIT App · iOS · Android), `codit-thecodit-app`(CODIT 플랫폼 앱 · iOS · Android · WebView),
 `ezl-charge`(이즐충전소 · React Native · 앱), `ezl-backoffice`(백오피스 · React · 운영 웹),
 `ezl-design-system`(디자인 시스템 · React Native · Storybook), `ezl-ai`(Jira/Confluence 검색 AI · TypeScript · Genkit)
 
@@ -189,7 +189,7 @@ evidence: 2025.03 vs 2025.06 CS 티켓 집계
    작업이 없어 세 문서 어디에도 보이지 않는다. 7단 서술 + HIGHLIGHT 로 받으면 작업으로 세운다.
 2. **ChatCODIT App 의 인증·보안·배포** — 7단 서술이 없어 작업을 지웠다(2026-09-28). 다시 올리려면
    7단 서술 + HIGHLIGHT 가 필요하다.
-3. **`codit-platform` 제품의 카드 요약** — Codit 플랫폼 자체를 한 줄로 설명하는 문장
+3. **`codit-platform` 제품의 카드 요약** — CODIT 플랫폼 자체를 한 줄로 설명하는 문장
    (`PRODUCT` 블록의 `summary`).
 4. **기술 지표들의 `label` 과 사업 지표 연결** — `ezl-inquiry-api`, `ezl-crash-free`,
    `sse-parser-lines`, `codit-dashboard-lcp`, `codit-dashboard-hooks` 등
