@@ -22,7 +22,8 @@ const Header = () => {
     <header className={headerClass}>
       <Link href="/" aria-label={siteMetadata.headerTitle}>
         <div className="flex items-center justify-between">
-          <div className="mt-2 mr-1">
+          {/* JE 모노그램. 바탕은 currentColor, 획은 --logo-fg 라 다크모드에서 색이 함께 뒤집힌다 */}
+          <div className="text-primary-700 dark:text-primary-400 mt-1 mr-2 [--logo-fg:#fff] dark:[--logo-fg:var(--color-gray-950)]">
             <Logo />
           </div>
           {typeof siteMetadata.headerTitle === 'string' ? (

@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <link
         rel="apple-touch-icon"
-        sizes="76x76"
+        sizes="180x180"
         href={`${basePath}/static/favicons/apple-touch-icon.png`}
       />
       <link
@@ -98,9 +98,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link
         rel="mask-icon"
         href={`${basePath}/static/favicons/safari-pinned-tab.svg`}
-        color="#5bbad5"
+        color="#2e4f73"
       />
-      <meta name="msapplication-TileColor" content="#000000" />
+      <meta name="msapplication-TileColor" content="#2e4f73" />
       {/* 브라우저 UI 색. css/tailwind.css 의 sand-50(라이트 그레이)·gray-950(다크 바탕)과 같은 값이다. */}
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F5F5" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B1118" />
