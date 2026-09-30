@@ -29,7 +29,7 @@ export default function ProductHeader({ product, badge, summary, work }: Props) 
     <header className="not-prose break-inside-avoid-page break-after-avoid-page">
       <div className="flex items-start gap-4">
         {/* 번호 원 — 경력기술서 섹션 번호·서술 줄기의 단계 번호와 같은 모양이다. */}
-        <div className="border-primary-700 text-primary-700 dark:border-primary-400 dark:text-primary-300 mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold tabular-nums">
+        <div className="border-primary-700 text-primary-700 dark:border-primary-400 dark:text-primary-300 mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border-2 pb-px text-sm leading-none font-bold tabular-nums">
           {badge}
         </div>
         <div className="min-w-0 flex-1">

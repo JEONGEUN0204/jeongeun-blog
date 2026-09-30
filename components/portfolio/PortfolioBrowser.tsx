@@ -165,11 +165,11 @@ export default function PortfolioBrowser({ title, companies }: Props) {
                 projectIndex > 0 ? 'print:break-before-page' : ''
               }`}
             >
-              {/* 가로 목차는 article 의 직계 자식이어야 한다. 감싸면 sticky 가 감싼 요소 높이 안에 갇힌다. */}
+              {/* 떠 있는 목차는 article 을 기준으로 본문이 화면에 들어왔는지 판단한다 — article 의 직계 자식으로 둔다. */}
               <ProductIndex
                 product={entry}
-                layout="bar"
-                className="mb-8 min-[90rem]:hidden print:hidden noscript:hidden"
+                layout="floating"
+                className="print:hidden noscript:hidden"
               />
               <ProductBody product={entry} />
             </article>

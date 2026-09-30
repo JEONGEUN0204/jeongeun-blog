@@ -1,6 +1,6 @@
 'use client'
 
-import type { MouseEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
 import { overviewId, scrollBehavior, type PortfolioProduct } from './portfolio'
 
 /**
@@ -54,7 +54,7 @@ function jump(event: MouseEvent<HTMLAnchorElement>, id: string) {
  * 본문 목차. 위치 이동만 한다 — 누른 자리로 스크롤할 뿐 본문을 열고 닫지 않는다.
  *
  * - rail: 1440px 이상에서 왼쪽 여백 레일(PortfolioBrowser) 안에 세로로 선다.
- * - bar: 그보다 좁으면 본문 맨 위에 가로 줄로 붙어 스크롤을 따라온다. 하위 자리는 옅은 톤으로 잇는다.
+ * - floating: 그보다 좁으면 화면 오른쪽에 떠 있는 버튼으로 연다(FloatingIndex).
  */
 export function ProductIndex({
   product,
@@ -62,10 +62,10 @@ export function ProductIndex({
   className = '',
 }: {
   product: PortfolioProduct
-  layout: 'rail' | 'bar'
+  layout: 'rail' | 'floating'
   className?: string
 }) {
-  const entries = entriesOf(product)
+  const entries = useMemo(() => entriesOf(product), [product])
   const label = `${product.name} 목차`
 
   if (layout === 'rail') {
@@ -93,28 +93,176 @@ export function ProductIndex({
     )
   }
 
+  return <FloatingIndex entries={entries} label={label} className={className} />
+}
+
+const FLOATING_IDLE =
+  'bg-white text-gray-600 ring-gray-200 hover:text-gray-900 dark:bg-gray-900 dark:text-gray-300 dark:ring-gray-700 dark:hover:text-gray-100'
+const FLOATING_BUTTON = `flex size-10 items-center justify-center rounded-full shadow-md ring-1 transition-colors motion-reduce:transition-none ${FLOATING_IDLE}`
+
+/**
+ * 떠 있는 목차 + 맨 위로 버튼. 화면 오른쪽 가운데의 둥근 버튼을 누르면 그 왼쪽에 전체 목차가 펼쳐진다.
+ *
+ * 가로 줄 목차는 항목 수(1~9개)와 제목 길이가 제품마다 달라 모양이 들쭉날쭉했다. 세로 목록은
+ * 항목이 몇 개든 같은 모양이고 긴 제목도 줄바꿈으로 다 보인다. 버튼은 본문이 화면에 들어왔을 때만 뜬다.
+ * 맨 위로 버튼은 목차 아래에 붙어 모든 폭에서 뜬다 — 넓은 화면에서는 목차 버튼만 숨고 레일 목차가 대신한다.
+ *
+ * 지금 읽는 자리: 화면 위쪽 1/4 선을 지난 마지막 자리. 페이지 끝에 닿으면 마지막 칸들은 그 선을
+ * 영영 넘지 못하므로, 끝에서는 화면 안에 머리가 들어온 마지막 자리로 정한다.
+ */
+function FloatingIndex({
+  entries,
+  label,
+  className,
+}: {
+  entries: Entry[]
+  label: string
+  className: string
+}) {
+  const rootRef = useRef<HTMLElement>(null)
+  const [active, setActive] = useState<string | null>(null)
+  const [visible, setVisible] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const article = rootRef.current?.parentElement
+      if (!article) return
+      const box = article.getBoundingClientRect()
+      setVisible(box.top < window.innerHeight / 2 && box.bottom > window.innerHeight / 2)
+
+      const atEnd =
+        Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 2
+      const line = atEnd ? window.innerHeight : window.innerHeight / 4
+      let current = entries[0]?.id ?? null
+      for (const entry of entries) {
+        const target = document.getElementById(entry.id)
+        if (target && target.getBoundingClientRect().top <= line) current = entry.id
+      }
+      setActive(current)
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [entries])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && setOpen(false)
+    const onPointer = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('pointerdown', onPointer)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('pointerdown', onPointer)
+    }
+  }, [open])
+
+  const shown = visible || open
+
   return (
     <nav
+      ref={rootRef}
       aria-label={label}
-      className={`bg-sand-50/95 sticky top-0 z-20 border-b border-gray-200 backdrop-blur dark:border-gray-700 dark:bg-gray-950/95 ${className}`}
+      className={`fixed top-1/2 right-4 z-30 flex -translate-y-1/2 flex-col gap-2 transition-opacity motion-reduce:transition-none sm:right-8 ${
+        shown ? 'opacity-100' : 'pointer-events-none opacity-0'
+      } ${className}`}
     >
-      <ol className="no-scrollbar flex items-center gap-1 overflow-x-auto py-2.5">
-        {entries.map((entry) => (
-          <li key={entry.id} className="shrink-0">
-            <a
-              href={`#${entry.id}`}
-              onClick={(event) => jump(event, entry.id)}
-              className={`block rounded-full px-3 py-1 text-xs whitespace-nowrap transition-colors motion-reduce:transition-none ${
-                entry.sub
-                  ? 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-                  : 'hover:border-accent-600 hover:text-accent-700 dark:hover:border-accent-400 dark:hover:text-accent-300 border border-gray-300 font-medium text-gray-700 dark:border-gray-700 dark:text-gray-300'
-              }`}
-            >
-              {entry.title}
-            </a>
-          </li>
-        ))}
-      </ol>
+      {/* 개요 한 줄뿐이면 옮겨 갈 자리가 없다. 넓은 화면은 왼쪽 레일 목차가 같은 일을 한다. */}
+      {entries.length > 1 && (
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-label={open ? '목차 닫기' : '목차 열기'}
+          onClick={() => setOpen((value) => !value)}
+          className={`flex size-10 items-center justify-center rounded-full shadow-md ring-1 transition-colors motion-reduce:transition-none min-[90rem]:hidden ${
+            open ? 'bg-accent-600 ring-accent-600 text-white' : FLOATING_IDLE
+          }`}
+        >
+          <svg
+            aria-hidden
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.8}
+            strokeLinecap="round"
+            className="size-5"
+          >
+            <path d="M7 5.5h9M7 10h9M7 14.5h9" />
+            <circle cx="3.75" cy="5.5" r=".9" fill="currentColor" stroke="none" />
+            <circle cx="3.75" cy="10" r=".9" fill="currentColor" stroke="none" />
+            <circle cx="3.75" cy="14.5" r=".9" fill="currentColor" stroke="none" />
+          </svg>
+        </button>
+      )}
+
+      <button
+        type="button"
+        aria-label="맨 위로"
+        onClick={() => {
+          setOpen(false)
+          window.scrollTo({ top: 0, behavior: scrollBehavior() })
+        }}
+        className={FLOATING_BUTTON}
+      >
+        <svg
+          aria-hidden
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="size-5"
+        >
+          <path d="M10 16V4.5M5 9.5l5-5 5 5" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute top-1/2 right-full mr-3 max-h-[70vh] w-64 -translate-y-1/2 overflow-y-auto rounded-xl bg-white p-2 shadow-lg ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-700">
+          <ol>
+            {entries.map((entry) => {
+              const isActive = entry.id === active
+              return (
+                <li key={entry.id}>
+                  <a
+                    href={`#${entry.id}`}
+                    aria-current={isActive ? 'location' : undefined}
+                    onClick={(event) => {
+                      jump(event, entry.id)
+                      setOpen(false)
+                    }}
+                    className={`block rounded-md py-1.5 pr-2 text-[13px] leading-snug transition-colors motion-reduce:transition-none ${
+                      entry.sub ? 'pl-6' : 'pl-2.5 font-medium'
+                    } ${
+                      isActive
+                        ? 'bg-accent-50 text-accent-700 dark:bg-accent-400/10 dark:text-accent-300'
+                        : entry.sub
+                          ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'
+                          : 'text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    {entry.title}
+                  </a>
+                </li>
+              )
+            })}
+          </ol>
+        </div>
+      )}
     </nav>
   )
 }

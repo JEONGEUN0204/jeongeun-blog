@@ -79,7 +79,7 @@ export default function Section({ title, className, titleClassName, children }: 
             }`}
           >
             {/* 번호는 원 안에 둔다 — /portfolio 서술 줄기의 단계 번호와 같은 모양이다. */}
-            <span className="not-prose border-primary-700 text-primary-700 dark:border-primary-400 dark:text-primary-300 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-[13px] font-bold tabular-nums">
+            <span className="not-prose border-primary-700 text-primary-700 dark:border-primary-400 dark:text-primary-300 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 pb-px text-[13px] leading-none font-bold tabular-nums">
               {parsed.no}
             </span>
             <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-2">
