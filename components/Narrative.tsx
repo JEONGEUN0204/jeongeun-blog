@@ -5,6 +5,7 @@ import Section from '@/components/mdx/Section'
 import { projects } from '@/content/projects'
 import {
   isShortNarrative,
+  TBD,
   type Narrative,
   type ShortNarrative,
   type Project,
@@ -394,7 +395,10 @@ export function NarrativeSummary({
   /** narrative 밖의 내용. 같은 섹션 끝에 붙는다. */
   children?: ReactNode
 }) {
-  const rows = isShortNarrative(narrative) ? shortRows(narrative) : narrativeRows(narrative)
+  /* 아직 확보하지 못한 칸(TBD)은 싣지 않는다. 목록은 verify 가 보고한다. */
+  const rows = (
+    isShortNarrative(narrative) ? shortRows(narrative) : narrativeRows(narrative)
+  ).filter((row) => row.content !== TBD)
 
   /*
     제목에는 작업 이름만 쓴다. 제품 이름은 회사 MDX 의 <ProductGroup> 구분선이 한 번 적는다 —

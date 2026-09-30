@@ -16,8 +16,7 @@ import type { Project } from '../schema'
  * metricIds 는 비운다. 입력 블록의 METRICS 가 비어 있고, AFTER 의 출시 날짜·버전은
  * evidence 를 붙일 지표가 아니라 서술이라 beforeAfter 에만 둔다.
  *
- * learning 은 입력 블록이 TBD 로 준 값이다. 지어내지 않고 그대로 둔다 — Narrative 컴포넌트가
- * TBD 를 거르지 않아 /careers 요약의 '배움' 칸에 그대로 보인다.
+ * learning 은 입력 블록이 TBD 로 준 값이다. 지어내지 않고 그대로 둔다 — /careers 요약은 TBD 칸을 싣지 않는다.
  */
 export const coditChatCoditAppBuild: Project = {
   id: 'codit-chatcodit-app-build',

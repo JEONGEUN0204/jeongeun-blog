@@ -13,7 +13,7 @@ import type { Project } from '../schema'
  * '가독성·유지보수성·일관성 향상' 과 '다운로드 내역·비밀번호 초기화' 는 입력 블록에 없는 주장이라
  * 서술을 이쪽으로 옮기면서 함께 걷어냈다.
  *
- * learning 은 입력 블록에 없어 TBD 다. Narrative 컴포넌트가 TBD 를 거르지 않아 /careers 에 그대로 보인다.
+ * learning 은 입력 블록에 없어 TBD 다. /careers 요약은 TBD 칸을 싣지 않는다.
  * decision.rejected 는 따로 검토한 대안이 없어 비운다 (supporting 이라 verify 통과).
  */
 export const ezlBackoffice: Project = {

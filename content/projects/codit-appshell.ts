@@ -9,8 +9,7 @@ import type { Project } from '../schema'
  * 예전 02 섹션의 Tailwind CSS · i18next 는 이 작업의 스택이 아니라는 답을 받아 넣지 않는다.
  *
  * name 은 narrative.result(무엇이 바뀌었나)에서 지었다(2026-09-29). 세 문서가 이 이름을 함께 쓴다.
- * decision.constraint · learning 은 입력 블록에 없어 TBD 다. Narrative 컴포넌트가 TBD 를
- * 거르지 않아 /careers · /portfolio 에 그대로 보인다.
+ * decision.constraint · learning 은 입력 블록에 없어 TBD 다. /careers 요약은 TBD 칸을 싣지 않는다.
  * decision.rejected 는 따로 검토한 대안이 없어 비운다 (supporting 이라 verify 통과).
  */
 export const coditAppShell: Project = {

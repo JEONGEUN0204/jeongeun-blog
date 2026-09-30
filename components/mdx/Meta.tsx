@@ -1,4 +1,5 @@
 import { projects } from '@/content/projects'
+import { TBD } from '@/content/schema'
 
 /**
  * 경력기술서 각 항목 머리의 "기술 / 역할" 메타 라인.
@@ -27,7 +28,7 @@ export default function Meta({ id, tech, role }: { id?: string; tech?: string; r
   return (
     <dl className="not-prose mt-2 mb-4 break-inside-avoid-page space-y-1 border-l-2 border-gray-200 pl-3 dark:border-gray-700">
       {techText && <Row label="기술" value={techText} />}
-      {roleText && <Row label="역할" value={roleText} />}
+      {roleText && roleText !== TBD && <Row label="역할" value={roleText} />}
     </dl>
   )
 }
