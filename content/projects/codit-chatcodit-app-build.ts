@@ -26,13 +26,19 @@ export const coditChatCoditAppBuild: Project = {
   name: 'iOS·Android 앱 출시와 인앱 구독 운영',
   role: '설계·구현 리드',
   roleDetail:
-    'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱 추가 — 구조·배포·스트리밍·구독 결제 담당',
+    'React 모바일 웹으로만 운영하던 ChatCODIT 서비스를 iOS·Android 앱으로 확장 — 구조·배포·스트리밍·구독 결제 담당',
   contribution:
-    '3명 중 앱 초기 세팅과 구조 설계, 스토어 배포, 채팅 스트리밍, 인앱 구독 결제, iOS 심사 대응을 맡음. Expo와 expo-iap 도입을 직접 결정. 나머지 두 명은 이 구조 위에서 남은 기능을 개발. 영수증 검증과 구독 상태 저장은 백엔드 담당',
-  stack: {
-    primary: ['React Native', 'Expo', 'TypeScript'],
-    secondary: ['expo-iap', 'EAS', 'TanStack Query', 'Zustand', 'reCAPTCHA'],
-  },
+    '3명 중 앱 초기 세팅과 구조 설계, 스토어 배포, 채팅 스트리밍, 인앱 구독 결제, iOS 심사 대응을 맡음. 영수증 검증과 구독 상태 저장은 백엔드 담당',
+  stack: [
+    'React Native',
+    'Expo',
+    'TypeScript',
+    'Zustand',
+    'TanStack Query',
+    'expo-iap',
+    'EAS',
+    'reCAPTCHA',
+  ],
   metricIds: [],
   highlight:
     '3명 중 앱 초기 구조·배포·구독 결제를 맡아, 서버 검증 성공 뒤에만 거래를 완료하고 실패 거래는 다음 실행·로그인 때 재검증하는 결제 흐름 설계',
@@ -42,7 +48,7 @@ export const coditChatCoditAppBuild: Project = {
     problem:
       '모바일 웹만 있던 서비스에 iOS·Android 앱을 새로 만들어야 했다. 웹의 스트리밍 구조는 RN에서 그대로 돌지 않았고, 스토어 인앱 구독은 결제 성공과 서버 권한 반영 사이에 앱 종료, 같은 거래의 중복 전달, 스토어 계정 공유 같은 빈틈이 있었다.',
     insight:
-      '웹 구조는 최대한 그대로 가져오고, RN에서 깨지는 지점(응답 스트림 지원, 앱 백그라운드 전환, 스토어 거래 큐)만 앱에 맞게 다시 설계하면 된다고 봤다.',
+      '웹 구조는 최대한 그대로 가져오고, RN에서 깨지는 지점(응답 스트림 지원, 앱 백그라운드 전환, 스토어 거래 큐)만 앱에 맞게 다시 설계하면 된다고 판단했다.',
     decision: {
       chosen:
         '서버 검증이 성공한 뒤에만 거래를 완료(finish)하고, 실패한 거래는 스토어 큐에 남겨 다음 실행·로그인 때 다시 검증한다. 단, 다른 앱 계정에 이미 묶인 거래(409)는 재시도해도 같은 에러가 반복되므로 검증 없이 완료해 큐를 비운다',
@@ -50,11 +56,6 @@ export const coditChatCoditAppBuild: Project = {
         {
           option: '구매 직후 바로 finish',
           reason: '서버 검증이 실패하면 결제는 됐는데 권한이 없는 상태가 복구할 방법 없이 남음',
-        },
-        {
-          option: 'react-native-iap',
-          reason:
-            '앱을 Expo로 구성해서, Expo Module로 만든 expo-iap가 설정·빌드 연동이 더 자연스러웠음',
         },
         {
           option: 'RevenueCat',

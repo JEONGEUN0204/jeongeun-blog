@@ -48,7 +48,7 @@ export default function Portfolio() {
             name: product.name,
             platform: product.platform,
             summary: product.summary,
-            stack: productStack(product.id).primary,
+            stack: productStack(product.id),
             // imageSize 는 images 가 있으면 반드시 있다(verify 가 검사). next/image 의 비율로 넘긴다.
             cover:
               cover && product.imageSize

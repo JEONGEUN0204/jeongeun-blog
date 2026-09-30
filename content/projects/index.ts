@@ -44,13 +44,7 @@ export function worksOf(productId: string): Project[] {
  * 제품의 스택 — 그 제품에 속한 작업들의 스택을 배열 순서대로 합치고 중복을 없앤다.
  *
  * 제품에 스택을 따로 적지 않는 이유는, 적는 순간 작업 쪽 스택과 갈라지기 때문이다.
- * 어느 한 작업에서 주력인 기술은 제품 단위에서도 주력으로 본다(보조 목록에서 뺀다).
  */
-export function productStack(productId: string): { primary: string[]; secondary: string[] } {
-  const works = worksOf(productId)
-  const primary = [...new Set(works.flatMap((work) => work.stack.primary))]
-  const secondary = [...new Set(works.flatMap((work) => work.stack.secondary))].filter(
-    (tag) => !primary.includes(tag)
-  )
-  return { primary, secondary }
+export function productStack(productId: string): string[] {
+  return [...new Set(worksOf(productId).flatMap((work) => work.stack))]
 }

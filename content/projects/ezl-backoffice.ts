@@ -24,14 +24,11 @@ export const ezlBackoffice: Project = {
   role: '기능 구현',
   roleDetail: 'CS·운영팀용 관리자 페이지 신규 메뉴 구축·에러 처리 구조 개선·운영 이슈 대응',
   contribution:
-    '이미 운영 중인 백오피스에 카드 배경 관리·포인트 조회·URL 관리·룰렛 등 신규 화면을 만들고, API 스펙 변경 대응과 버그 수정을 맡았다. 에러 처리에서는 react-error-boundary를 저장소에 처음 도입해 목록 단위 에러 경계를 7개 도메인에 적용하고 공통 ErrorFallback 컴포넌트를 작성했다. 커스텀 에러 객체(EnhancedError)와 throwOnError 전역 설정은 동료가 만들었고, 이를 fallback 전반에 적용하는 일을 했다.',
-  stack: {
-    primary: ['React', 'TypeScript', 'React Query', 'react-error-boundary'],
-    secondary: ['Recoil', 'AG Grid'],
-  },
+    '이미 운영 중인 백오피스에 카드 배경 관리·포인트 조회·URL 관리 등 신규 화면을 만들고, API 스펙 변경 대응과 버그 수정을 맡았다. 에러 처리에서는 react-error-boundary를 저장소에 처음 도입해 목록 단위 에러 경계를 7개 도메인에 적용하고 공통 ErrorFallback 컴포넌트를 작성했다. 커스텀 에러 객체(EnhancedError)와 throwOnError 전역 설정을 fallback 전반에 적용했다.',
+  stack: ['React', 'TypeScript', 'React Query', 'react-error-boundary', 'Recoil', 'AG Grid'],
   metricIds: [],
   highlight:
-    'react-error-boundary를 저장소에 처음 도입해 실패한 목록 자리에 재시도 버튼을 두는 에러 경계를 적용, 팀 기본 구조로 채택',
+    'react-error-boundary를 저장소에 처음 도입해, 실패한 목록 자리에 재시도 버튼을 두는 통일성 있는 에러 구조 적용',
   depth: 'supporting',
   kind: 'improvement',
   narrative: {
@@ -58,8 +55,7 @@ export const ezlBackoffice: Project = {
       after:
         "실패한 목록 자리에만 '무엇을 불러오지 못했는지' 문구, 서버 메시지, 재시도 버튼이 표시되고 필터·등록 버튼은 그대로 사용 가능",
     },
-    result:
-      '7개 도메인에 목록 단위 에러 경계를 적용했다. 일주일 뒤부터 동료 개발자가 같은 파일 규칙과 구성으로 다른 화면을 작성했고, 2025.09에는 동료가 쓴 기능별 README에 기본 구조로 실렸다.',
+    result: '7개 도메인에 목록 단위 에러 경계를 적용해 통일성 있는 에러 구조를 갖췄다.',
     learning: 'TBD',
   },
 }

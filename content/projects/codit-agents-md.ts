@@ -13,10 +13,7 @@ export const coditAgentsMd: Project = {
   role: '설계·구현 리드',
   roleDetail: '에이전트 컨텍스트 도입을 제안하고 문서 구조와 내용을 직접 작성',
   contribution: '도구 중립 단일 원본 방식 결정, AGENTS.md 작성',
-  stack: {
-    primary: ['Claude Code'],
-    secondary: [],
-  },
+  stack: ['Claude Code'],
   metricIds: [],
   highlight:
     '에이전트 컨텍스트 도입을 제안하고 AGENTS.md 단일 원본 구조를 설계·작성해, Cursor와 Claude Code를 함께 쓰는 팀의 참조 문서 통일',
@@ -32,7 +29,7 @@ export const coditAgentsMd: Project = {
       rejected: [
         {
           option: '도구별 컨텍스트 문서를 각각 관리',
-          reason: '같은 내용을 두 벌 두게 되고 두 파일은 결국 갈라진다',
+          reason: '같은 내용을 여러 파일에 나눠 관리하게 되어 유지보수가 어렵다',
         },
         {
           option: '심볼릭 링크로 연결',

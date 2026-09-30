@@ -5,7 +5,7 @@ import type { Project } from '../schema'
  * 이 파일이 원천이 되면서 둘 다 걷어냈다. 그쪽에만 있던 'Suspense L1/L3 계층화' ·
  * '첫 진입 폴백 최소화' 는 확인 질문에서 빠져도 된다는 답을 받았다.
  *
- * 스택은 입력 블록(secondary: Recoil)이 아니라 확인 질문에서 받은 답(Zustand)을 따른다.
+ * 스택은 입력 블록(secondary: Recoil)을 따르지 않는다. 확인 질문에서 Zustand 로 바꿨다가 이 작업과 무관하다는 답을 받아 뺐다(2026-09-30).
  * 예전 02 섹션의 Tailwind CSS · i18next 는 이 작업의 스택이 아니라는 답을 받아 넣지 않는다.
  *
  * name 은 narrative.result(무엇이 바뀌었나)에서 지었다(2026-09-29). 세 문서가 이 이름을 함께 쓴다.
@@ -23,11 +23,8 @@ export const coditAppShell: Project = {
   roleDetail:
     '화면 전환 로딩 문제를 직접 발견해 원인 파악부터 AppShell 구조 설계·구현·전후 측정까지 담당',
   contribution:
-    '문제를 직접 발견하고 AppShell 구조를 제안·결정. 헤더 이동, Suspense 경계 분리, 모바일 BootFallback, 세션 prefetch를 구현',
-  stack: {
-    primary: ['React', 'TypeScript', 'TanStack Query'],
-    secondary: ['Zustand'],
-  },
+    '문제를 직접 발견하고 AppShell 구조를 제안·결정. 헤더 이동, Suspense 경계 분리, 세션 prefetch를 구현',
+  stack: ['React', 'TypeScript', 'TanStack Query'],
   metricIds: ['codit-header-refetch'],
   highlight:
     '화면 전환 로딩 문제를 직접 발견해 헤더·알림·디바이스 모달을 라우트 밖 AppShell로 옮기고, 전환당 헤더 API 호출을 {m:codit-header-refetch}으로 축소',
@@ -47,7 +44,7 @@ export const coditAppShell: Project = {
     action: [
       '헤더·알림·디바이스 모달을 라우트 트리 밖 AppShell로 옮겨 한 번만 마운트되게 변경',
       '전역 Suspense 경계를 계층으로 나눔',
-      '모바일 화면에 같은 구조를 적용하고, 앱 첫 부팅용 BootFallback을 따로 분리',
+      '모바일 화면에도 같은 구조를 적용',
       '세션 조회를 미리 불러오도록 prefetch 추가',
       '적용 전후 커밋을 나란히 띄워 전환 중 요청 수와 헤더 유지 여부를 측정',
     ],

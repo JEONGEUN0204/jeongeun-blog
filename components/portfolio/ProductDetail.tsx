@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import {
   NARRATIVE_STAGES,
-  NarrativeCard,
+  NarrativeBrief,
   NarrativeFull,
   narrativeStageId,
 } from '@/components/Narrative'
@@ -11,7 +11,7 @@ import { StackTags, WorkMeta } from './WorkMeta'
 import type { DetailSection } from './portfolio'
 import { highlightParts, portfolioHeadline, portfolioTitle } from '@/content/highlight'
 import { worksOf } from '@/content/projects'
-import type { Narrative, Product, Project } from '@/content/schema'
+import { isShortNarrative, type Narrative, type Product, type Project } from '@/content/schema'
 
 function Prose({ children }: { children: ReactNode }) {
   return <div className="prose dark:prose-invert prose-doc max-w-none">{children}</div>
@@ -49,6 +49,9 @@ export function productBody({ product, no }: Props): {
   const works = worksOf(product.id)
   const single = works.length === 1 ? works[0] : undefined
   const flagship = works.find((work) => work.depth === 'flagship' && work.narrative)
+  // ShortNarrative 는 flagship 이 될 수 없다(verify 가 검사). 풀 전개는 7단 서술만 받는다.
+  const flagshipNarrative =
+    flagship?.narrative && !isShortNarrative(flagship.narrative) ? flagship.narrative : undefined
 
   return {
     /*
@@ -57,7 +60,7 @@ export function productBody({ product, no }: Props): {
     */
     overview: <ProductOverview product={product} no={no} single={single} />,
     sections: [
-      ...(flagship?.narrative
+      ...(flagship && flagshipNarrative
         ? [
             {
               id: `${flagship.id}-narrative`,
@@ -66,7 +69,7 @@ export function productBody({ product, no }: Props): {
                 id: narrativeStageId(flagship.id, key),
                 title: label,
               })),
-              node: <NarrativeSection work={flagship} narrative={flagship.narrative} />,
+              node: <NarrativeSection work={flagship} narrative={flagshipNarrative} />,
             },
           ]
         : []),
@@ -102,9 +105,9 @@ function ProductOverview({ product, no, single }: Props & { single?: Project }) 
           alt={product.name}
         />
       )}
-      {/* flagship 은 7단 풀 전개를 따로 받는다. 그 밖의 단일 작업은 카드 1개 분량이라 개요에 둔다. */}
+      {/* flagship 은 7단 풀 전개를 따로 받는다. 그 밖의 단일 작업은 네 칸 흐름이라 개요에 둔다. */}
       {single?.narrative && single.depth !== 'flagship' && (
-        <NarrativeCard narrative={single.narrative} />
+        <NarrativeBrief narrative={single.narrative} />
       )}
     </div>
   )
@@ -127,9 +130,9 @@ function NarrativeSection({ work, narrative }: { work: Project; narrative: Narra
 }
 
 /**
- * 작업 한 건 — 소제목 · 역할 · 스택 · 서술 카드.
+ * 작업 한 건 — 소제목 · 역할 · 스택 · 네 칸 서술.
  *
- * 서술은 카드 1개 분량이다. 풀 전개는 제품마다 flagship 하나만 받는다.
+ * 서술은 네 칸이다. 풀 전개는 제품마다 flagship 하나만 받는다.
  */
 function WorkSection({ work }: { work: Project }) {
   return (
@@ -143,8 +146,8 @@ function WorkSection({ work }: { work: Project }) {
         <StackTags stack={work.stack} />
       </div>
       {work.narrative && (
-        <div className="not-prose mt-4">
-          <NarrativeCard narrative={work.narrative} />
+        <div className="not-prose mt-6">
+          <NarrativeBrief narrative={work.narrative} />
         </div>
       )}
     </section>

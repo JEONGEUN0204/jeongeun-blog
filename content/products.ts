@@ -46,7 +46,7 @@ export const products: Product[] = [
     name: 'ChatCODIT App',
     platform: 'iOS · Android',
     summary:
-      'React 모바일 웹만 있던 ChatCODIT에 iOS·Android 앱을 추가하고, 두 스토어 모두 인앱 구독을 붙여 운영 중입니다.',
+      'React 모바일 웹으로만 운영하던 ChatCODIT 서비스를 iOS·Android 앱으로 확장하고, 두 스토어 모두 인앱 구독을 붙여 운영 중입니다.',
     images: [
       '/static/images/codit-chatcodit-app-3.png',
       '/static/images/codit-chatcodit-app-1.png',

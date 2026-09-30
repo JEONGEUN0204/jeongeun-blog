@@ -9,14 +9,11 @@ export const coditTailwindSkill: Project = {
   companyId: 'codit',
   productId: 'codit-platform',
   name: 'Tailwind 마이그레이션 작업 표준화',
-  headline: '남은 {m:tw-migration-backlog}의 Tailwind 전환을 스킬 하나로 표준화',
+  headline: '{m:tw-migration-backlog}의 Tailwind 전환을 스킬 하나로 표준화',
   role: '설계·구현 리드',
   roleDetail: '마이그레이션 규칙과 검증 절차를 정해 스킬로 정리',
   contribution: '완료 판정 기준을 먼저 정하고, 그 기준에 맞춘 에이전트 하네스를 설계',
-  stack: {
-    primary: ['Claude Code', 'Tailwind'],
-    secondary: ['claude-in-chrome (MCP)'],
-  },
+  stack: ['Claude Code', 'Tailwind'],
   metricIds: ['tw-migration-backlog', 'tw-migration-check'],
   highlight:
     '스타일 값 비교를 완료 기준으로 정하고 변환 규칙·검증 절차를 SKILL.md로 설계해, 팀이 /styled-to-tailwind 명령 하나로 쓰도록 공유',
@@ -29,12 +26,12 @@ export const coditTailwindSkill: Project = {
       '변환 자체는 AI로도 된다. 남는 문제는 결과가 원래 화면과 같은지 확인하는 쪽이다. 특히 상태나 props에 따라 달라지는 스타일은 코드만 봐서는 판단할 수 없고 실제로 렌더링해서 상태별로 확인해야 한다. 그리고 그 절차를 매번 대화로 설명하면 세션마다 판정이 달라진다. 변환을 맡기는 것보다 확인하는 방법을 하네스에 고정해두는 게 먼저였다.',
     decision: {
       chosen:
-        '변환보다 결과 확인이 오래 걸린다고 봤다. 검증 절차와 완료 조건을 먼저 정하고, 그걸 .claude/skills/styled-to-tailwind/SKILL.md 한 파일에 담아 저장소에 커밋했다. 팀은 /styled-to-tailwind 명령 하나로 같은 절차를 불러 쓴다',
+        '변환보다 결과 확인이 오래 걸린다고 판단했다. 검증 절차와 완료 조건을 먼저 정하고, 그걸 .claude/skills/styled-to-tailwind/SKILL.md 한 파일에 담아 저장소에 커밋했다. 팀은 /styled-to-tailwind 명령 하나로 같은 절차를 불러 쓴다',
       rejected: [
         {
           option: '파일을 만질 때마다 그때그때 애드혹 프롬프트로 요청하고 직접 확인하기',
           reason:
-            '지금까지 하던 방식이다. 한두 파일은 되지만 절차가 세션마다 달라지고 확인을 매번 사람이 해야 해서 남은 파일 전체를 옮길 엄두가 나지 않는다',
+            '지금까지 하던 방식이다. 한두 파일은 되지만 절차가 세션마다 달라지고 확인을 매번 사람이 해야 해서 남은 파일 전체로 확장하기 어렵다',
         },
         {
           option: '일반적인 Tailwind 변환 방법을 스킬 본문에 담기',
@@ -60,7 +57,7 @@ export const coditTailwindSkill: Project = {
         '변환 규칙과 검증 절차가 스킬 파일 하나로 고정되어 팀이 같은 방식으로 작업하고, 폴더 단위로 배치 실행할 수 있다. 완료 여부는 스타일 값 비교로 판정된다.',
     },
     result:
-      '저장소에 커밋되어 팀이 명령 하나로 사용할 수 있게 됐고, 폴더 단위로 배치를 돌려 옮기는 중이다. 변환 소요 시간과 문제 발생률은 아직 측정하지 않았다. 남은 파일을 옮기면서 확인할 계획이다.',
+      '저장소에 커밋되어 팀이 명령 하나로 사용할 수 있게 됐고, 폴더 단위로 배치를 돌려 옮길 수 있게 되었다.',
     learning:
       '반복 작업을 에이전트에 맡길 때 병목은 변환이 아니라 검증이다. "잘 됐는지 봐 달라"는 매번 판정이 달라져서 배치로 돌릴 수 없다. 판정 기준을 사람 눈이 아니라 비교 가능한 값으로 바꿔야 자동 반복이 성립한다.',
   },

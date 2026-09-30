@@ -76,6 +76,27 @@ export type Narrative = {
   learning: string
 }
 
+/**
+ * 판단이 없는 작업의 서술 — 문제 → (원인) → 조치 → 이전·이후 → 결과.
+ *
+ * 운영 중 버그 대응이나 요청받은 구현은 여러 안을 두고 고른 일이 아니라 관점·선택·배움 칸에 넣을 내용이 없다.
+ * 7단에 맞추면 그 칸이 TBD 로 남거나 억지 문장이 들어간다.
+ * cause 는 증상에서 원인을 좁힌 과정이 있을 때(주로 kind:'operation')만 적는다.
+ * kind:'operation' 은 반드시 이 형태를 쓴다. flagship 은 될 수 없다(둘 다 verify 가 검사) —
+ * 풀 전개는 판단 근거를 보여주는 자리다.
+ */
+export type ShortNarrative = {
+  problem: string
+  cause?: string
+  action: string[]
+  beforeAfter: { before: string; after: string }
+  result: string
+}
+
+export const isShortNarrative = (
+  narrative: Narrative | ShortNarrative
+): narrative is ShortNarrative => !('insight' in narrative)
+
 /** 담당/리드/설계가 섞여 있으면 어떤 역할로 뽑을지 판단이 서지 않는다. 하나만 고른다. */
 export type ProjectRole = '기획·구현' | '설계·구현 리드' | '기능 구현' | '일부 참여' | Tbd
 
@@ -147,8 +168,14 @@ export type Project = {
   roleDetail: string
   /** 실제 수행 + 의사결정 기여 범위 */
   contribution: string | Tbd
-  /** 버전 표기 금지. primary = 주력, secondary = 보조. */
-  stack: { primary: string[]; secondary: string[] }
+  /**
+   * 이 작업에서 실제로 쓴 기술. 버전 표기 금지. 중요한 것부터 적는다 — 적은 순서가 곧 화면 순서다.
+   *
+   * 예전에는 주력·보조 두 칸이었는데, 관련 없는 기술을 걸러 내고 나니 남은 것이 모두 이 작업의
+   * 핵심이라 구분이 서지 않았다. 옅은 태그가 '잘 못 다루는 기술'로 읽히기도 했다.
+   * 숙련도의 주력·보조는 profile.ts 의 skills 한 곳에서만 말한다.
+   */
+  stack: string[]
   metricIds: string[]
   /**
    * /resume 의 한 줄 설명. 이력서 하이라이트 제목은 name, 설명은 이 필드다 — 둘 다 따로 쓰지 않는다.
@@ -165,10 +192,11 @@ export type Project = {
   depth: ProjectDepth
   kind: ProjectKind
   /**
-   * 7단 서술. 아직 블록을 받지 못한 작업만 undefined 이고, verify 가 목록으로 보고한다.
+   * 7단 서술, 또는 판단이 없는 작업의 ShortNarrative(문제·원인·조치·전후·결과). kind:'operation' 은 ShortNarrative 다.
+   * 아직 블록을 받지 못한 작업만 undefined 이고, verify 가 목록으로 보고한다.
    * 서술이 없는 작업은 /careers 회사 MDX 에 손으로 쓴 <Section> 이 대신한다.
    */
-  narrative?: Narrative
+  narrative?: Narrative | ShortNarrative
 }
 
 /**

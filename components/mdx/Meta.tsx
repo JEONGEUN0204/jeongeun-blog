@@ -18,11 +18,10 @@ export default function Meta({ id, tech, role }: { id?: string; tech?: string; r
   }
 
   /*
-    기술 문자열은 여기서만 만든다. 주력을 앞에 두고 보조를 잇는 순서가 곧 읽는 순서다.
+    기술 문자열은 여기서만 만든다. stack 에 적은 순서가 곧 읽는 순서다.
     /careers 의 모든 메타 라인이 이 함수를 지나므로 섹션마다 순서가 달라질 자리가 없다.
   */
-  const techText =
-    tech ?? (project && [...project.stack.primary, ...project.stack.secondary].join(' · '))
+  const techText = tech ?? project?.stack.join(' · ')
   const roleText = role ?? project?.roleDetail
 
   return (

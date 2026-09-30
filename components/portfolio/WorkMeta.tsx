@@ -30,25 +30,17 @@ export function WorkMeta({ work }: { work: Project }) {
 }
 
 /**
- * 주력 스택은 진하게, 보조는 옅게 — 나열만으로는 숙련도를 구분할 수 없다.
+ * 스택 태그. 작업 스택은 주력·보조를 나누지 않는다(schema.ts 의 stack 참고).
  *
  * 작업의 스택과 제품의 스택(작업들의 합집합)이 같은 모양으로 나와야 해서 배열을 직접 받는다.
  */
-export function StackTags({ stack }: { stack: { primary: string[]; secondary: string[] } }) {
+export function StackTags({ stack }: { stack: string[] }) {
   return (
     <div className="not-prose flex flex-wrap gap-2">
-      {stack.primary.map((tag) => (
+      {stack.map((tag) => (
         <span
           key={tag}
           className="bg-primary-100 text-primary-800 dark:bg-primary-400/15 dark:text-primary-300 rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap"
-        >
-          {tag}
-        </span>
-      ))}
-      {stack.secondary.map((tag) => (
-        <span
-          key={tag}
-          className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium whitespace-nowrap text-gray-700 dark:bg-gray-800 dark:text-gray-300"
         >
           {tag}
         </span>

@@ -19,12 +19,9 @@ export const ezlCharge: Project = {
   role: '기능 구현',
   roleDetail: '이즐워크 조회 API 호출 개선·충전 실패 재시도 플로우 구현·Sentry 이슈 대응',
   contribution:
-    '이즐워크 API 호출 개선은 원인 파악부터 구현까지 혼자 진행. 충전 실패 재시도 플로우는 기획을 받아 결과 코드별 분기(처음부터 재충전·미완료 거래 NFC 재처리·카드 불일치 재시도)를 구현. Sentry 이슈 확인·수정은 팀원과 나눠서 담당. Kotlin·Swift는 SDK 연동 코드 일부만 작성',
+    '이즐워크 API 호출 개선은 원인 파악부터 구현까지 혼자 진행. 충전 실패 재시도 플로우는 기획을 받아 결과 코드별 분기를 구현. Sentry 이슈 확인·수정은 팀원과 나눠서 담당. Kotlin·Swift는 SDK 연동 코드 일부만 작성',
   // Kotlin·Swift 는 SDK 연동 코드 일부만 작성해 스택에서 뺐다 (contribution 참고).
-  stack: {
-    primary: ['React Native', 'TypeScript', 'React Query'],
-    secondary: ['Recoil'],
-  },
+  stack: ['React Native', 'TypeScript', 'React Query', 'Recoil'],
   metricIds: ['ezl-inquiry-api', 'ezl-crash-free', 'ezl-mau'],
   highlight:
     '이즐워크 API 호출 문제를 원인 파악부터 맡아 미션 조회를 useQuery 캐시로 공유해 진입당 호출을 {m:ezl-inquiry-api}로 줄이고, 보상 버튼 연속 클릭 에러 제거',
@@ -32,12 +29,12 @@ export const ezlCharge: Project = {
   kind: 'improvement',
   narrative: {
     problem:
-      '이즐충전소 앱의 이즐워크(걸음 수를 코인으로 전환) 페이지에서 일일·연속 미션 조회 API가 한 번 들어갈 때 4번씩 호출됐고, 연속 미션 보상 받기 버튼을 연달아 누르면 에러 메시지가 떴다',
+      '이즐충전소 앱의 이즐워크(걸음 수를 코인으로 전환) 페이지에서 일일·연속 미션 조회 API가 한 번 들어갈 때 4번씩 호출됐고, 연속 미션 보상 받기 버튼을 연달아 누르면 에러 메시지가 떴다.',
     insight:
-      '조회 API를 useMutation으로 호출하고 있어서 상태가 바뀔 때마다 같은 요청이 다시 나갔고, 결과도 캐시에 남지 않았다',
+      '조회 API를 useMutation으로 호출하고 있어서 상태가 바뀔 때마다 같은 요청이 다시 나갔고, 결과도 캐시에 남지 않았다.',
     decision: {
       chosen:
-        '호출 위치와 필요 여부를 정리한 뒤 미션 조회를 useQuery로 바꿔 캐시로 공유하고, 연속 미션 보상 받기 버튼은 첫 클릭만 처리하고 이후 클릭은 막는다',
+        '호출 위치와 필요 여부를 정리한 뒤 미션 조회를 useQuery로 바꿔 캐시로 공유했다. 연속 미션 보상 받기 버튼은 첫 클릭만 처리되도록 이후 클릭을 막았다.',
       rejected: [],
       constraint: '없음',
     },
@@ -55,8 +52,8 @@ export const ezlCharge: Project = {
       after: '진입 1회당 미션 조회 API 1회 호출, 연속 클릭 시 에러 메시지 노출되지 않음',
     },
     result:
-      '페이지 진입당 미션 조회 API 호출을 4회에서 1회로 줄이고, 보상 버튼 연속 클릭 에러를 없애고, 불필요한 호출 코드를 삭제',
+      '페이지 진입당 미션 조회 API 호출을 4회에서 1회로 줄였다. 보상 버튼을 연달아 눌러도 에러가 나지 않게 했고, 불필요한 호출 코드를 삭제했다.',
     learning:
-      'API를 쓰기 전에 조회인지 변경인지부터 구분해야, 요청 시점을 직접 관리하지 않고 캐시에 맡길 수 있다는 걸 배웠다',
+      'API를 쓰기 전에 조회인지 변경인지부터 구분해야, 요청 시점을 직접 관리하지 않고 캐시에 맡길 수 있다는 걸 배웠다.',
   },
 }

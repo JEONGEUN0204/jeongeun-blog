@@ -19,7 +19,7 @@ import { projects } from '../content/projects'
 import { about, aboutLead, skills } from '../content/profile'
 import { experiences } from '../content/experience'
 import { highlightMetricIds, renderedHighlight } from '../content/highlight'
-import { TBD } from '../content/schema'
+import { isShortNarrative, TBD } from '../content/schema'
 
 const errors: string[] = []
 const warnings: string[] = []
@@ -257,7 +257,7 @@ for (const project of projects) {
   if (project.role === TBD) todo(`${at} role 미확정 (담당/리드/설계 중 무엇인지)`)
   if (project.contribution === TBD) todo(`${at} 기여 범위 미확보`)
 
-  if (project.stack.primary.length === 0) error(`${at} stack.primary 가 비어 있다`)
+  if (project.stack.length === 0) error(`${at} stack 이 비어 있다`)
 
   // 작업은 예외 없이 제품에 속한다. 가리키는 제품이 없으면 /portfolio 에 렌더될 자리가 없다.
   const product = products.find((item) => item.id === project.productId)
@@ -303,6 +303,19 @@ for (const project of projects) {
   if (!project.narrative) {
     if (project.depth === 'flagship') {
       todo(`${at} flagship 인데 7단 서술(narrative)이 없다`)
+    }
+    continue
+  }
+
+  // 운영 대응은 고른 안이 없어 문제·원인·조치·전후·결과(ShortNarrative)로 쓴다.
+  if (project.kind === 'operation' && !isShortNarrative(project.narrative)) {
+    error(`${at} kind:'operation' 인데 7단 서술이다 — 문제·원인·조치 서술(ShortNarrative)로 쓴다`)
+  }
+  if (isShortNarrative(project.narrative)) {
+    if (project.depth === 'flagship') {
+      error(
+        `${at} ShortNarrative 는 flagship 이 될 수 없다 — 풀 전개는 판단 근거(관점·선택·대안)를 싣는 자리다`
+      )
     }
     continue
   }
