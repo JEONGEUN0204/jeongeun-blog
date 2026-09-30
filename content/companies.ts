@@ -11,7 +11,8 @@ export const companies: Company[] = [
     id: 'codit',
     name: '코딧',
     period: { start: '2025.11', end: 'present' },
-    context: '정책·입법 데이터 플랫폼 「CODIT」과 분리 서비스 「ChatCODIT」',
+    context:
+      '정책·입법 데이터 플랫폼 「CODIT」과 정책·규제 분석을 위해 설계된 AI 에이전트 「ChatCODIT」',
   },
   {
     id: 'ezllabs',

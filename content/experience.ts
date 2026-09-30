@@ -13,7 +13,7 @@ export const experiences: Experience[] = [
     companyId: 'codit',
     role: 'Frontend Engineer',
     summary:
-      '정책·입법 데이터 플랫폼 「CODIT」과 분리 서비스 「ChatCODIT」의 웹·iOS·Android 앱 프론트엔드 담당',
+      '정책·입법 데이터 플랫폼 「CODIT」과 정책·규제 분석을 위해 설계된 AI 에이전트 「ChatCODIT」의 웹·iOS·Android 앱 프론트엔드 담당',
   },
   {
     companyId: 'ezllabs',
