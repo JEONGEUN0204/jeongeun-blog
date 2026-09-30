@@ -22,12 +22,13 @@ const Header = () => {
     <header className={headerClass}>
       <Link href="/" aria-label={siteMetadata.headerTitle}>
         <div className="flex items-center justify-between">
-          {/* JE 모노그램. 바탕은 currentColor, 획은 --logo-fg 라 다크모드에서 색이 함께 뒤집힌다 */}
-          <div className="text-primary-700 dark:text-primary-400 mt-1 mr-2 [--logo-fg:#fff] dark:[--logo-fg:var(--color-gray-950)]">
-            <Logo />
+          {/* JE 모노그램 — accent-400 → 700 그라데이션이라 라이트·다크 모두 그대로 쓴다 */}
+          <div className="mr-2">
+            <Logo className="block" />
           </div>
+          {/* 줄 높이를 글자 크기에 맞춰야 로고와 가운데가 맞는다. 높이를 고정하면 글자가 칸 아래로 삐져나와 로고가 떠 보인다 */}
           {typeof siteMetadata.headerTitle === 'string' ? (
-            <div className="text-primary-700 dark:text-primary-400 hidden h-6 text-2xl font-semibold sm:block">
+            <div className="text-accent-700 dark:text-accent-300 hidden text-2xl leading-none font-semibold sm:block">
               {siteMetadata.headerTitle}
             </div>
           ) : (
