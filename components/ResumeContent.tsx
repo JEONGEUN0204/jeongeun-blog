@@ -266,11 +266,11 @@ export default function ResumeContent() {
           인쇄는 md 폭에 못 미쳐 항상 1단이다. 1단 카드는 상자 여백만큼 길어져 아래 학력·자격을
           다음 쪽으로 밀어냈다 — 인쇄에서는 상자를 걷고 항목 사이 가는 선으로만 나눈다.
         */}
-        <div className="mt-5 grid gap-4 md:grid-cols-3 print:mt-4 print:gap-0">
+        <div className="mt-5 grid gap-4 md:grid-cols-3 print:mt-3 print:gap-0">
           {collaborations.map((item) => (
             <div
               key={item.audience}
-              className="break-inside-avoid-page rounded-2xl bg-white p-5 dark:bg-gray-900 print:rounded-none print:border-t print:border-gray-200 print:px-0 print:py-2.5 print:first:border-t-0 print:first:pt-0"
+              className="break-inside-avoid-page rounded-2xl bg-white p-5 dark:bg-gray-900 print:rounded-none print:border-t print:border-gray-200 print:px-0 print:py-2 print:first:border-t-0 print:first:pt-0"
             >
               <div className="text-primary-700 dark:text-primary-400 text-sm font-bold">
                 {item.audience}
@@ -284,13 +284,14 @@ export default function ResumeContent() {
       {/*
         학력·자격 — 예전에는 머리 오른쪽 칸에 있었다. 머리를 한 줄 정체성에 내주면서 문서 끝으로 옮겼다.
         두 목록을 나란히 둔다. 좁은 화면에서는 쌓인다.
+        인쇄에서는 이름과 기간을 한 줄로 붙인다 — 두 줄이면 블록이 앞 쪽 끝에 조금 못 들어가 혼자 다음 쪽으로 넘어간다.
       */}
-      <Section className="my-0! grid gap-8 py-8 sm:grid-cols-2 print:pt-2 print:pb-0">
+      <Section className="my-0! grid gap-8 py-8 sm:grid-cols-2 print:pt-0 print:pb-0">
         <div>
           <h2 className={sectionTitle}>Education</h2>
-          <ul className="space-y-3 print:space-y-2">
+          <ul className="space-y-3 print:space-y-1">
             {education.map((item) => (
-              <li key={item.school}>
+              <li key={item.school} className="print:flex print:items-baseline print:gap-3">
                 <div className="font-semibold text-gray-900 dark:text-gray-100">
                   {item.school}
                   {item.detail && (
@@ -308,9 +309,9 @@ export default function ResumeContent() {
         </div>
         <div>
           <h2 className={sectionTitle}>Certificate</h2>
-          <ul className="space-y-3 print:space-y-2">
+          <ul className="space-y-3 print:space-y-1">
             {certificates.map((item) => (
-              <li key={item.name}>
+              <li key={item.name} className="print:flex print:items-baseline print:gap-3">
                 <div className="font-semibold text-gray-900 dark:text-gray-100">{item.name}</div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   {item.issuer} · ({item.date})
