@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import siteMetadata from '@/data/siteMetadata'
 import ProductBody, { ProductIndex } from './ProductBody'
 import ProductCard from './ProductCard'
 import {
@@ -13,9 +12,6 @@ import {
 } from './portfolio'
 
 /** 타일 크기별 그리드 칸. 2열(좁은 화면)과 4열 모두 lead 는 2×2, wide 는 가로 2칸이다. */
-/** 인쇄물 첫머리에 싣는 웹 주소. PDF 는 스크린샷이 작아 읽기 어려우니 웹에서 크게 보도록 넘긴다. */
-const webUrl = `${siteMetadata.siteUrl}/portfolio`
-
 const tileSpan: Record<TileSize, string> = {
   lead: 'col-span-2 row-span-2',
   wide: 'col-span-2',
@@ -146,17 +142,7 @@ export default function PortfolioBrowser({ title, companies }: Props) {
         >
           {/* 인쇄·JS 없는 환경 전용 회사 머리. 화면에서는 타일 위 회사 제목이 같은 일을 한다. */}
           <header className="hidden break-after-avoid-page print:block noscript:block">
-            <div className="flex items-baseline justify-between gap-4">
-              <p className="text-primary-700 dark:text-primary-400 text-sm font-semibold">
-                Portfolio
-              </p>
-              {companyIndex === 0 && (
-                <a href={webUrl} className="hidden text-xs text-gray-500 print:inline">
-                  웹에서 보기 · {webUrl.replace(/^https?:\/\//, '')}
-                </a>
-              )}
-            </div>
-            <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
+            <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
               {item.name}
             </h2>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">

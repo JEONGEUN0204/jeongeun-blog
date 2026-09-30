@@ -2,7 +2,7 @@
 
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
+import LogoMark from './LogoMark'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
@@ -24,7 +24,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* JE 모노그램 — accent-400 → 700 그라데이션이라 라이트·다크 모두 그대로 쓴다 */}
           <div className="mr-2">
-            <Logo className="block" />
+            <LogoMark className="block" />
           </div>
           {/* 줄 높이를 글자 크기에 맞춰야 로고와 가운데가 맞는다. 높이를 고정하면 글자가 칸 아래로 삐져나와 로고가 떠 보인다 */}
           {typeof siteMetadata.headerTitle === 'string' ? (

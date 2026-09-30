@@ -1,4 +1,5 @@
 import PortfolioBrowser from '@/components/portfolio/PortfolioBrowser'
+import PrintCover from '@/components/portfolio/PrintCover'
 import { productBody } from '@/components/portfolio/ProductDetail'
 import { pad, type PortfolioCompany } from '@/components/portfolio/portfolio'
 import { companies, formatPeriod } from '@/content/companies'
@@ -66,5 +67,10 @@ export default function Portfolio() {
     ]
   })
 
-  return <PortfolioBrowser title={`${profile.name} · Portfolio`} companies={groups} />
+  return (
+    <>
+      <PrintCover />
+      <PortfolioBrowser title={`${profile.name} · Portfolio`} companies={groups} />
+    </>
+  )
 }
