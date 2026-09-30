@@ -9,6 +9,7 @@ export const coditAgentsMd: Project = {
   companyId: 'codit',
   productId: 'codit-platform',
   name: 'AGENTS.md · 에이전트 컨텍스트 단일 원본',
+  headline: 'Cursor·Claude Code가 같은 문서를 읽도록 AGENTS.md 단일 원본 구성',
   role: '설계·구현 리드',
   roleDetail: '에이전트 컨텍스트 도입을 제안하고 문서 구조와 내용을 직접 작성',
   contribution: '도구 중립 단일 원본 방식 결정, AGENTS.md 작성',

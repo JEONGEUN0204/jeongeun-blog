@@ -18,6 +18,7 @@ export const coditDashboard: Project = {
   companyId: 'codit',
   productId: 'codit-platform',
   name: '슬라이드 단위 로딩으로 대시보드 첫 화면 단축',
+  headline: '슬라이드 단위 로딩으로 대시보드 LCP {m:codit-dashboard-lcp}',
   role: '설계·구현 리드',
   roleDetail:
     '대시보드 캐러셀 데이터 로딩을 슬라이드 단위로 재설계하고 쿼리 계층·스와이프 인터랙션 구현',

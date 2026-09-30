@@ -9,6 +9,7 @@ import ProductHeader from './ProductHeader'
 import Screenshots from './Screenshots'
 import { StackTags, WorkMeta } from './WorkMeta'
 import type { DetailSection } from './portfolio'
+import { highlightParts, portfolioHeadline, portfolioTitle } from '@/content/highlight'
 import { worksOf } from '@/content/projects'
 import type { Narrative, Product, Project } from '@/content/schema'
 
@@ -60,7 +61,7 @@ export function productBody({ product, no }: Props): {
         ? [
             {
               id: `${flagship.id}-narrative`,
-              title: flagship.name,
+              title: portfolioTitle(flagship),
               items: NARRATIVE_STAGES.map(({ key, label }) => ({
                 id: narrativeStageId(flagship.id, key),
                 title: label,
@@ -75,7 +76,7 @@ export function productBody({ product, no }: Props): {
           : [
               {
                 id: `${product.id}-${work.id}`,
-                title: work.name,
+                title: portfolioTitle(work),
                 node: (
                   <Prose>
                     <WorkSection work={work} />
@@ -114,7 +115,9 @@ function NarrativeSection({ work, narrative }: { work: Project; narrative: Narra
   return (
     <>
       <Prose>
-        <h3>{work.name}</h3>
+        <h3>
+          <WorkTitle work={work} />
+        </h3>
       </Prose>
       <div className="mt-6">
         <NarrativeFull narrative={narrative} idPrefix={work.id} />
@@ -132,7 +135,9 @@ function WorkSection({ work }: { work: Project }) {
   return (
     <section>
       {/* 섹션 본문의 첫 요소라 prose 의 h3 위 여백을 뗀다 */}
-      <h3 className="mt-0">{work.name}</h3>
+      <h3 className="mt-0">
+        <WorkTitle work={work} />
+      </h3>
       <div className="not-prose space-y-3">
         <WorkMeta work={work} />
         <StackTags stack={work.stack} />
@@ -143,5 +148,24 @@ function WorkSection({ work }: { work: Project }) {
         </div>
       )}
     </section>
+  )
+}
+
+/**
+ * 작업 제목 — headline(없으면 name). 수치 조각은 강조색으로 띄워 훑어보는 눈에 먼저 걸리게 한다.
+ * 인쇄에서는 다른 강조와 같이 본문색으로 되돌린다.
+ */
+function WorkTitle({ work }: { work: Project }) {
+  return highlightParts(portfolioHeadline(work)).map((part, index) =>
+    part.metric ? (
+      <span
+        key={index}
+        className="text-accent-700 dark:text-accent-300 tabular-nums print:text-gray-900"
+      >
+        {part.text}
+      </span>
+    ) : (
+      part.text
+    )
   )
 }

@@ -136,6 +136,12 @@ export type Project = {
    * 예: 'ChatCODIT App · 구축·결제' 가 아니라 '구축·결제'.
    */
   name: string
+  /**
+   * /portfolio 섹션 제목·카드 뒷면·목차. 없으면 name 을 쓴다. /resume · /careers 는 쓰지 않는다.
+   * 포트폴리오는 훑어보는 문서라 제목에서 결과가 보이게 한다 — 수치가 있으면 수치를 담는다.
+   * 수치는 highlight 처럼 타이핑하지 않고 `{m:<metric-id>}` 로 참조한다(id 는 metricIds 안에 있어야 한다).
+   */
+  headline?: string
   role: ProjectRole
   /** 역할을 한 줄로 구체화. 예: 'SSE 프로토콜 초안 설계 및 프론트 파서 전면 교체' */
   roleDetail: string

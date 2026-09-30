@@ -41,6 +41,16 @@ export function highlightTitle(project: Project, product: Product): string | nul
   return project.name === product.name ? null : project.name
 }
 
+/** /portfolio 의 작업 제목 원문. headline 이 없으면 name 이다. `{m:id}` 는 아직 풀지 않았다. */
+export function portfolioHeadline(project: Project): string {
+  return project.headline ?? project.name
+}
+
+/** /portfolio 목차·카드 뒷면에 찍히는 작업 제목. 수치까지 글자로 푼다. */
+export function portfolioTitle(project: Project): string {
+  return renderedHighlight(portfolioHeadline(project))
+}
+
 export type ResumeGroup = { product: Product; works: Project[] }
 
 /** 회사의 제품(products.ts 순서)과 각 제품의 작업(projects 배열 순서). */

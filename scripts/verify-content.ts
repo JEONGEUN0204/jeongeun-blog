@@ -278,6 +278,28 @@ for (const project of projects) {
 
   checkHighlight(project, at)
 
+  // headline 은 /portfolio 제목이다. 수치 규칙은 highlight 와 같다 — 타이핑하지 않고 {m:id} 로 참조한다.
+  if (project.headline !== undefined) {
+    const headline = project.headline.trim()
+    if (!headline || headline === TBD)
+      error(`${at} headline 이 비어 있거나 TBD 다 — 없으면 필드를 지운다`)
+    for (const id of highlightMetricIds(headline)) {
+      if (!project.metricIds.includes(id)) {
+        error(`${at} headline 의 {m:${id}} 가 이 작업의 metricIds 에 없다`)
+      }
+    }
+    const raw = headline
+      .replace(/\{m:[^}]+\}/g, '')
+      .replace(DATE_LITERAL_G, '')
+      .match(RAW_NUMBER)
+    if (raw) {
+      warn(`${at} headline 에 수치 '${raw[0]}' 가 직접 적혀 있다 — {m:id} 로 참조한다`)
+    }
+    if (product && headline.startsWith(`${product.name} · `)) {
+      error(`${at} headline 이 제품 이름('${product.name}')으로 시작한다 — 카드 제목이 이미 적는다`)
+    }
+  }
+
   if (!project.narrative) {
     if (project.depth === 'flagship') {
       todo(`${at} flagship 인데 7단 서술(narrative)이 없다`)

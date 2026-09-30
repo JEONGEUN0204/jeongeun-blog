@@ -9,6 +9,7 @@ export const coditTailwindSkill: Project = {
   companyId: 'codit',
   productId: 'codit-platform',
   name: 'Tailwind 마이그레이션 작업 표준화',
+  headline: '남은 {m:tw-migration-backlog}의 Tailwind 전환을 스킬 하나로 표준화',
   role: '설계·구현 리드',
   roleDetail: '마이그레이션 규칙과 검증 절차를 정해 스킬로 정리',
   contribution: '완료 판정 기준을 먼저 정하고, 그 기준에 맞춘 에이전트 하네스를 설계',
