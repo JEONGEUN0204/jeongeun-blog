@@ -22,11 +22,11 @@ const siteMetadata = {
     // content security policy in the `next.config.js` file.
     // supports Plausible, Simple Analytics, Umami, Posthog or Google Analytics.
     umamiAnalytics: {
-      // We use an env variable for this site to avoid other users cloning our analytics ID
-      umamiWebsiteId: process.env.NEXT_UMAMI_ID, // e.g. 123e4567-e89b-12d3-a456-426614174000
-      // You may also need to overwrite the script if you're storing data in the US - ex:
-      // src: 'https://us.umami.is/script.js'
-      // Remember to add 'us.umami.is' in `next.config.js` as a permitted domain for the CSP
+      // Website ID 는 공개되는 HTML 에 그대로 실리는 값이라 비밀이 아니다.
+      // 환경변수 대신 여기 적어 배포처(GitHub Pages·Vercel)와 무관하게 동작하게 한다.
+      umamiWebsiteId: '768fcd85-7f0f-497e-bad4-9770e6d1912f',
+      // Umami Cloud 의 Tracking code 가 주는 주소. 바꾸면 `next.config.js` CSP 도 함께 바꾼다.
+      src: 'https://cloud.umami.is/script.js',
     },
     // plausibleAnalytics: {
     //   plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
