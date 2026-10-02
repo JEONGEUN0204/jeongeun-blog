@@ -151,11 +151,14 @@ function Stage({
 /**
  * '선택' 칸 본문. 버린 안이 있으면 고른 안(✓)과 한 판에 붙인다 — "여러 안 중 이걸 골랐다"가 한 덩어리로 읽힌다.
  * 버린 안(✕)은 한 톤 낮추고 이유를 그 아래 작은 글씨로 둔다. 칸 이름이 이미 '선택'이라 줄마다 라벨을 달지 않는다.
+ *
+ * 인쇄에서는 한 판을 줄마다 테두리를 가진 카드로 나눈다. 한 판인 채로 쪽이 넘어가면 바깥 테두리만 빈 채로
+ * 쪽 끝까지 늘어나고 다음 쪽은 위가 터진 상자로 시작한다. 카드로 나누면 카드 사이에서 깨끗하게 끊긴다.
  */
 function Decision({ decision }: { decision: Narrative['decision'] }) {
   return decision.rejected.length > 0 ? (
-    <ul className="mt-2 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
-      <li className="bg-accent-50 dark:bg-accent-400/10 flex gap-3 p-4">
+    <ul className="mt-2 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 print:space-y-2 print:overflow-visible print:rounded-none print:border-0">
+      <li className="bg-accent-50 dark:bg-accent-400/10 flex break-inside-avoid-page gap-3 p-4 print:rounded-xl print:border print:border-gray-200">
         <span
           aria-hidden
           className="bg-accent-600 mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
@@ -170,7 +173,7 @@ function Decision({ decision }: { decision: Narrative['decision'] }) {
       {decision.rejected.map(({ option, reason }) => (
         <li
           key={option}
-          className="flex break-inside-avoid-page gap-3 border-t border-gray-200 p-4 dark:border-gray-700"
+          className="flex break-inside-avoid-page gap-3 border-t border-gray-200 p-4 dark:border-gray-700 print:rounded-xl print:border"
         >
           <span
             aria-hidden
