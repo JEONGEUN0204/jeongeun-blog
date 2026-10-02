@@ -7,6 +7,20 @@
   @page {
     size: A4;
     margin: 16mm 14mm;
+
+    /* 쪽 번호 '2 / 10'. 아래 여백(16mm) 안에 찍혀 본문 분량에 영향이 없다 */
+    @bottom-center {
+      content: counter(page) ' / ' counter(pages);
+      font-size: 9pt;
+      color: #9ca3af;
+    }
+  }
+
+  /* 표지(components/PrintCover 의 page:cover)에는 번호를 달지 않는다. 표지도 쪽 수에는 센다 */
+  @page cover {
+    @bottom-center {
+      content: none;
+    }
   }
 
   /*

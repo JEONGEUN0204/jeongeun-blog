@@ -4,6 +4,7 @@ import { IoIosMail } from 'react-icons/io'
 import { MdOutlinePhoneIphone } from 'react-icons/md'
 import { FaGithub } from 'react-icons/fa'
 import Image from '@/components/Image'
+import PrintCover from '@/components/PrintCover'
 import Section from '@/components/mdx/Section'
 import { formatPeriod, getCompany } from '@/content/companies'
 import { productLabel } from '@/content/products'
@@ -57,10 +58,12 @@ export default function ResumeContent() {
 
   return (
     <div>
+      <PrintCover label="Resume" path="" phone />
       {/*
         머리 — 사진·이름·직함을 한 줄로 작게 두고 연락처를 오른쪽 끝에 붙인다.
         첫 화면의 주인공은 그 아래 한 줄 정체성(aboutLead)이다. 이름은 h1 로 남겨 문서 제목 역할을 한다.
         좁은 화면에서는 연락처가 이름 아래로 내려간다.
+        인쇄에서는 연락처만 뺀다 — 바로 앞 표지가 싣는다.
       */}
       <Section className="my-0! pt-2 pb-0">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -81,7 +84,7 @@ export default function ResumeContent() {
               <p className="mt-0.5 text-gray-600 dark:text-gray-400">{profile.title}</p>
             </div>
           </div>
-          <div className="flex flex-col gap-1 text-sm text-gray-600 sm:items-end dark:text-gray-400">
+          <div className="flex flex-col gap-1 text-sm text-gray-600 sm:items-end dark:text-gray-400 print:hidden">
             <span className="flex items-center gap-2">
               <IoIosMail aria-hidden />
               {profile.email}
